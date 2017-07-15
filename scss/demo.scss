@@ -1,0 +1,193 @@
+$col: #333;
+$col2: #fad;
+$font-size: 1.5em;
+
+@font-face {
+  font-family: 'Walsheim Bold';
+  src: url('./fonts/gt-walsheim-bold-web.ttf');
+}
+@font-face {
+  font-family: 'Walsheim Light';
+  src: url('./fonts/gt-walsheim-light-web.ttf');
+}
+* {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 5% 7.5%;
+  background: #fff;
+  color: $col;
+  font-family: 'Walsheim Light', sans-serif;
+  font-size: $font-size;
+  line-height: 1;
+  letter-spacing: .025rem;
+  position: relative;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+header {
+  font-size: 1em;
+  margin: 0 0 1.75em;
+  position: relative;
+  display: block;
+  i {
+    font-style: normal;
+    font-size: 50%;
+    opacity: .65;
+    position: relative;
+
+    &:first-of-type {
+      top: -.85em;
+    }
+    &:last-of-type {
+      left: -1.1em;
+    }
+    margin-right: -.75em;
+  }
+  b {
+    font-family: 'Walsheim Bold', sans-serif;
+    font-weight: 700;
+  }
+  span {
+    position: absolute;
+    right: 0;
+  }
+  &:after {
+    content:none;
+    position:absolute;
+    width:100vw;
+    height:7.3em;
+    display:block;
+    background:rgba(0,0,0,.035);
+    top:-3.25em;
+    left:-7.5vw;
+  }
+}
+code {
+  font-size: 70%;
+  padding: 2em;
+  overflow-x: hidden!important;
+}
+pre {
+  padding: 1em;
+  border: 1px solid #f0f0f0;
+  opacity: .5;
+  transition: opacity .25s linear;
+  position: relative;
+  z-index: 0;
+  filter: grayscale(100%);
+  &:hover {
+    opacity: 1;
+    filter: grayscale(0%);
+  }
+}
+section {
+  position: relative;
+  padding: 2em 0 1em;
+  display: block;
+  &:before {
+    border-top: 1px solid #e0e0e0;
+    width: 100vw;
+    position: absolute;
+    left: -7.5%;
+    top: 1em;
+    display: block;
+    text-indent: 7.5%;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 11px;
+    padding-top: 1em;
+    color: #0AF;
+    content: 'Requires bubb.min.css';
+  }
+  &:last-of-type:before {
+    content: 'Requires bubb.min.css + bubb.min.js';
+  }
+  > div {
+    display: inline-block;
+    font-size: 95%;
+    margin-top: 1em;
+    padding-bottom: 2px;
+    border-bottom: 2px solid $col2;
+    cursor: help;
+    &:hover {
+      transition: all .3s cubic-bezier(0,0,0,1);
+      border-color: transparent;
+    }
+  }
+}
+a {
+  position: fixed;
+  top: 0;
+  left: 7.5%;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 11px;
+  color: #0AF;
+  padding-top: 1em;
+  &:before {
+    display: inline-block;
+    margin-right: 6px;
+    color: $col;
+    content: 'Share Bubb on';
+  }
+  &:last-of-type {
+    left: auto;
+    right: 7.5%;
+    &:before {
+      content: 'Download Bubb on';
+    }
+  }
+}
+#eventsDisplay {
+  background: rgba(#0ff1ce,.5);
+  padding: 0 7.5vw;
+  line-height: 100vh;
+  height: 100vw;
+  min-width: 30vw;
+  font-size: 40%;
+  font-style: normal;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 100;
+  &:empty {
+    visibility: hidden;
+  }
+}
+@media all and (max-width: 550px) {
+  body {
+    font-size: 5vw;
+  }
+}
+
+
+
+/*
+--- bubb modifier
+*/
+.bubb {
+  p {
+    padding: 0;
+    margin: 0;
+  }
+  &-menu {
+    bubb {
+      div {
+        padding: .2em 0;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 72.5%;
+        &:hover {
+          color: #fff;
+        }
+      }
+    }
+  }
+}

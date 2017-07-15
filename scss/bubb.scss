@@ -1,0 +1,149 @@
+$bubb-background: #333;
+$bubb-color: #fad;
+$bubb-tip-size: .75em;
+$bubb-offset-left: 50%;
+$bubb-transition-px-distance: 10px;
+$bubb-border-radius: 4px;
+
+@mixin bubbStyle() {
+  padding: .75em 1em;
+  line-height: 1.1;
+  font-size: 75%;
+  text-align: center;
+  border-radius: $bubb-border-radius;
+  background: $bubb-background;
+  border-bottom-color: $bubb-background;
+  color: $bubb-color;
+  cursor: default;
+  min-width: 150px;
+  width: 100%;
+  box-sizing: border-box;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+@mixin bubbTip($width) {
+  width: 0;
+  height: 0;
+  border-right: $width solid transparent;
+  border-left: $width solid transparent;
+  // to make tip-color changes through js possible by altering border-bottom-color on parent
+  border-bottom-width: $width;
+  border-bottom-style: solid;
+  border-bottom-color: inherit;
+}
+@mixin bubbTipPseudo($width) {
+  width: 0;
+  height: 0;
+  border-bottom: $width solid $bubb-background;
+  border-right: $width solid transparent;
+  border-left: $width solid transparent;
+}
+@mixin bubbTransition() {
+  transition: opacity .3s cubic-bezier(0,0,0,.75), bottom .3s cubic-bezier(0,0,0,.75);
+  transition-delay: .3s;
+}
+
+/*
+--- Bubb as html element
+*/
+.bubb {
+  position: relative;
+  bubb {
+    position: absolute;
+    display: block;
+    visibility: hidden;
+    transform: translate(-50%, 100%);
+    bottom: calc( -#{$bubb-tip-size} - #{$bubb-transition-px-distance} );
+    left: $bubb-offset-left;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    @include bubbStyle();
+    &:after {
+      content: '';
+      position: absolute;
+      transform: translate(-50%, 15%);
+      top: calc( 1px - #{$bubb-tip-size} );
+      left: $bubb-offset-left;
+      z-index: -1;
+      @include bubbTip($bubb-tip-size);
+    }
+    &:hover {
+      display: none;
+    }
+  }
+  &:hover {
+    bubb {
+      @include bubbTransition();
+      visibility: visible;
+      bottom: -$bubb-tip-size;
+      pointer-events: all;
+      opacity: 1;
+    }
+  }
+
+  /*
+  --- Make bubb hoverable
+  */
+  &-menu {
+    &:before {
+      content: '';
+      position: absolute;
+      display: block;
+      width: 100%;
+      height: $bubb-tip-size;
+      bottom: -$bubb-tip-size;
+    }
+    bubb {
+      &:hover {
+        display: block;
+      }
+      > div {
+        cursor: pointer;
+      }
+    }
+  }
+
+}
+
+
+
+/*
+--- Bubb as pseudo element, attribute only
+*/
+[bubb] {
+  position: relative;
+  &:before, &:after {
+    position: absolute;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 1;
+  }
+  &:after {
+    content: attr(bubb);
+    transform: translate(-50%, 100%);
+    bottom: calc( -#{$bubb-tip-size} - #{$bubb-transition-px-distance} );
+    left: $bubb-offset-left;
+    @include bubbStyle();
+  }
+  &:before {
+    content: '';
+    transform: translate(-50%, 115%);
+    bottom: - $bubb-transition-px-distance;
+    left: $bubb-offset-left;
+    @include bubbTipPseudo($bubb-tip-size/1.5);
+  }
+  &:hover {
+    &:before, &:after {
+      @include bubbTransition();
+      opacity: 1;
+    }
+    &:after {
+      bottom: calc( 1px - #{$bubb-tip-size} );
+    }
+    &:before {
+      bottom: 0;
+    }
+  }
+}
