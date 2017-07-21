@@ -1,4 +1,4 @@
-$col: #333;
+$col: #444;
 $col2: #fad;
 $font-size: 1.5em;
 
@@ -17,8 +17,8 @@ $font-size: 1.5em;
 }
 
 body {
+  padding: 0 0 2em;
   margin: 0;
-  padding: 5% 7.5%;
   background: #fff;
   color: $col;
   font-family: 'Walsheim Light', sans-serif;
@@ -31,9 +31,13 @@ body {
 }
 header {
   font-size: 1em;
-  margin: 0 0 1.75em;
+  padding: 2.5em 7.5%;
+  box-sizing: border-box;
+  width: 100%;
   position: relative;
   display: block;
+  background: $col;
+  color: #fff;
   i {
     font-style: normal;
     font-size: 50%;
@@ -54,7 +58,7 @@ header {
   }
   span {
     position: absolute;
-    right: 0;
+    right: 7.5%;
   }
   &:after {
     content:none;
@@ -75,8 +79,8 @@ code {
 pre {
   padding: 1em;
   border: 1px solid #f0f0f0;
-  opacity: .5;
-  transition: opacity .25s linear;
+  opacity: .35;
+  transition: opacity .5s linear;
   position: relative;
   z-index: 0;
   filter: grayscale(100%);
@@ -87,25 +91,30 @@ pre {
 }
 section {
   position: relative;
-  padding: 2em 0 1em;
+  padding: 3em 7.5% 2em;
+  box-sizing: border-box;
   display: block;
+  width: 100%;
   &:before {
-    border-top: 1px solid #e0e0e0;
-    width: 100vw;
+    font-family: 'Walsheim Bold';
+    width: 100%;
     position: absolute;
-    left: -7.5%;
-    top: 1em;
+    left: 0;
+    top: 0;
+    height: 3em;
+    line-height: 3em;
+    background: #fafafa;
     display: block;
-    text-indent: 7.5%;
+    padding-left: 7.5%;
+    box-sizing: border-box;
     text-transform: uppercase;
     letter-spacing: 2px;
     font-size: 11px;
-    padding-top: 1em;
     color: #0AF;
-    content: 'Requires bubb.min.css';
+    content: '↓ Requires bubb.min.css';
   }
   &:last-of-type:before {
-    content: 'Requires bubb.min.css + bubb.min.js';
+    content: '↓ Requires bubb.min.css + bubb.min.js';
   }
   > div {
     display: inline-block;
@@ -114,49 +123,76 @@ section {
     padding-bottom: 2px;
     border-bottom: 2px solid $col2;
     cursor: help;
+    position: relative;
     &:hover {
       transition: all .3s cubic-bezier(0,0,0,1);
       border-color: transparent;
     }
   }
-}
-a {
-  position: fixed;
-  top: 0;
-  left: 7.5%;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  font-size: 11px;
-  color: #0AF;
-  padding-top: 1em;
-  &:before {
-    display: inline-block;
-    margin-right: 6px;
-    color: $col;
-    content: 'Share Bubb on';
+  > i {
+    &:after {
+      content: '⟵  :hover';
+      display: inline-block;
+      white-space: nowrap;
+      border-bottom: none;
+      margin-left: 12px;
+      font-size: 75%;
+      opacity: .35;
+    }
   }
-  &:last-of-type {
-    left: auto;
-    right: 7.5%;
+}
+body > span {
+  background: $col;
+  display: block;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 2em;
+  line-height: 2em;
+  a {
+    position: absolute;
+    top: 0;
+    left: 7.5%;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 11px;
+    color: #0AF;
+    text-decoration: none;
+    font-family: 'Walsheim Bold';
     &:before {
-      content: 'Download Bubb on';
+      display: inline-block;
+      font-family: 'Walsheim Light';
+      margin-right: 6px;
+      color: $col2;
+      content: 'Share Bubb on';
+    }
+    &:last-of-type {
+      left: auto;
+      right: 7.5%;
+      &:before {
+        content: 'Download Bubb on';
+      }
     }
   }
 }
 #eventsDisplay {
-  background: rgba(#0ff1ce,.5);
+  background: #0ff1ce;
   padding: 0 7.5vw;
   line-height: 100vh;
-  height: 100vw;
+  height: 100vh;
   min-width: 30vw;
-  font-size: 40%;
+  font-size: 65%;
   font-style: normal;
   text-transform: uppercase;
+  text-align: center;
   letter-spacing: 2px;
   position: fixed;
   top: 0;
   right: 0;
   z-index: 100;
+  &[switch="false"] {
+    background: #fad;
+  }
   &:empty {
     visibility: hidden;
   }
@@ -177,17 +213,44 @@ a {
     padding: 0;
     margin: 0;
   }
+  b {
+    font-family: 'Walsheim Bold';
+    letter-spacing: 1px;
+    font-size: 85%;
+  }
   &-menu {
-    bubb {
+    aside {
+      padding: 0!important;
       div {
-        padding: .2em 0;
+        padding: .75em 0;
         text-transform: uppercase;
         letter-spacing: 2px;
         font-size: 72.5%;
+        border-bottom: 1px solid rgba(#0ff1ce, .25);
+        transition: background .3s cubic-bezier(0,0,0,.75);
+        &:first-child {
+          padding-top: 1em;
+        }
         &:hover {
-          color: #fff;
+          background: rgba(#0ff1ce, .5);
+          border-color: transparent;
         }
       }
     }
   }
 }
+
+/*
+
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 41 21">
+<polygon points="21,0 0,21 41,21 "/>
+</svg>
+
+https://codepen.io/yoksel/details/JDqvs
+
+background-image: url(data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20viewBox%3D%220%200%2041%2021%22%3E%0A%3Cpolygon%20points%3D%2221%2C0%200%2C21%2041%2C21%20%22/%3E%0A%3C/svg%3E%0A);
+background-repeat: no-repeat;
+background-position: center 0;
+background-size: 40px;
+
+*/

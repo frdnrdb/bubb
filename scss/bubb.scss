@@ -1,8 +1,9 @@
-$bubb-background: #333;
-$bubb-color: #fad;
-$bubb-tip-size: .75em;
+$bubb-background: #444;
+$bubb-color: #fff;
+$bubb-tip-size: .65em;
 $bubb-offset-left: 50%;
-$bubb-transition-px-distance: 10px;
+$bubb-transition-px-distance: 1em;
+$bubb-transition-expression: cubic-bezier(0,0,.25,1); //cubic-bezier(.25,.8,.25,1);
 $bubb-border-radius: 4px;
 
 @mixin bubbStyle() {
@@ -11,7 +12,7 @@ $bubb-border-radius: 4px;
   font-size: 75%;
   text-align: center;
   border-radius: $bubb-border-radius;
-  background: $bubb-background;
+  background-color: $bubb-background;
   border-bottom-color: $bubb-background;
   color: $bubb-color;
   cursor: default;
@@ -21,6 +22,7 @@ $bubb-border-radius: 4px;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  @include boxShadow();
 }
 @mixin bubbTip($width) {
   width: 0;
@@ -32,6 +34,10 @@ $bubb-border-radius: 4px;
   border-bottom-style: solid;
   border-bottom-color: inherit;
 }
+@mixin boxShadow() {
+  box-shadow: rgba(#fad, .35) 6px 7px 0 0;
+  //box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
 @mixin bubbTipPseudo($width) {
   width: 0;
   height: 0;
@@ -40,8 +46,11 @@ $bubb-border-radius: 4px;
   border-left: $width solid transparent;
 }
 @mixin bubbTransition() {
-  transition: opacity .3s cubic-bezier(0,0,0,.75), bottom .3s cubic-bezier(0,0,0,.75);
-  transition-delay: .3s;
+  transition: opacity .3s $bubb-transition-expression, bottom .3s $bubb-transition-expression;
+  //transition-delay: .3s;
+}
+@mixin bubbTransitionPseudo() {
+  transition: opacity .3s $bubb-transition-expression;
 }
 
 /*
@@ -49,32 +58,34 @@ $bubb-border-radius: 4px;
 */
 .bubb {
   position: relative;
-  bubb {
+  aside {
     position: absolute;
+    z-index: 1;
     display: block;
     visibility: hidden;
     transform: translate(-50%, 100%);
     bottom: calc( -#{$bubb-tip-size} - #{$bubb-transition-px-distance} );
     left: $bubb-offset-left;
     pointer-events: none;
-    z-index: 1;
     opacity: 0;
     @include bubbStyle();
     &:after {
       content: '';
       position: absolute;
-      transform: translate(-50%, 15%);
+      transform: translate(-50%, 0);
       top: calc( 1px - #{$bubb-tip-size} );
       left: $bubb-offset-left;
-      z-index: -1;
       @include bubbTip($bubb-tip-size);
     }
     &:hover {
       display: none;
     }
+    &:empty {
+      display: none;
+    }
   }
   &:hover {
-    bubb {
+    aside {
       @include bubbTransition();
       visibility: visible;
       bottom: -$bubb-tip-size;
@@ -86,7 +97,7 @@ $bubb-border-radius: 4px;
   /*
   --- Make bubb hoverable
   */
-  &-menu {
+  &-interact {
     &:before {
       content: '';
       position: absolute;
@@ -95,12 +106,23 @@ $bubb-border-radius: 4px;
       height: $bubb-tip-size;
       bottom: -$bubb-tip-size;
     }
-    bubb {
+    aside {
       &:hover {
         display: block;
       }
       > div {
         cursor: pointer;
+      }
+    }
+  }
+
+  /*
+  --- Remove transition
+  */
+  &-still {
+    &:hover {
+      aside {
+        transition-duration: 0s;
       }
     }
   }
@@ -112,6 +134,37 @@ $bubb-border-radius: 4px;
 /*
 --- Bubb as pseudo element, attribute only
 */
+[bubb] {
+  position: relative;
+  &:before, &:after {
+    position: absolute;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 1;
+    //@include bubbTransitionPseudo();
+  }
+  &:after {
+    content: attr(bubb);
+    transform: translate(-50%, 100%);
+    left: $bubb-offset-left;
+    bottom: -$bubb-tip-size;
+    @include bubbStyle();
+  }
+  &:before {
+    content: '';
+    transform: translate(-50%, 100%);
+    left: $bubb-offset-left;
+    bottom: -1px;
+    @include bubbTipPseudo($bubb-tip-size);
+  }
+  &:hover {
+    &:before, &:after {
+      opacity: 1;
+    }
+  }
+}
+/*
+--- With position transition - :before & :after slightly unsynced
 [bubb] {
   position: relative;
   &:before, &:after {
@@ -140,10 +193,11 @@ $bubb-border-radius: 4px;
       opacity: 1;
     }
     &:after {
-      bottom: calc( 1px - #{$bubb-tip-size} );
+      bottom: calc( 2px - #{$bubb-tip-size} );
     }
     &:before {
       bottom: 0;
     }
   }
 }
+*/

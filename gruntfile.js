@@ -2,7 +2,7 @@ module.exports = function(grunt) {
 
   require('load-grunt-tasks')(grunt);
 
-  grunt.registerTask('build', ['sass','cssmin','es6transpiler:dist','uglify','replace','header','clean']);
+  grunt.registerTask('build', ['sass','cssmin','es6transpiler:dist','uglify','replace','clean']); //'header','clean'
   grunt.registerTask('serve', ['sass','cssmin','es6transpiler','copy','connect','open','watch']);
   grunt.registerTask('deploy', ['build', 'run:deploy']);
 

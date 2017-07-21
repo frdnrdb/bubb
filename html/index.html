@@ -7,8 +7,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <link rel="shortcut icon"type="image/x-icon" href="data:image/x-icon;,">
-<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/github-gist.min.css">
-<script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<link rel="stylesheet" href="/libs/css/tomorrow.min.css">
+<script src="/libs/js/highlight.min.js"></script>
 <link rel="stylesheet" href="demo.min.css">
 <link rel="stylesheet" href="bubb.min.css">
 <script delete src="//localhost:35729/livereload.js"></script>
@@ -16,19 +16,21 @@
 
 <body>
 
-  <a href="https://twitter.com/intent/tweet?url=bubb.surge.sh&text=bubb%20infotip&hashtags=css,js,lightweight,simple">Twitter</a>
-  <a href="https://github.com/frdnrdb/bubb">GitHub</a>
+  <span>
+    <a href="https://twitter.com/intent/tweet?url=bubb.surge.sh&text=bubb%20infotip&hashtags=css,js,lightweight,simple">Twitter</a>
+    <a href="https://github.com/frdnrdb/bubb">GitHub</a>
+  </span>
 
   <header><b>Bubb</b> Infotip<span>CSS <i>and</i><i>or</i> JS</span></header>
 
   <section>
-  <div class="bubb">CSS element<bubb>child element <u><i>html</i></u> content</bubb></div>
-  <div bubb="attribute text content">CSS attribute</div>
+    <div class="bubb">CSS element<aside>Child element with <b>HTML</b> content</aside></div><i></i>
+    <div bubb="Attribute only with pure text content">CSS attribute</div><i></i>
   </section>
 
   <section>
-  <div data-bubb-menu="vedder, mccready, gossard, ament">JS menu</div>
-  <div data-bubb="abbruzzese">JS random quote</div>
+    <div data-bubb-menu="vedder, mccready, gossard, ament">JS menu</div><i></i>
+    <div data-bubb="abbruzzese">JS callback on hover</div><i></i>
   </section>
 
   <i id="eventsDisplay"></i>
@@ -47,7 +49,7 @@
             pre.appendChild(code);
             code.innerHTML = temp.innerHTML.replace(/</g,"&lt;").replace(/>/g,"&gt;");
 
-            div.parentNode.insertBefore(pre, div.nextSibling);
+            div.parentNode.insertBefore(pre, div.nextSibling.nextSibling);
 
       });
 
@@ -59,54 +61,67 @@
         clearTimeout(eventsDisplay.hideTimeout);
         eventsDisplay.hideTimeout = setTimeout(function() {
           eventsDisplay.innerHTML = '';
-        }, 2500);
+        }, 2000);
       });
 
+      // hide hover-info elements
+    /*
+      [].slice.call( document.querySelectorAll('section > i') ).forEach( function(i) {
+
+        console.log(i);
+
+      });
+    */
 
 
   </script>
   <script id="demo">
-
       //  options are optional
-      //  default: tooltip renders data-bubb-attribute
 
       var options = {
             vedder: 'vocals',
             mccready: 'lead guitar',
             gossard: 'guitar',
-            ament: ['bass'],
+            ament: 'bass',
             abbruzzese: ['', {
               callback: function(key, item) { // overrides main callback
-                item.innerHTML = 'loading...';
-                fetch('https://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1')
-                .then(function(res){ return res.json(); }).then(function(quotes){
+                item.innerHTML = 'Loading...';
+                var url = 'https://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1';
+                fetch(url).then(function(res){ return res.json(); }).then(function(quotes){
                   item.innerHTML = quotes[0].content;
                 });
               },
+              transitionOff: true,
               hoverCallback: true,
               background: '#fad',
-              color: '#333',
+              color: '#444',
             }]
       };
 
-      // initialize
-      // bubb(), bubb(options) or bubb(options, callback);
+      // initialize with bubb(), bubb(options) or bubb(options, callback);
 
       bubb(options, function(key, item) {
+        /**/
 
-        /**/document.getElementById('eventsDisplay').innerHTML = 'clicked ' + key;/**/console.log('clicked ' + key);
+        var eventsDisplay = document.getElementById('eventsDisplay');
+        eventsDisplay.innerHTML = 'clicked ' + key;
+        bubb.switch = !bubb.switch;
+        eventsDisplay.setAttribute('switch', bubb.switch);
+
+        /**/
+        console.log('clicked ' + key);
 
       });
 
   </script>
   <script>
 
-      // display bubb js demo
+      // display bubb js demo code
 
       var pre = document.createElement('pre'),
           code = document.createElement('code');
           pre.appendChild(code);
-          code.innerHTML = document.getElementById('demo').innerHTML.replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\/\*\*\/.+\/\*\*\//,'');
+          code.innerHTML = document.getElementById('demo').innerHTML.replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\/\*\*\/[\s\S]*\/\*\*\//igm,'');
 
       document.querySelector('section:last-of-type').appendChild(pre);
       hljs.initHighlightingOnLoad();
