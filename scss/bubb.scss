@@ -1,9 +1,11 @@
+$bubb-tip-size: .65em; // calc... -> must include units (em, px...)
+$bubb-offset: .15em; // calc...
+$bubb-transition-distance: .65em; // calc...
+$bubb-transition-expression: cubic-bezier(0,0,.25,1); //cubic-bezier(.25,.8,.25,1);
+$bubb-transition-delay: 0s; // global
+$bubb-transition-delay-option: .5s; // enabled by bubb-delay class
 $bubb-background: #444;
 $bubb-color: #fff;
-$bubb-tip-size: .65em;
-$bubb-offset-left: 50%;
-$bubb-transition-px-distance: 1em;
-$bubb-transition-expression: cubic-bezier(0,0,.25,1); //cubic-bezier(.25,.8,.25,1);
 $bubb-border-radius: 4px;
 
 @mixin bubbStyle() {
@@ -29,10 +31,10 @@ $bubb-border-radius: 4px;
   height: 0;
   border-right: $width solid transparent;
   border-left: $width solid transparent;
-  // to make tip-color changes through js possible by altering border-bottom-color on parent
   border-bottom-width: $width;
   border-bottom-style: solid;
   border-bottom-color: inherit;
+  // border bottom properties split to make tip-color changes through js possible by altering border-bottom-color on parent
 }
 @mixin boxShadow() {
   box-shadow: rgba(#fad, .35) 6px 7px 0 0;
@@ -47,11 +49,9 @@ $bubb-border-radius: 4px;
 }
 @mixin bubbTransition() {
   transition: opacity .3s $bubb-transition-expression, bottom .3s $bubb-transition-expression;
-  //transition-delay: .3s;
+  transition-delay: $bubb-transition-delay;
 }
-@mixin bubbTransitionPseudo() {
-  transition: opacity .3s $bubb-transition-expression;
-}
+
 
 /*
 --- Bubb as html element
@@ -64,8 +64,8 @@ $bubb-border-radius: 4px;
     display: block;
     visibility: hidden;
     transform: translate(-50%, 100%);
-    bottom: calc( -#{$bubb-tip-size} - #{$bubb-transition-px-distance} );
-    left: $bubb-offset-left;
+    bottom: calc( -#{$bubb-tip-size} - ( #{$bubb-transition-distance} + #{$bubb-offset} ) );
+    left: 50%;
     pointer-events: none;
     opacity: 0;
     @include bubbStyle();
@@ -74,7 +74,7 @@ $bubb-border-radius: 4px;
       position: absolute;
       transform: translate(-50%, 0);
       top: calc( 1px - #{$bubb-tip-size} );
-      left: $bubb-offset-left;
+      left: 50%;
       @include bubbTip($bubb-tip-size);
     }
     &:hover {
@@ -88,7 +88,7 @@ $bubb-border-radius: 4px;
     aside {
       @include bubbTransition();
       visibility: visible;
-      bottom: -$bubb-tip-size;
+      bottom: calc( -#{$bubb-tip-size} - #{$bubb-offset} );
       pointer-events: all;
       opacity: 1;
     }
@@ -97,7 +97,7 @@ $bubb-border-radius: 4px;
   /*
   --- Make bubb hoverable
   */
-  &-interact {
+  &-interactive {
     &:before {
       content: '';
       position: absolute;
@@ -127,6 +127,17 @@ $bubb-border-radius: 4px;
     }
   }
 
+  /*
+  --- Delayed reveal
+  */
+  &-delayed {
+    &:hover {
+      aside {
+        transition-delay: $bubb-transition-delay-option;
+      }
+    }
+  }
+
 }
 
 
@@ -139,27 +150,32 @@ $bubb-border-radius: 4px;
   &:before, &:after {
     position: absolute;
     pointer-events: none;
-    opacity: 0;
+    visibility: hidden;
     z-index: 1;
-    //@include bubbTransitionPseudo();
   }
   &:after {
     content: attr(bubb);
     transform: translate(-50%, 100%);
-    left: $bubb-offset-left;
-    bottom: -$bubb-tip-size;
+    left: 50%;
+    bottom: calc( 0px - ( #{$bubb-tip-size} + #{$bubb-offset} ) );
     @include bubbStyle();
   }
   &:before {
     content: '';
     transform: translate(-50%, 100%);
-    left: $bubb-offset-left;
-    bottom: -1px;
+    left: 50%;
+    bottom: -$bubb-offset;
     @include bubbTipPseudo($bubb-tip-size);
   }
   &:hover {
     &:before, &:after {
-      opacity: 1;
+      transition-delay: $bubb-transition-delay;
+      visibility: visible;
+    }
+  }
+  &.bubb-delayed:hover {
+    &:before, &:after {
+      transition-delay: $bubb-transition-delay-option;
     }
   }
 }
@@ -176,15 +192,15 @@ $bubb-border-radius: 4px;
   &:after {
     content: attr(bubb);
     transform: translate(-50%, 100%);
-    bottom: calc( -#{$bubb-tip-size} - #{$bubb-transition-px-distance} );
-    left: $bubb-offset-left;
+    bottom: calc( -#{$bubb-tip-size} - #{$bubb-transition-distance} );
+    left: 50%;
     @include bubbStyle();
   }
   &:before {
     content: '';
     transform: translate(-50%, 115%);
-    bottom: - $bubb-transition-px-distance;
-    left: $bubb-offset-left;
+    bottom: - $bubb-transition-distance;
+    left: 50%;
     @include bubbTipPseudo($bubb-tip-size/1.5);
   }
   &:hover {

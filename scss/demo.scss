@@ -91,7 +91,7 @@ pre {
 }
 section {
   position: relative;
-  padding: 3em 7.5% 2em;
+  padding: 2em 7.5%;
   box-sizing: border-box;
   display: block;
   width: 100%;
@@ -116,16 +116,20 @@ section {
   &:last-of-type:before {
     content: '↓ Requires bubb.min.css + bubb.min.js';
   }
+  > p {
+    font-size: 70%;
+    line-height: 1.3;
+    color: #888;
+  }
   > div {
     display: inline-block;
     font-size: 95%;
     margin-top: 1em;
     padding-bottom: 2px;
-    border-bottom: 2px solid $col2;
+    border-bottom: 2px dotted $col2;
     cursor: help;
     position: relative;
     &:hover {
-      transition: all .3s cubic-bezier(0,0,0,1);
       border-color: transparent;
     }
   }

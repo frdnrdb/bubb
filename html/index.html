@@ -24,11 +24,14 @@
   <header><b>Bubb</b> Infotip<span>CSS <i>and</i><i>or</i> JS</span></header>
 
   <section>
-    <div class="bubb">CSS element<aside>Child element with <b>HTML</b> content</aside></div><i></i>
+    <p>Pure, minimal CSS infotip. Add class "bubb-delay" (or modify global bubb.scss variables) to add a reveal delay. A bubb with HTML content may want to be class(ified) as "bubb-interactive". If you really don't care for transitions add "bubb-still".</p>
     <div bubb="Attribute only with pure text content">CSS attribute</div><i></i>
+    <div class="bubb bubb-delayed bubb-interactive">CSS element<aside>Child element with <b>HTML</b> content</aside></div><i></i>
   </section>
 
   <section>
+    <p>Non-dependent, minimal JS script that simplifies utilization of bubbs as UI menus (with callbacks) and, most importantly, uses simple markup references so that bubb content can be dynamically maintained in a configuration object. Available options are listed in the final code block. The menu gets a "bubb-menu" class for targeted styling. Mouseover-events are still handled by CSS :hover.</p>
+    <div data-bubb="reference">JS basic</div><i></i>
     <div data-bubb-menu="vedder, mccready, gossard, ament">JS menu</div><i></i>
     <div data-bubb="abbruzzese">JS callback on hover</div><i></i>
   </section>
@@ -64,54 +67,61 @@
         }, 2000);
       });
 
-      // hide hover-info elements
-    /*
-      [].slice.call( document.querySelectorAll('section > i') ).forEach( function(i) {
-
-        console.log(i);
-
-      });
-    */
-
-
   </script>
   <script id="demo">
-      //  options are optional
+    //  configuration object. options are optional.
 
-      var options = {
-            vedder: 'vocals',
-            mccready: 'lead guitar',
-            gossard: 'guitar',
-            ament: 'bass',
-            abbruzzese: ['', {
-              callback: function(key, item) { // overrides main callback
-                item.innerHTML = 'Loading...';
-                var url = 'https://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1';
-                fetch(url).then(function(res){ return res.json(); }).then(function(quotes){
-                  item.innerHTML = quotes[0].content;
-                });
-              },
-              transitionOff: true,
-              hoverCallback: true,
-              background: '#fad',
-              color: '#444',
-            }]
-      };
+    var config = {
+          reference: 'Referenced content maintained in a separate configuration object',
+          vedder: 'vocals',
+          mccready: 'lead guitar',
+          gossard: 'guitar',
+          ament: 'bass',
+          abbruzzese: ['', {
+            callback: function(key, item) {
+              item.innerHTML = 'Loading...';
+              var url = 'https://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1';
+              fetch(url).then(function(res){ return res.json(); }).then(function(quotes){
+                item.innerHTML = quotes[0].content;
+              });
+            },
+            transitionOff: true,
+            hoverCallback: true,
+            delay: true,
+            background: '#fad',
+            color: '#444',
+          }]
+    };
 
-      // initialize with bubb(), bubb(options) or bubb(options, callback);
+    // initialize with bubb(options) or bubb(options, callback)
 
-      bubb(options, function(key, item) {
-        /**/
+    bubb(config, function(key, item) {
+      /**/
 
-        var eventsDisplay = document.getElementById('eventsDisplay');
-        eventsDisplay.innerHTML = 'clicked ' + key;
-        bubb.switch = !bubb.switch;
-        eventsDisplay.setAttribute('switch', bubb.switch);
+      var eventsDisplay = document.getElementById('eventsDisplay');
+      eventsDisplay.innerHTML = 'clicked ' + key;
+      bubb.switch = !bubb.switch;
+      eventsDisplay.setAttribute('switch', bubb.switch);
 
-        /**/
-        console.log('clicked ' + key);
+      /**/
+      console.log('clicked ' + key);
 
-      });
+    });
+
+    /*
+
+    add a globals property to config to override default behaviour
+
+    config.globals = {
+      callback: function(){}, // overrides main callback
+      transitionOff: false, // default
+      hoverCallback: false, // default
+      delay: false, // true yields .5s reveal delay, configurable via bubb.scss
+      background: '#444', // default
+      color: '#fff', // default
+    };
+
+    */    
 
   </script>
   <script>
