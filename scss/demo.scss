@@ -180,11 +180,12 @@ body > span {
   }
 }
 #eventsDisplay {
-  background: #0ff1ce;
+  background: rgba(#0ff1ce,.8);
   padding: 0 7.5vw;
+  box-sizing: border-box;
   line-height: 100vh;
   height: 100vh;
-  min-width: 30vw;
+  width: 100vw;
   font-size: 65%;
   font-style: normal;
   text-transform: uppercase;
@@ -193,9 +194,9 @@ body > span {
   position: fixed;
   top: 0;
   right: 0;
-  z-index: 100;
+  z-index: 0;
   &[switch="false"] {
-    background: #fad;
+    background: rgba(#fad, .8);
   }
   &:empty {
     visibility: hidden;
