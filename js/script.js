@@ -1,11 +1,11 @@
 /*
 
   TODO!
-    * Context awareness (width vs content, tip/ direction, as option)
-    * TRY alternative tooltip layout ('list', as option)
-    * TRY alternative theme (light, material box-shadow, as option)
 
-    * remove event listeners @ update
+    * TRY alternative tooltip layout ('list', as option)
+    * TRY alternative theme (light, "material" box-shadow, as option)
+
+    * MAYBE: Context awareness (width vs content, tip/ direction, as option)
 
     keep it simple!
 
@@ -130,7 +130,7 @@ bubb.bindElement = infotip => {
 
   infotip.bubb.bind = true;
 
-  infotip.addEventListener(infotip.bubb.config.hoverCallback ? 'mouseenter' : 'click', callbackHandler, false);
+  infotip.addEventListener(bubb.isMobile ? 'touchstart' : infotip.bubb.config.hoverCallback ? 'mouseenter' : 'click', callbackHandler, false);
 
   function callbackHandler(e) {
 
@@ -287,6 +287,8 @@ bubb.availableOptions = [
   'interactive',
   'delay'
 ];
+
+bubb.isMobile = (typeof window.orientation !== "undefined") || ~navigator.userAgent.indexOf('IEMobile') ? true : false;
 
 if (typeof exports !== 'undefined' && exports !== null) exports.bubb = bubb;
 // todo! add support for amd/ requirejs
