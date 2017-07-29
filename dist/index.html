@@ -24,7 +24,7 @@
   <header><b>Bubb</b> Infotip<span>CSS <i>and</i><i>or</i> JS</span></header>
 
   <section>
-    <p>Non-dependent, minimal JS script that simplifies utilization of bubbs as UI menus with callbacks and, most importantly, uses simple element attribute keyword references so that bubb content can be dynamically maintained in a configuration object. Available bubb options are listed in the code blocks below. Menu bubbs get a "bubb-menu" class for targeted styling. Mouseover-events are primarily handled by CSS:hover.</p>
+    <p>Non-dependent, minimal JS script that simplifies utilization of bubbs as UI menus with callbacks and, most importantly, uses simple element attribute keyword references for lucid maintenance of content within a configuration object. All available bubb options are listed in the code blocks below. Menu bubbs get a "bubb-menu" class for targeted styling. Mouseover-events are primarily handled by CSS:hover.</p>
     <div data-bubb="reference">JS basic</div><i></i>
     <div data-bubb="pj">JS menu</div><i></i>
     <div data-bubb="abbruzzese">JS callback on hover</div><i></i>
@@ -56,7 +56,7 @@
 
       });
 
-      // hide event-info
+      // timeout then hide menu event info
 
       var eventsDisplay = document.getElementById('eventsDisplay');
 
@@ -69,16 +69,22 @@
 
   </script>
   <script id="demo">
-    //  configuration object. options are optional.
+    // --> configuration object. options are optional.
 
     var config = {
+
+          // standard
           reference: 'Referenced content maintained in a <b>separate configuration object</b>',
+
+          // menu with callback
           pj: {
             vedder: 'vocals',
             mccready: 'guitar',
             gossard: 'guitar',
             ament: 'bass'
           },
+
+          // standard with options
           abbruzzese: {
             text: '',
             _: {
@@ -89,14 +95,15 @@
                   item.innerHTML = quotes[0].content;
                 });
               },
-              transitionOff: true,
               hoverCallback: true,
-              delay: true
+              interactive: false, // true by default if a callback is registered
+              transitionOff: true
             }
           }
+
         };
 
-    // initialize with bubb(config) or bubb(config, callback)
+    // --> initialize with bubb(config) or bubb(config, callback)
 
     bubb(config, function(key, item) {
       /**/
@@ -111,24 +118,37 @@
 
     });
 
-    // update bubb post initialization
+    // --> update bubbs post initialization
 
     bubb.update('pj.mccready', 'lead guitar');
-    bubb.update('abbruzzese', { background:'#fad', color:'#444', interactive: false });
+    bubb.add('pj.irons', 'drums'); // remove a menu item by setting 2nd argument to false
+    bubb.update('abbruzzese', { background:'#fad', color:'#444', delay: true });
 
-    var newBubb = document.createElement('section');
-    newBubb.innerHTML = '<div data-bubb="test">JS added</div>';
-    document.body.appendChild(newBubb);
-    bubb();
-    bubb.add();
-    bubb.update('test', 'added and updated');
-    bubb.update('test', { background: 'gold', color: '#444', callback: function(k,i){console.log('---',k,i);} });
+    // --> update DOM then add new bubbs post initialization
+
+    var addElements = ''+
+          '<div data-bubb="addedOne">JS added after bubb init - method one</div><i></i><br>'+
+          '<div data-bubb="addedTwo">JS added after bubb init - method two</div><i></i>';
+
+    document.querySelector('section:first-of-type').insertAdjacentHTML('beforeend', addElements);
+
+    config.addedOne = 'Content updated before adding new elements';
+
+    bubb(); // won't work. console warning: bubb aleready initialized
+    bubb.add(); // finds and adds new bubbs (here: addedOne + addedTwo)
+
+    bubb.update('addedTwo', 'Content updated after adding new elements');
+    bubb.update('addedTwo', {
+      background: 'gold',
+      color: '#444',
+      callback: true // default callback on click
+    });
 
     /*
 
-    add a globals property to config to override default behaviour
+    --> optionally add globals to override initial (overall) behaviour
 
-    config.globals = {
+    config._ = {
       callback: function(), // overrides/ replaces main callback
       transitionOff: false, // default
       interactive: false, // default, true for bubb menus
@@ -150,10 +170,9 @@
           pre.appendChild(code);
           code.innerHTML = document.getElementById('demo').innerHTML.replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\/\*\*\/[\s\S]*\/\*\*\//igm,'');
 
-      document.querySelector('section:first-of-type').appendChild(pre);
+      document.querySelector('section:first-of-type').insertBefore(pre, document.querySelector('[data-bubb="addedOne"]'));
       hljs.initHighlightingOnLoad();
 
   </script>
-
 </body>
 </html>
