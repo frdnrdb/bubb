@@ -19,7 +19,7 @@
 let bubb = (config, callback) => {
 
   if (!bubb.initialized) bubb.initialize(config, callback);
-  else console.log('Use bubb.add to process new DOM elements or bubb.update to modiy existing instances');
+  else console.log('bubb already initialized. use bubb.add to process new DOM elements or bubb.update to modiy existing instances');
   bubb.initialized = true;
 
 }
@@ -27,7 +27,7 @@ let bubb = (config, callback) => {
 bubb.initialize = (config, callback) => {
 
   bubb.config = bubb.config || (typeof config === 'object' ? config : {});
-  bubb.config.globals = bubb.config.globals || config.globals || {};
+  bubb.config._ = bubb.config._ || config._ || {};
   bubb.callback = bubb.callback || (typeof callback === 'function' ? callback : false);
 
   // Parse DOM for valid bubb elements - skip initialized elements
@@ -49,15 +49,15 @@ bubb.buildElement = infotip => {
       menu = chck && !data.hasOwnProperty('text');
 
       function setConfiguration(config) {
-        if (opts || Object.keys(bubb.config.globals).length) {
+        if (opts || Object.keys(bubb.config._).length) {
           bubb.availableOptions.forEach( option => {
-            config[option] = opts[option] || bubb.config.globals[option];
+            config[option] = opts[option] || bubb.config._[option];
           });
         }
         return config;
       }
 
-      let bindMenu = typeof bubb.callback === 'function' || typeof bubb.config.globals.callback === 'function';
+      let bindMenu = typeof bubb.callback === 'function' || typeof bubb.config._.callback === 'function';
 
       infotip.bubb = {
         config: setConfiguration({}),
@@ -129,7 +129,7 @@ bubb.configureElement = (infotip, aside, html) => {
 
 bubb.bindElement = infotip => {
 
-  infotip.bubb.bind = false;
+  infotip.bubb.bind = true;
 
   infotip.addEventListener(infotip.bubb.config.hoverCallback ? 'mouseenter' : 'click', callbackHandler, false);
 
@@ -140,7 +140,7 @@ bubb.bindElement = infotip => {
 
       if (!bubbvalue) return;
 
-      let thiscallback = this.bubb.config.callback || bubb.callback,
+      let thiscallback = (typeof this.bubb.config.callback === 'function' && this.bubb.config.callback) || bubb.callback,
           item = this.querySelector(`[data-bubb-value="${this.dataset.bubb}"]`) || e.target;
 
       thiscallback(bubbvalue, item);
@@ -172,9 +172,9 @@ bubb.update = (key, contentOrConfig) => {
 
       if (updateConfig) {
 
-        let bindHover = contentOrConfig.hoverCallback && !infotip.bubb.config.hoverCallback,
-            //bindDefault = (contentOrConfig.callback && infotip.bubb.bind),
-            bindFirst = contentOrConfig.callback && !infotip.bubb.config.hasOwnProperty('callback'); // && !bubb.config.globals.hasOwnProperty('callback');
+        let bindDefault = typeof contentOrConfig.callback === 'boolean' && !infotip.bubb.bind,
+            bindSelf = contentOrConfig.callback && !infotip.bubb.config.hasOwnProperty('callback'),
+            bindHover = contentOrConfig.hoverCallback && !infotip.bubb.config.hoverCallback;
 
         Object.keys(contentOrConfig).forEach( updatedKey => {
           if (!~bubb.availableOptions.indexOf(updatedKey)) return;
@@ -185,7 +185,7 @@ bubb.update = (key, contentOrConfig) => {
 
         bubb.configureElement(infotip, aside);
 
-        if (bindHover || bindFirst) bubb.bindElement(infotip);
+        if (bindDefault || bindSelf || bindHover) bubb.bindElement(infotip);
 
       }
 
@@ -202,7 +202,35 @@ bubb.add = (key, value) => {
     return;
   }
 
-  // todo! bubb.add('pj.irons', 'drummer'), bubb.remove???
+  let keyVal = key.split('.');
+
+  if (keyVal.length > 1 && bubb.config[keyVal[0]]) {
+
+    // add
+
+    if (!bubb.config[keyVal[0]][keyVal[1]] && typeof value === 'string') {
+
+      bubb.config[keyVal[0]][keyVal[1]] = value;
+      document.querySelector(`[data-bubb="${keyVal[0]}"]`).children[0]
+        .insertAdjacentHTML('beforeend', `<div data-bubb-value="${key}">${value}</div>`);
+
+    }
+
+    // remove
+
+    else if (bubb.config[keyVal[0]][keyVal[1]] && typeof value === 'boolean' && !value) {
+
+      console.log('REMOVE');
+
+      delete bubb.config[keyVal[0]][keyVal[1]];
+      let aside = document.querySelector(`[data-bubb="${keyVal[0]}"]`).children[0];
+      Array.from(aside.children).forEach( child => {
+        if (child.dataset.bubbValue === key) aside.removeChild(child);
+      });
+
+    }
+
+  }
 
 };
 
@@ -229,8 +257,6 @@ bubb.updateConfig = (key, contentOrConfig, updateConfig, infotip) => {
     }
   }
   else bubb.config[key] = contentOrConfig;
-
-  console.log('===', bubb.config);
 
 }
 

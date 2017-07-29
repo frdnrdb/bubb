@@ -34,7 +34,7 @@ $bubb-border-radius: 4px;
   border-bottom-width: $width;
   border-bottom-style: solid;
   border-bottom-color: inherit;
-  // border bottom properties split to make tip-color changes through js possible by altering border-bottom-color on parent
+  // border bottom properties are split to make tip-color changes through js possible by altering border-bottom-color on parent
 }
 @mixin boxShadow() {
   box-shadow: rgba(#fad, .35) 6px 7px 0 0;
@@ -51,7 +51,37 @@ $bubb-border-radius: 4px;
   transition: opacity .3s $bubb-transition-expression, bottom .3s $bubb-transition-expression;
   transition-delay: $bubb-transition-delay;
 }
-
+@mixin bubbMenuStyle() {
+  aside {
+    padding: 0!important;
+    div {
+      padding: .75em 0;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 72.5%;
+      font-weight: bold;
+      color: #ddd;
+      border-bottom: 1px solid rgba(#fff, .15);
+      transition: background .3s cubic-bezier(0,0,0,.75);
+      &:first-child {
+        padding-top: 1em;
+      }
+      &:hover {
+        background: rgba(#fff, .1);
+        color: #fff;
+        border-color: transparent;
+      }
+    }
+  }
+}
+@mixin userSelectNone() {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+}
 
 /*
 --- Bubb as html element
@@ -60,6 +90,7 @@ $bubb-border-radius: 4px;
   position: relative;
   word-wrap: break-word;
   hyphens: auto;
+  @include userSelectNone();
   aside {
     position: absolute;
     z-index: 1;
@@ -140,6 +171,13 @@ $bubb-border-radius: 4px;
     }
   }
 
+  /*
+  --- Default menu style
+  */
+  &-menu {
+    @include bubbMenuStyle();
+  }
+
 }
 
 
@@ -181,41 +219,3 @@ $bubb-border-radius: 4px;
     }
   }
 }
-/*
---- With position transition - :before & :after slightly unsynced
-[bubb] {
-  position: relative;
-  &:before, &:after {
-    position: absolute;
-    pointer-events: none;
-    opacity: 0;
-    z-index: 1;
-  }
-  &:after {
-    content: attr(bubb);
-    transform: translate(-50%, 100%);
-    bottom: calc( -#{$bubb-tip-size} - #{$bubb-transition-distance} );
-    left: 50%;
-    @include bubbStyle();
-  }
-  &:before {
-    content: '';
-    transform: translate(-50%, 115%);
-    bottom: - $bubb-transition-distance;
-    left: 50%;
-    @include bubbTipPseudo($bubb-tip-size/1.5);
-  }
-  &:hover {
-    &:before, &:after {
-      @include bubbTransition();
-      opacity: 1;
-    }
-    &:after {
-      bottom: calc( 2px - #{$bubb-tip-size} );
-    }
-    &:before {
-      bottom: 0;
-    }
-  }
-}
-*/

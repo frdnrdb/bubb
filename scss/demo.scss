@@ -3,11 +3,15 @@ $col2: #fad;
 $font-size: 1.5em;
 
 @font-face {
-  font-family: 'Walsheim Bold';
+  font-family: 'Walsheim';
+  font-weight: bold;
+  font-style: bold;
   src: url('./fonts/gt-walsheim-bold-web.ttf');
 }
 @font-face {
-  font-family: 'Walsheim Light';
+  font-family: 'Walsheim';
+  font-weight: normal;
+  font-style: normal;
   src: url('./fonts/gt-walsheim-light-web.ttf');
 }
 * {
@@ -21,7 +25,8 @@ body {
   margin: 0;
   background: #fff;
   color: $col;
-  font-family: 'Walsheim Light', sans-serif;
+  font-family: 'Walsheim', arial, sans-serif;
+  font-weight: normal;
   font-size: $font-size;
   line-height: 1;
   letter-spacing: .025rem;
@@ -53,8 +58,7 @@ header {
     margin-right: -.75em;
   }
   b {
-    font-family: 'Walsheim Bold', sans-serif;
-    font-weight: 700;
+    font-weight: bold;
   }
   span {
     position: absolute;
@@ -74,7 +78,11 @@ header {
 code {
   font-size: 70%;
   padding: 2em;
-  overflow-x: hidden!important;
+  overflow-x: scroll;
+  &::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+  }
 }
 pre {
   padding: 1em;
@@ -96,7 +104,7 @@ section {
   display: block;
   width: 100%;
   &:before {
-    font-family: 'Walsheim Bold';
+    font-weight: bold;
     width: 100%;
     position: absolute;
     left: 0;
@@ -163,10 +171,10 @@ body > span {
     font-size: 11px;
     color: #0AF;
     text-decoration: none;
-    font-family: 'Walsheim Bold';
+    font-weight: bold;
     &:before {
       display: inline-block;
-      font-family: 'Walsheim Light';
+      font-weight: normal;
       margin-right: 6px;
       color: $col2;
       content: 'Share Bubb on';
@@ -220,36 +228,15 @@ body > span {
     margin: 0;
   }
   b {
-    font-family: 'Walsheim Bold';
+    font-weight: bold;
     letter-spacing: 1px;
     font-size: 90%;
-  }
-  &-menu {
-    aside {
-      padding: 0!important;
-      div {
-        padding: .75em 0;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        font-size: 72.5%;
-        font-family: 'Walsheim Bold';
-        color: #ddd;
-        border-bottom: 1px solid rgba(#fff, .15);
-        transition: background .3s cubic-bezier(0,0,0,.75);
-        &:first-child {
-          padding-top: 1em;
-        }
-        &:hover {
-          background: rgba(#fff, .15);
-          color: #fff;
-          border-color: transparent;
-        }
-      }
-    }
   }
 }
 
 /*
+
+svg tip
 
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 41 21">
 <polygon points="21,0 0,21 41,21 "/>
