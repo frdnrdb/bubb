@@ -9,7 +9,7 @@ $bubb-color: #fff;
 $bubb-border-radius: 4px;
 
 @mixin bubbStyle() {
-  padding: .75em 1em;
+  padding: .75em 1em .85em;
   line-height: 1.1;
   font-size: 75%;
   text-align: center;
@@ -58,6 +58,8 @@ $bubb-border-radius: 4px;
 */
 .bubb {
   position: relative;
+  word-wrap: break-word;
+  hyphens: auto;
   aside {
     position: absolute;
     z-index: 1;

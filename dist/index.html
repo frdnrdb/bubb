@@ -24,16 +24,16 @@
   <header><b>Bubb</b> Infotip<span>CSS <i>and</i><i>or</i> JS</span></header>
 
   <section>
-    <p>Pure, minimal CSS infotip. Add class "bubb-delay" (or modify global bubb.scss variables) to add a reveal delay. A bubb with HTML content may want to be class(ified) as "bubb-interactive". If you really don't care for transitions add "bubb-still".</p>
-    <div bubb="Attribute only with pure text content">CSS attribute</div><i></i>
-    <div class="bubb bubb-delayed bubb-interactive">CSS element<aside>Child element with <b>HTML</b> content</aside></div><i></i>
+    <p>Non-dependent, minimal JS script that simplifies utilization of bubbs as UI menus with callbacks and, most importantly, uses simple element attribute keyword references so that bubb content can be dynamically maintained in a configuration object. Available bubb options are listed in the code blocks below. Menu bubbs get a "bubb-menu" class for targeted styling. Mouseover-events are primarily handled by CSS:hover.</p>
+    <div data-bubb="reference">JS basic</div><i></i>
+    <div data-bubb="pj">JS menu</div><i></i>
+    <div data-bubb="abbruzzese">JS callback on hover</div><i></i>
   </section>
 
   <section>
-    <p>Non-dependent, minimal JS script that simplifies utilization of bubbs as UI menus (with callbacks) and, most importantly, uses simple markup references so that bubb content can be dynamically maintained in a configuration object. Available options are listed in the final code block. The menu gets a "bubb-menu" class for targeted styling. Mouseover-events are still handled by CSS :hover.</p>
-    <div data-bubb="reference">JS basic</div><i></i>
-    <div data-bubb-menu="vedder, mccready, gossard, ament">JS menu</div><i></i>
-    <div data-bubb="abbruzzese">JS callback on hover</div><i></i>
+    <p>Pure, minimal CSS infotip. Add class "bubb-delay" (or modify global bubb.scss variables) to add a reveal delay. A bubb with HTML content may want to be class(ified) as "bubb-interactive". If you really don't care for transitions add "bubb-still".</p>
+    <div bubb="Attribute only with pure text content">CSS attribute</div><i></i>
+    <div class="bubb bubb-delayed bubb-interactive">CSS element<aside>Child element with <b>HTML</b> content</aside></div><i></i>
   </section>
 
   <i id="eventsDisplay"></i>
@@ -72,28 +72,31 @@
     //  configuration object. options are optional.
 
     var config = {
-          reference: 'Referenced content maintained in a separate configuration object',
-          vedder: 'vocals',
-          mccready: 'lead guitar',
-          gossard: 'guitar',
-          ament: 'bass',
-          abbruzzese: ['', {
-            callback: function(key, item) {
-              item.innerHTML = 'Loading...';
-              var url = 'https://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1';
-              fetch(url).then(function(res){ return res.json(); }).then(function(quotes){
-                item.innerHTML = quotes[0].content;
-              });
-            },
-            transitionOff: true,
-            hoverCallback: true,
-            delay: true,
-            background: '#fad',
-            color: '#444',
-          }]
-    };
+          reference: 'Referenced content maintained in a <b>separate configuration object</b>',
+          pj: {
+            vedder: 'vocals',
+            mccready: 'guitar',
+            gossard: 'guitar',
+            ament: 'bass'
+          },
+          abbruzzese: {
+            text: '',
+            _: {
+              callback: function(key, item) {
+                item.innerHTML = 'Loading...';
+                var url = 'https://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1';
+                fetch(url).then(function(res){ return res.json(); }).then(function(quotes){
+                  item.innerHTML = quotes[0].content;
+                });
+              },
+              transitionOff: true,
+              hoverCallback: true,
+              delay: true
+            }
+          }
+        };
 
-    // initialize with bubb(options) or bubb(options, callback)
+    // initialize with bubb(config) or bubb(config, callback)
 
     bubb(config, function(key, item) {
       /**/
@@ -108,15 +111,29 @@
 
     });
 
+    // update bubb post initialization
+
+    bubb.update('pj.mccready', 'lead guitar');
+    bubb.update('abbruzzese', { background:'#fad', color:'#444', interactive: false });
+
+    var newBubb = document.createElement('section');
+    newBubb.innerHTML = '<div data-bubb="test">JS added</div>';
+    document.body.appendChild(newBubb);
+    bubb();
+    bubb.add();
+    bubb.update('test', 'added and updated');
+    bubb.update('test', { background: 'gold', color: '#444', callback: function(k,i){console.log('---',k,i);} });
+
     /*
 
     add a globals property to config to override default behaviour
 
     config.globals = {
-      callback: function(){}, // overrides main callback
+      callback: function(), // overrides/ replaces main callback
       transitionOff: false, // default
+      interactive: false, // default, true for bubb menus
       hoverCallback: false, // default
-      delay: false, // true yields .5s reveal delay, configurable via bubb.scss
+      delay: false, // default, true yields .5s reveal delay. configurable via bubb.scss
       background: '#444', // default
       color: '#fff', // default
     };
@@ -133,7 +150,7 @@
           pre.appendChild(code);
           code.innerHTML = document.getElementById('demo').innerHTML.replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\/\*\*\/[\s\S]*\/\*\*\//igm,'');
 
-      document.querySelector('section:last-of-type').appendChild(pre);
+      document.querySelector('section:first-of-type').appendChild(pre);
       hljs.initHighlightingOnLoad();
 
   </script>

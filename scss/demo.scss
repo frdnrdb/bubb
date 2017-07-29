@@ -103,18 +103,19 @@ section {
     top: 0;
     height: 3em;
     line-height: 3em;
-    background: #fafafa;
+    background: #fad;
     display: block;
     padding-left: 7.5%;
     box-sizing: border-box;
     text-transform: uppercase;
     letter-spacing: 2px;
     font-size: 11px;
-    color: #0AF;
-    content: '↓ Requires bubb.min.css';
+    color: #444;
+    content: '↓ Requires bubb.min.css + bubb.min.js';
   }
   &:last-of-type:before {
-    content: '↓ Requires bubb.min.css + bubb.min.js';
+    background: #0ff1ce;
+    content: '↓ Requires bubb.min.css';
   }
   > p {
     font-size: 70%;
@@ -180,7 +181,7 @@ body > span {
   }
 }
 #eventsDisplay {
-  background: rgba(#0ff1ce,.8);
+  background: rgba(#0ff1ce, .7);
   padding: 0 7.5vw;
   box-sizing: border-box;
   line-height: 100vh;
@@ -196,7 +197,7 @@ body > span {
   right: 0;
   z-index: 0;
   &[switch="false"] {
-    background: rgba(#fad, .8);
+    background: rgba(#fad, .7);
   }
   &:empty {
     visibility: hidden;
@@ -221,7 +222,7 @@ body > span {
   b {
     font-family: 'Walsheim Bold';
     letter-spacing: 1px;
-    font-size: 85%;
+    font-size: 90%;
   }
   &-menu {
     aside {
@@ -231,13 +232,16 @@ body > span {
         text-transform: uppercase;
         letter-spacing: 2px;
         font-size: 72.5%;
-        border-bottom: 1px solid rgba(#0ff1ce, .25);
+        font-family: 'Walsheim Bold';
+        color: #ddd;
+        border-bottom: 1px solid rgba(#fff, .15);
         transition: background .3s cubic-bezier(0,0,0,.75);
         &:first-child {
           padding-top: 1em;
         }
         &:hover {
-          background: rgba(#0ff1ce, .5);
+          background: rgba(#fff, .15);
+          color: #fff;
           border-color: transparent;
         }
       }
