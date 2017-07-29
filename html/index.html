@@ -121,7 +121,8 @@
     // --> update bubbs post initialization
 
     bubb.update('pj.mccready', 'lead guitar');
-    bubb.add('pj.irons', 'drums'); // remove a menu item by setting 2nd argument to false
+    bubb.add('pj.irons', 'drums');
+    // bubb.remove('pj.vedder');
     bubb.update('abbruzzese', { background:'#fad', color:'#444', delay: true });
 
     // --> update DOM then add new bubbs post initialization
@@ -134,7 +135,6 @@
 
     config.addedOne = 'Content updated before adding new elements';
 
-    bubb(); // won't work. console warning: bubb aleready initialized
     bubb.add(); // finds and adds new bubbs (here: addedOne + addedTwo)
 
     bubb.update('addedTwo', 'Content updated after adding new elements');

@@ -1,7 +1,6 @@
 /*
 
   TODO!
-    * non-specific update() after dynamic DOM changes
     * Context awareness (width vs content, tip/ direction, as option)
     * TRY alternative tooltip layout ('list', as option)
     * TRY alternative theme (light, material box-shadow, as option)
@@ -195,35 +194,54 @@ bubb.update = (key, contentOrConfig) => {
 
 };
 
-bubb.add = (key, value) => {
+bubb.add = () => {
+  bubb.addOrRemove.apply(this, arguments);
+}
+
+bubb.remove = () => {
+  bubb.addOrRemove.apply(this, arguments);
+}
+
+bubb.addOrRemove = () => {
+
+  // parse DOM for new data-bubb elements
 
   if (arguments.length === 0) {
     bubb.initialize();
     return;
   }
 
-  let keyVal = key.split('.');
+  let key = arguments[0],
+      value = arguments[1],
+      keyVal = key.split('.');
+
+  // add or remove menu items
 
   if (keyVal.length > 1 && bubb.config[keyVal[0]]) {
 
-    // add
+    let menu = keyVal[0],
+        menuItem = keyVal[1];
 
-    if (!bubb.config[keyVal[0]][keyVal[1]] && typeof value === 'string') {
+    // add new menu item
 
-      bubb.config[keyVal[0]][keyVal[1]] = value;
-      document.querySelector(`[data-bubb="${keyVal[0]}"]`).children[0]
+    if (value && typeof value === 'string' && !bubb.config[menu][menuItem]) {
+
+      bubb.config[menu][menuItem] = value;
+
+      document.querySelector(`[data-bubb="${menu}"]`).children[0]
         .insertAdjacentHTML('beforeend', `<div data-bubb-value="${key}">${value}</div>`);
+
+      return;
 
     }
 
-    // remove
+    // remove menu item
 
-    else if (bubb.config[keyVal[0]][keyVal[1]] && typeof value === 'boolean' && !value) {
+    if (!value && bubb.config[menu][menuItem]) {
 
-      console.log('REMOVE');
+      delete bubb.config[menu][menuItem];
 
-      delete bubb.config[keyVal[0]][keyVal[1]];
-      let aside = document.querySelector(`[data-bubb="${keyVal[0]}"]`).children[0];
+      let aside = document.querySelector(`[data-bubb="${menu}"]`).children[0];
       Array.from(aside.children).forEach( child => {
         if (child.dataset.bubbValue === key) aside.removeChild(child);
       });
