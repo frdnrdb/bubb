@@ -7,59 +7,52 @@
 
     * MAYBE: Context awareness (width vs content, tip/ direction, as option)
 
-    keep it simple!
-
 */
 
 "use strict";
 
 (function() {
 
-let bubb = (config, callback) => {
-
-  if (!bubb.initialized) bubb.initialize(config, callback);
-  else console.log('bubb already initialized. use bubb.add to process new DOM elements or bubb.update to modiy existing instances');
-  bubb.initialized = true;
-
-}
-
-bubb.initialize = (config, callback) => {
+const bubb = (config, callback) => {
 
   bubb.config = bubb.config || (typeof config === 'object' ? config : {});
   bubb.config._ = bubb.config._ || config._ || {};
   bubb.callback = bubb.callback || (typeof callback === 'function' ? callback : false);
 
-  // Parse DOM for valid bubb elements - skip initialized elements
   let bubbs = Array.from( document.querySelectorAll('[data-bubb]:not(.bubb)') );
 
   if (!bubbs.length) return;
 
-  bubbs.forEach(bubb.buildElement);
+  bubbs.forEach(buildElement);
 
 }
 
-bubb.buildElement = infotip => {
+bubb.update = (key, contentOrConfig) => update(key, contentOrConfig);
+bubb.add = bubb.refresh = () => addOrRemove.apply(this, arguments);
+bubb.remove = () => addOrRemove.apply(this, arguments);
 
-  let key = infotip.dataset.bubb.trim(),
+const buildElement = _bubbParent => {
+
+  let key = _bubbParent.dataset.bubb.trim(),
       data = bubb.config[key],
 
       chck = typeof data === 'object',
-      opts = chck && data.hasOwnProperty('_') ? data._ : false,
-      menu = chck && !data.hasOwnProperty('text');
+      opts = chck && data._,
+      menu = chck && !data.hasOwnProperty('text'),
 
-      function setConfiguration(config) {
-        if (opts || Object.keys(bubb.config._).length) {
-          bubb.availableOptions.forEach( option => {
-            config[option] = opts[option] || bubb.config._[option];
-          });
-        }
-        return config;
+      validOpts;
+
+      function setConfiguration() {
+        return availableOptions.reduce( (config, option) => {
+          if (validOpts = (opts && opts[option]) || bubb.config._[option]) config[option] = validOpts;
+          return config;
+        }, {});
       }
 
       let bindMenu = typeof bubb.callback === 'function' || typeof bubb.config._.callback === 'function';
 
-      infotip.bubb = {
-        config: setConfiguration({}),
+      _bubbParent.bubb = {
+        config: setConfiguration(),
         type: menu ? 'menu' : opts ? 'opts' : 'string',
         bind: (menu && bindMenu) || (opts && typeof opts.callback === 'function')
       };
@@ -67,7 +60,7 @@ bubb.buildElement = infotip => {
       let props = !menu ? opts ? ['text'] : [false] : Object.keys(data);
       let html = props.reduce( buildConent.bind(this, key), '' );
 
-      function buildConent(key, acc, prop) {
+      function buildConent(key, markup, prop) {
 
           if (prop === '_') return;
 
@@ -75,66 +68,64 @@ bubb.buildElement = infotip => {
               selector = key + (prop && prop !== 'text' ? '.' + prop : ''),
               attribute = ` data-bubb-value="${selector}"`;
 
-          return acc += `<div ${attribute}>${content}</div>`;
+          return markup += `<div ${attribute}>${content}</div>`;
 
       }
 
-      bubb.configureElement(infotip, null, html);
+      configureElement(_bubbParent, null, html);
 
 };
 
-bubb.configureElement = (infotip, aside, html) => {
+const configureElement = (_bubbParent, _bubbLe, html) => {
 
-    aside = aside || document.createElement('aside'); // keep if update
+    _bubbLe = _bubbLe || document.createElement('aside');
 
-    let config = infotip.bubb.config,
+    let config = _bubbParent.bubb.config,
         update = !html;
 
     if (config.background) {
-      aside.style.background = config.background;
-      aside.style.borderBottomColor = config.background;
+      _bubbLe.style.background = config.background;
+      _bubbLe.style.borderBottomColor = config.background;
     }
-    if (config.color) aside.style.color = config.color;
+    if (config.color) _bubbLe.style.color = config.color;
 
-    infotip.classList.add('bubb');
+    _bubbParent.classList.add('bubb');
 
-    if (config.transitionOff) infotip.classList.add('bubb-still');
-    else if (update) infotip.classList.remove('bubb-still');
+    if (config.transitionOff) _bubbParent.classList.add('bubb-still');
+    else if (update) _bubbParent.classList.remove('bubb-still');
 
-    if (config.delay) infotip.classList.add('bubb-delayed');
-    else if (update) infotip.classList.remove('bubb-delayed');
+    if (config.delay) _bubbParent.classList.add('bubb-delayed');
+    else if (update) _bubbParent.classList.remove('bubb-delayed');
 
     // make the bubb hoverable
-    if (infotip.bubb.type === 'menu' || config.callback) {
-      infotip.classList.add('bubb-interactive');
-    }
-    if (config.interactive) infotip.classList.add('bubb-interactive');
-    else if (update && config.hasOwnProperty('interactive')) infotip.classList.remove('bubb-interactive');
+    (_bubbParent.bubb.type === 'menu' || config.callback) && _bubbParent.classList.add('bubb-interactive');
 
-    if (infotip.bubb.type === 'menu') {
-      infotip.classList.add('bubb-menu'); // convenience class for styling
-    }
+    if (config.interactive) _bubbParent.classList.add('bubb-interactive');
+    else if (update && config.hasOwnProperty('interactive')) _bubbParent.classList.remove('bubb-interactive');
+
+    // add convenience class for styling
+    _bubbParent.bubb.type === 'menu' && _bubbParent.classList.add('bubb-menu');
 
     if (!update) {
-      aside.innerHTML = html;
-      infotip.appendChild(aside);
+      _bubbLe.innerHTML = html;
+      _bubbParent.appendChild(_bubbLe);
     }
 
-    if ( !infotip.bubb.bind ) return;
+    if (!_bubbParent.bubb.bind) return;
 
-    bubb.bindElement(infotip);
+    bindElement(_bubbParent);
 
 };
 
-bubb.bindElement = infotip => {
+const bindElement = _bubbParent => {
 
-  infotip.bubb.bind = true;
+  _bubbParent.bubb.bind = true;
 
-  infotip.addEventListener(bubb.isMobile ? 'touchstart' : infotip.bubb.config.hoverCallback ? 'mouseenter' : 'click', callbackHandler, false);
+  _bubbParent.addEventListener(isMobile ? 'touchstart' : _bubbParent.bubb.config.hoverCallback ? 'mouseenter' : 'click', callbackHandler, false);
 
   function callbackHandler(e) {
 
-      let hover = infotip.bubb.config.hoverCallback,
+      let hover = _bubbParent.bubb.config.hoverCallback,
           bubbvalue = hover ? this.dataset.bubb : e.target.dataset.bubbValue || e.target.parentNode.dataset.bubbValue;
 
       if (!bubbvalue) return;
@@ -148,13 +139,12 @@ bubb.bindElement = infotip => {
 
 };
 
-bubb.update = (key, contentOrConfig) => {
+const update = (key, contentOrConfig) => {
 
       if (typeof key !== 'string' || !contentOrConfig) return;
 
-      let updateConfig = typeof contentOrConfig === 'object';
-
-      let item = document.querySelector(`[data-bubb-value="${key}"]`),
+      let updateConfig = typeof contentOrConfig === 'object',
+          item = document.querySelector(`[data-bubb-value="${key}"]`),
           parent;
 
       if (!item && updateConfig) parent = document.querySelector(`[data-bubb="${key}"]`);
@@ -167,118 +157,117 @@ bubb.update = (key, contentOrConfig) => {
 
       // update element config
 
-      let infotip = parent || item.parentNode.parentNode; // .bubb < aside < div (item)
+      let _bubbParent = parent || item.parentNode.parentNode; // .bubb < aside < div (item)
 
       if (updateConfig) {
 
-        let bindDefault = typeof contentOrConfig.callback === 'boolean' && !infotip.bubb.bind,
-            bindSelf = contentOrConfig.callback && !infotip.bubb.config.hasOwnProperty('callback'),
-            bindHover = contentOrConfig.hoverCallback && !infotip.bubb.config.hoverCallback;
+        let bindDefault = typeof contentOrConfig.callback === 'boolean' && !_bubbParent.bubb.bind,
+            bindSelf = contentOrConfig.callback && !_bubbParent.bubb.config.hasOwnProperty('callback'),
+            bindHover = contentOrConfig.hoverCallback && !_bubbParent.bubb.config.hoverCallback;
 
         Object.keys(contentOrConfig).forEach( updatedKey => {
-          if (!~bubb.availableOptions.indexOf(updatedKey)) return;
-          infotip.bubb.config[updatedKey] = contentOrConfig[updatedKey];
+          if (!~availableOptions.indexOf(updatedKey)) return;
+          _bubbParent.bubb.config[updatedKey] = contentOrConfig[updatedKey];
         });
 
-        let aside = parent ? parent.children[0] : item.parentNode;
+        let _bubbLe = parent ? parent.children[0] : item.parentNode;
 
-        bubb.configureElement(infotip, aside);
+        configureElement(_bubbParent, _bubbLe);
 
-        if (bindDefault || bindSelf || bindHover) bubb.bindElement(infotip);
+        (bindDefault || bindSelf || bindHover) && bindElement(_bubbParent);
 
       }
 
       // update bubb config
 
-      bubb.updateConfig(key, contentOrConfig, updateConfig, infotip);
+      updateMainConfig(key, contentOrConfig, updateConfig, _bubbParent);
 
 };
 
-bubb.add = () => {
-  bubb.addOrRemove.apply(this, arguments);
-}
-
-bubb.remove = () => {
-  bubb.addOrRemove.apply(this, arguments);
-}
-
-bubb.addOrRemove = () => {
-
-  // parse DOM for new data-bubb elements
+const addOrRemove = () => {
 
   if (arguments.length === 0) {
-    bubb.initialize();
+    bubb();
     return;
   }
 
   let key = arguments[0],
       value = arguments[1],
-      keyVal = key.split('.');
 
-  // add or remove menu items
+      menu = key.split('.').reduce( (obj, val, i) => {
+        obj[['key','val'][i]] = val;
+        return obj;
+      }, {});
 
-  if (keyVal.length > 1 && bubb.config[keyVal[0]]) {
+  if (!menu.val || !bubb.config[menu.key]) return;
 
-    let menu = keyVal[0],
-        menuItem = keyVal[1];
+  // add new menu item
 
-    // add new menu item
+  if (value && typeof value === 'string' && !bubb.config[menu.key][menu.val]) {
 
-    if (value && typeof value === 'string' && !bubb.config[menu][menuItem]) {
+    bubb.config[menu.key][menu.val] = value;
 
-      bubb.config[menu][menuItem] = value;
+    document.querySelector(`[data-bubb="${menu.key}"]`).children[0]
+      .insertAdjacentHTML('beforeend', `<div data-bubb-value="${key}">${value}</div>`);
 
-      document.querySelector(`[data-bubb="${menu}"]`).children[0]
-        .insertAdjacentHTML('beforeend', `<div data-bubb-value="${key}">${value}</div>`);
+    return;
 
-      return;
+  }
 
-    }
+  // remove menu item
 
-    // remove menu item
+  if (!value && bubb.config[menu.key][menu.val]) {
 
-    if (!value && bubb.config[menu][menuItem]) {
+    delete bubb.config[menu.key][menu.val];
 
-      delete bubb.config[menu][menuItem];
-
-      let aside = document.querySelector(`[data-bubb="${menu}"]`).children[0];
-      Array.from(aside.children).forEach( child => {
-        if (child.dataset.bubbValue === key) aside.removeChild(child);
-      });
-
-    }
+    let _bubbLe = document.querySelector(`[data-bubb="${menu.key}"]`).children[0];
+    Array.from(_bubbLe.children).forEach( child => {
+      if (child.dataset.bubbValue === key) _bubbLe.removeChild(child);
+    });
 
   }
 
 };
 
-bubb.updateConfig = (key, contentOrConfig, updateConfig, infotip) => {
+const updateMainConfig = (key, contentOrConfig, updateConfig, _bubbParent) => {
 
-  let menu = ~key.indexOf('.') ? key.split('.') : false,
-      opts = infotip.bubb.type === 'opts';
+  let typeMenu = _bubbParent.bubb.type === 'menu',
+      typeOptions = _bubbParent.bubb.type === 'opts',
 
-  if (menu || opts || updateConfig) {
-    let prop = menu ? menu[0] : key;
-    if (!updateConfig) bubb.config[prop][menu ? menu[1] : 'text'] = contentOrConfig;
-    else if (updateConfig) {
-      if (menu) {
-        bubb.config[prop]['_'] = contentOrConfig;
-      }
-      else if (!opts) {
-        bubb.config[prop] = {
-          text: bubb.config[prop],
-          _: contentOrConfig
-        };
-        infotip.bubb.type === 'opts';
-      }
-      Object.assign(bubb.config[prop]['_'], contentOrConfig);
-    }
+      keyVal = ~key.indexOf('.') && key.split('.'),
+
+      menu = keyVal ? keyVal.reduce( (obj, val, i) => {
+        obj[['key','val'][i]] = val;
+        return obj;
+      }, {}) : {};
+
+  if (!typeMenu && !typeOptions && !updateConfig) {
+      bubb.config[key] = contentOrConfig;
+      return;
   }
-  else bubb.config[key] = contentOrConfig;
+
+  let prop = menu.key || key;
+
+  if (!updateConfig) {
+    bubb.config[prop][menu.val || 'text'] = contentOrConfig;
+    return;
+  }
+
+  if (!typeMenu && !typeOptions) {
+    bubb.config[prop] = {
+      text: bubb.config[prop],
+      _: contentOrConfig
+    };
+    _bubbParent.bubb.type === 'opts';
+    return;
+  }
+
+  bubb.config[prop]['_'] = bubb.config[prop]['_'] || contentOrConfig;
+  Object.assign(bubb.config[prop]['_'], contentOrConfig);
 
 }
 
-bubb.availableOptions = [
+const availableOptions = [
   'callback',
   'hoverCallback',
   'background',
@@ -288,7 +277,7 @@ bubb.availableOptions = [
   'delay'
 ];
 
-bubb.isMobile = (typeof window.orientation !== "undefined") || ~navigator.userAgent.indexOf('IEMobile') ? true : false;
+const isMobile = (typeof window.orientation !== "undefined") || ~navigator.userAgent.indexOf('IEMobile') ? true : false;
 
 if (typeof exports !== 'undefined' && exports !== null) exports.bubb = bubb;
 // todo! add support for amd/ requirejs
