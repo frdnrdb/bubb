@@ -122,7 +122,7 @@ module.exports = function(grunt) {
   			command: 'git commit -m \'patch\''
   		},
       git_push: {
-  			command: 'git push https://<%= process.env.GIT_USER %>:<%= process.env.GIT_PASS %>@github.com:frdnrdb/bubb.git master'
+  			command: 'git push https://<%= process.env.GIT_USER %>:<%= process.env.GIT_PASS %>@github.com/frdnrdb/bubb.git master'
   		},
       npm_version: {
   			command: 'npm version patch'
