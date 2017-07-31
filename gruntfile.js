@@ -1,5 +1,6 @@
 module.exports = function(grunt) {
 
+  require('dotenv').config();
   require('load-grunt-tasks')(grunt);
 
   grunt.registerTask('build', ['sass','cssmin','es6transpiler:dist','uglify','replace','clean']); //'header','clean'
@@ -118,10 +119,10 @@ module.exports = function(grunt) {
   			command: 'git add .'
   		},
       git_commit: {
-  			command: 'git commit -m "patch"'
+  			command: 'git commit -m \'patch\''
   		},
       git_push: {
-  			command: 'git push origin master'
+  			command: 'git push https://<%= process.env.GIT_USER %>:<%= process.env.GIT_PASS %>@github.com:frdnrdb/bubb.git master'
   		},
       npm_version: {
   			command: 'npm version patch'

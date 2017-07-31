@@ -1,4 +1,4 @@
-## bubb *infotip*
+## bubb
 
 non-dependent, non-fancy javascripted infotip.
 
@@ -26,7 +26,7 @@ non-dependent, non-fancy javascripted infotip.
   }
 
   const callback = (key, el) => {
-    console.log(key); // menu click -> eg. 'ref.mitchell'
+    console.log(key); // menu click -> eg. 'bobble.mitchell'
   }
 
   bubb(config, callback)
@@ -66,7 +66,8 @@ let bubb = require('bubb');
   /*
 
     callback: function(){} || true
-    // overrides initial (or global) callback. boolean true adds click listener and reports to default callback
+    // overrides initial (or global) callback.
+    // boolean true adds click listener and reports to default callback
 
     transitionOff: false
     // default
@@ -78,7 +79,8 @@ let bubb = require('bubb');
     // default
 
     delay: false
-    // default, true yields .5s reveal delay. configurable via bubb.scss
+    // default, true yields .5s reveal delay.
+    // configurable via bubb.scss
 
     background: '#444'
     // default
