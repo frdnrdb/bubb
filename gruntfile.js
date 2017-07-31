@@ -4,8 +4,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('build', ['sass','cssmin','es6transpiler:dist','uglify','replace','clean']); //'header','clean'
   grunt.registerTask('serve', ['sass','cssmin','es6transpiler','copy','connect','open','watch']);
-
-  grunt.registerTask('git', ['gitadd','gitcommit']);
+  grunt.registerTask('publish', ['build','shell:git_add','shell:git_commit','shell:git_push','shell:npm_version','shell:npm_publish']);
 
   grunt.initConfig ({
     sass: {
@@ -114,20 +113,23 @@ module.exports = function(grunt) {
         app: grunt.option('safari') ? 'Safari' : 'Google Chrome'
       }
     },
-    gitadd: {
-      task: {
-        options: {
-          all: true
-        }
-      }
-    },
-    gitcommit: {
-      task: {
-        options: {
-          message: 'patch'
-        }
-      }
-    },
+    shell: {
+  		git_add: {
+  			command: 'git add .'
+  		},
+      git_commit: {
+  			command: 'git commit -m "patch"'
+  		},
+      git_push: {
+  			command: 'git push origin master'
+  		},
+      npm_version: {
+  			command: 'npm version patch'
+  		},
+      npm_publish: {
+  			command: 'npm publish'
+  		}
+  	}
   });
 
 };

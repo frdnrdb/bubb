@@ -288,12 +288,8 @@ const availableOptions = [
   'delay'
 ];
 
-f (typeof module !== 'undefined' && module.exports) {
-  module.exports = bubb;
-} else if (typeof define === 'function' && define.amd) {
-  define(bubb);
-} else {
-  window.bubb = bubb;
-}
+const isMobile = (typeof window.orientation !== "undefined") || ~navigator.userAgent.indexOf('IEMobile') ? true : false;
+
+typeof module !== 'undefined' && module.exports ? module.exports = bubb : window.bubb = bubb;
 
 })();

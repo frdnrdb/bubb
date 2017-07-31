@@ -24,11 +24,11 @@
     "grunt-contrib-uglify": "^1.0.1",
     "grunt-contrib-watch": "^1.0.0",
     "grunt-es6-transpiler": "^1.0.2",
-    "grunt-git": "^1.0.5",
     "grunt-header": "^1.1.0",
     "grunt-open": "^0.2.3",
     "grunt-replace": "^1.0.1",
     "grunt-sass": "^1.2.0",
+    "grunt-shell": "^2.1.0",
     "load-grunt-tasks": "^3.5.2"
   }
 }
