@@ -9,9 +9,9 @@
 
 */
 
-"use strict";
-
 (function() {
+
+"use strict";
 
 const bubb = (config, callback) => {
 
@@ -288,10 +288,12 @@ const availableOptions = [
   'delay'
 ];
 
-const isMobile = (typeof window.orientation !== "undefined") || ~navigator.userAgent.indexOf('IEMobile') ? true : false;
+f (typeof module !== 'undefined' && module.exports) {
+  module.exports = bubb;
+} else if (typeof define === 'function' && define.amd) {
+  define(bubb);
+} else {
+  window.bubb = bubb;
+}
 
-if (typeof exports !== 'undefined' && exports !== null) exports.bubb = bubb;
-// todo! add support for amd/ requirejs
-else window.bubb = bubb;
-
-})(this);
+})();

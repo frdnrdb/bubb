@@ -11,7 +11,7 @@
 <script src="/libs/js/highlight.min.js"></script>
 <link rel="stylesheet" href="demo.min.css">
 <link rel="stylesheet" href="bubb.min.css">
-
+<script delete src="//localhost:35729/livereload.js"></script>
 </head>
 
 <body>
@@ -21,19 +21,26 @@
     <a href="https://github.com/frdnrdb/bubb">GitHub</a>
   </span>
 
-  <header><b>Bubb</b> Infotip<span>CSS <i>and</i><i>or</i> JS</span></header>
+  <header>
+    <b>Bubb</b> Infotip<span>CSS <i>and</i><i>or</i> JS</span>
+    <aside>
+      <a id="dist-js" href="https://unpkg.com/bubb/dist/bubb.min.js"></a>
+      <a id="dist-css" href="https://unpkg.com/bubb/dist/bubb.min.css"></a>
+      <a id="npm-js" href="https://www.npmjs.com/package/bubb"></a>
+    </aside>
+  </header>
 
   <section>
-    <p>Non-dependent, minimal JS script that simplifies utilization of bubbs as UI menus with callbacks and, most importantly, uses simple element attribute keyword references for lucid maintenance of content within a configuration object. All available bubb options are listed in the code blocks below. Menu bubbs get a "bubb-menu" class for targeted styling. Mouseover-events are primarily handled by CSS:hover.</p>
-    <div data-bubb="reference">JS basic</div><i></i>
-    <div data-bubb="pj">JS menu</div><i></i>
-    <div data-bubb="abbruzzese">JS callback on hover</div><i></i>
+    <p>Minimal non-dependent JS script that simplifies utilization of bubbs as UI menus with callbacks and, most importantly, uses simple element attribute keyword references for lucid maintenance of content within a configuration object. All available bubb options are listed in the code blocks below. Menu bubbs get a "bubb-menu" class for targeted styling. Mouseover-events are primarily handled by CSS:hover.</p>
+    <div data-bubb="reference">Basic</div><i></i>
+    <div data-bubb="pj">Menu</div><i></i>
+    <div data-bubb="abbruzzese">Callback on hover</div><i></i>
   </section>
 
   <section>
     <p>Pure, minimal CSS infotip. Add class "bubb-delay" (or modify global bubb.scss variables) to add a reveal delay. A bubb with HTML content may want to be class(ified) as "bubb-interactive". If you really don't care for transitions add "bubb-still".</p>
-    <div bubb="Attribute only with pure text content">CSS attribute</div><i></i>
-    <div class="bubb bubb-delayed bubb-interactive">CSS element<aside>Child element with <b>HTML</b> content</aside></div><i></i>
+    <div bubb="Attribute only with pure text content">Attribute</div><i></i>
+    <div class="bubb bubb-delayed bubb-interactive">Element<aside>Child element with <b>HTML</b> content</aside></div><i></i>
   </section>
 
   <i id="eventsDisplay"></i>
@@ -128,16 +135,16 @@
     // --> update DOM then add new bubbs post initialization
 
     var addElements = ''+
-          '<button data-bubb="addedOne">JS added after bubb init - method one</button><i></i><br>'+
-          '<button data-bubb="addedTwo">JS added after bubb init - method two</button><i></i>';
+          '<div data-bubb="addedOne">Dynamically added #1</div><i></i><br>'+
+          '<div data-bubb="addedTwo">Dynamically added #2</div><i></i>';
 
     document.querySelector('section:first-of-type').insertAdjacentHTML('beforeend', addElements);
 
-    config.addedOne = 'Content updated before adding element';
+    config.addedOne = 'config.element edited before adding bubb to DOM';
 
     bubb.refresh(); // finds and adds new bubbs (here: addedOne + addedTwo)
 
-    bubb.update('addedTwo', 'Content updated after adding element');
+    bubb.update('addedTwo', 'bubb.update(element, content) called after adding bubb to DOM');
     bubb.update('addedTwo', {
       background: 'gold',
       color: '#444',
@@ -176,16 +183,32 @@
   </script>
   <script>
 
+      /*
       function getFileSize(string) {
         var bytes = encodeURI(string).split(/%..|./).length - 1;
         return (bytes / 1024).toFixed(1) + 'kb';
       }
 
-      var url = 'https://raw.githubusercontent.com/frdnrdb/bubb/master/dist/bubb.min.js';
-      fetch(url).then(function(res){ return res.text(); }).then(function(file){
-        console.log('***', getFileSize(file));
+      var urls = ['https://unpkg.com/bubb/dist/bubb.min.js','https://unpkg.com/bubb/dist/bubb.min.css'];
+      urls.forEach( function(url) {
+        fetch(url).then(function(res){ return res.text(); }).then(function(file){
+          console.log(url.split('/').pop(), getFileSize(file));
+        });
       });
+      */
 
+      var urls = ['https://unpkg.com/bubb/dist'];
+      urls.forEach( function(url) {
+        fetch(url).then(function(res){ return res.text(); }).then(function(doc){
+          var js = doc.match(/(bubb.min.js).*?(\d+.?\d+\skB)/),
+              css = doc.match(/(bubb.min.css).*?(\d+.?\d+\skB)/);
+
+          document.querySelector('#dist-js').innerHTML = '↓ ' + js.slice(1,3).join(' <b>')+'</b>';
+          document.querySelector('#dist-css').innerHTML = '↓ ' + css.slice(1,3).join(' <b>')+'</b>';
+          document.querySelector('#npm-js').innerHTML = 'yarn add bubb <b>or</b> npm i --save bubb';
+
+        });
+      });
 
   </script>
 </body>

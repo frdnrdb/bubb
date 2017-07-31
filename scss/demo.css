@@ -1,109 +1,92 @@
-$col: #444;
-$col2: #fad;
-$font-size: 1.5em;
-$max-width: 720px;
-
+@charset "UTF-8";
 @font-face {
   font-family: 'Walsheim';
   font-weight: bold;
   font-style: bold;
-  src: url('./fonts/gt-walsheim-bold-web.ttf');
-}
+  src: url("./fonts/gt-walsheim-bold-web.ttf"); }
+
 @font-face {
   font-family: 'Walsheim';
   font-weight: normal;
   font-style: normal;
-  src: url('./fonts/gt-walsheim-light-web.ttf');
-}
+  src: url("./fonts/gt-walsheim-light-web.ttf"); }
+
 * {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+  -moz-osx-font-smoothing: grayscale; }
 
 body {
   padding: 0 0 2em;
   margin: 0;
   background: #fff;
-  color: $col;
+  color: #444;
   font-family: 'Walsheim', arial, sans-serif;
   font-weight: normal;
-  font-size: $font-size;
+  font-size: 1.5em;
   line-height: 1;
   letter-spacing: .025rem;
   position: relative;
   min-height: 100vh;
-  box-sizing: border-box;
-}
+  box-sizing: border-box; }
+
 header {
   font-size: 1em;
-  padding: 2.5em calc( (100vw - #{$max-width}) / 2 );
+  padding: 2.5em calc( (100vw - 720px) / 2);
   box-sizing: border-box;
   width: 100%;
   position: relative;
   display: block;
-  background: $col;
-  color: #fff;
-  aside {
-    margin-top: .75em;
-    a {
+  background: #444;
+  color: #fff; }
+  header aside {
+    margin-top: .75em; }
+    header aside a {
       color: #fff;
       text-decoration: none;
       font-size: 50%;
       text-transform: uppercase;
       letter-spacing: 2px;
-      margin: 1em .5em 0;
-      &:hover {
-        color: #0ff1ce;
-      }
-      &:before {
-        content:'';
+      margin: 1em .5em 0; }
+      header aside a:hover {
+        color: #0ff1ce; }
+      header aside a:before {
+        content: '';
         max-height: 0;
         overflow: hidden;
-        display: block;
-      }
-    }
-  }
-  i {
+        display: block; }
+  header i {
     font-style: normal;
     font-size: 50%;
     opacity: .65;
     position: relative;
+    margin-right: -.75em; }
+    header i:first-of-type {
+      top: -.85em; }
+    header i:last-of-type {
+      left: -1.1em; }
+  header b {
+    font-weight: bold; }
+  header span {
+    float: right; }
+  header:after {
+    content: none;
+    position: absolute;
+    width: 100vw;
+    height: 7.3em;
+    display: block;
+    background: rgba(0, 0, 0, 0.035);
+    top: -3.25em;
+    left: -7.5vw; }
 
-    &:first-of-type {
-      top: -.85em;
-    }
-    &:last-of-type {
-      left: -1.1em;
-    }
-    margin-right: -.75em;
-  }
-  b {
-    font-weight: bold;
-  }
-  span {
-    float: right;
-  }
-  &:after {
-    content:none;
-    position:absolute;
-    width:100vw;
-    height:7.3em;
-    display:block;
-    background:rgba(0,0,0,.035);
-    top:-3.25em;
-    left:-7.5vw;
-  }
-}
 code {
   font-size: 70%;
   padding: 2em;
-  overflow-x: scroll;
-  &::-webkit-scrollbar {
+  overflow-x: scroll; }
+  code::-webkit-scrollbar {
     width: 0px;
-    background: transparent;
-  }
-}
+    background: transparent; }
+
 pre {
   padding: 1em;
   border: 1px solid #f0f0f0;
@@ -111,21 +94,20 @@ pre {
   transition: opacity .5s linear;
   position: relative;
   z-index: 0;
-  filter: grayscale(100%);
-  &:hover {
+  filter: grayscale(100%); }
+  pre:hover {
     opacity: 1;
-    filter: grayscale(0%);
-  }
-}
+    filter: grayscale(0%); }
+
 section {
   position: relative;
   padding: 3em 0 2em;
-  max-width: $max-width;
+  max-width: 720px;
   margin: 0 auto;
   box-sizing: border-box;
   display: block;
-  width: 100%;
-  &:before {
+  width: 100%; }
+  section:before {
     font-weight: bold;
     width: 100%;
     position: absolute;
@@ -141,77 +123,65 @@ section {
     letter-spacing: 2px;
     font-size: 11px;
     color: #444;
-    content: 'JS version  ↓  Requires bubb.min.css + bubb.min.js';
-  }
-  &:last-of-type:before {
+    content: 'JS version  ↓  Requires bubb.min.css + bubb.min.js'; }
+  section:last-of-type:before {
     background: #0ff1ce;
-    content: 'CSS version  ↓  Requires bubb.min.css';
-  }
-  > p {
+    content: 'CSS version  ↓  Requires bubb.min.css'; }
+  section > p {
     font-size: 70%;
     line-height: 1.3;
-    color: #888;
-  }
-  > div {
+    color: #888; }
+  section > div {
     display: inline-block;
     font-size: 95%;
     margin-top: 1em;
     padding-bottom: 2px;
-    border-bottom: 2px dotted $col2;
+    border-bottom: 2px dotted #fad;
     cursor: help;
-    position: relative;
-    &:hover {
-      border-color: transparent;
-    }
-  }
-  > i {
-    &:after {
-      content: '⟵  :hover';
-      display: inline-block;
-      white-space: nowrap;
-      border-bottom: none;
-      margin-left: 12px;
-      font-size: 75%;
-      opacity: .35;
-    }
-  }
-}
+    position: relative; }
+    section > div:hover {
+      border-color: transparent; }
+  section > i:after {
+    content: '⟵  :hover';
+    display: inline-block;
+    white-space: nowrap;
+    border-bottom: none;
+    margin-left: 12px;
+    font-size: 75%;
+    opacity: .35; }
+
 body > span {
-  background: $col;
+  background: #444;
   display: block;
   position: absolute;
   bottom: 0;
   width: 100%;
   height: 2em;
-  line-height: 2em;
-  a {
+  line-height: 2em; }
+  body > span a {
     position: absolute;
     top: 0;
-    left: calc( (100vw - #{$max-width}) / 2 );
+    left: calc( (100vw - 720px) / 2);
     text-transform: uppercase;
     letter-spacing: 2px;
     font-size: 11px;
     color: #0AF;
     text-decoration: none;
-    font-weight: bold;
-    &:before {
+    font-weight: bold; }
+    body > span a:before {
       display: inline-block;
       font-weight: normal;
       margin-right: 6px;
-      color: $col2;
-      content: 'Share Bubb on';
-    }
-    &:last-of-type {
+      color: #fad;
+      content: 'Share Bubb on'; }
+    body > span a:last-of-type {
       left: auto;
-      right: calc( (100vw - #{$max-width}) / 2 );
-      &:before {
-        content: 'Download Bubb on';
-      }
-    }
-  }
-}
+      right: calc( (100vw - 720px) / 2); }
+      body > span a:last-of-type:before {
+        content: 'Download Bubb on'; }
+
 #eventsDisplay {
-  background: rgba(#0ff1ce, .7);
+  background: rgba(15, 241, 206, 0.7);
   padding: 0 7.5vw;
   box-sizing: border-box;
   line-height: 100vh;
@@ -225,21 +195,15 @@ body > span {
   position: fixed;
   top: 0;
   right: 0;
-  z-index: 0;
-  &[switch="false"] {
-    background: rgba(#fad, .7);
-  }
-  &:empty {
-    visibility: hidden;
-  }
-}
+  z-index: 0; }
+  #eventsDisplay[switch="false"] {
+    background: rgba(255, 170, 221, 0.7); }
+  #eventsDisplay:empty {
+    visibility: hidden; }
+
 @media all and (max-width: 550px) {
   body {
-    font-size: 5vw;
-  }
-}
-
-
+    font-size: 5vw; } }
 
 /*
 --- bubb modifier
@@ -252,19 +216,16 @@ button {
   color: #444;
   padding: .5em 1em;
   border-radius: 4px;
-  margin-bottom: 1em;
-}
-.bubb {
-  p {
-    padding: 0;
-    margin: 0;
-  }
-  b {
-    font-weight: bold;
-    letter-spacing: 1px;
-    font-size: 90%;
-  }
-}
+  margin-bottom: 1em; }
+
+.bubb p {
+  padding: 0;
+  margin: 0; }
+
+.bubb b {
+  font-weight: bold;
+  letter-spacing: 1px;
+  font-size: 90%; }
 
 /*
 

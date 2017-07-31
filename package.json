@@ -1,15 +1,18 @@
 {
   "name": "bubb",
-  "version": "1.0.4",
   "description": "infotip",
-  "main": "app.js",
-  "scripts": {
-    "start": "grunt serve",
-    "publish": "grunt build && git add . && git commit -m 'patch' && npm version patch && npm publish"
-  },
-  "author": "frd",
+  "version": "1.0.4",
+  "author": "frdnrdb",
   "license": "MIT",
-  "private": false,
+  "main": "./dist/bubb.min.js",
+  "homepage": "http://noink.no",
+  "scripts": {
+    "start": "grunt serve"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:frdnrdb/bubb.git"
+  },
   "dependencies": {},
   "devDependencies": {
     "grunt": "^1.0.1",
@@ -21,6 +24,7 @@
     "grunt-contrib-uglify": "^1.0.1",
     "grunt-contrib-watch": "^1.0.0",
     "grunt-es6-transpiler": "^1.0.2",
+    "grunt-git": "^1.0.5",
     "grunt-header": "^1.1.0",
     "grunt-open": "^0.2.3",
     "grunt-replace": "^1.0.1",

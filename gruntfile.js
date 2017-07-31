@@ -5,6 +5,8 @@ module.exports = function(grunt) {
   grunt.registerTask('build', ['sass','cssmin','es6transpiler:dist','uglify','replace','clean']); //'header','clean'
   grunt.registerTask('serve', ['sass','cssmin','es6transpiler','copy','connect','open','watch']);
 
+  grunt.registerTask('git', ['gitadd','gitcommit']);
+
   grunt.initConfig ({
     sass: {
       dist: {
@@ -111,7 +113,21 @@ module.exports = function(grunt) {
         path: 'http://localhost:5000',
         app: grunt.option('safari') ? 'Safari' : 'Google Chrome'
       }
-    }
+    },
+    gitadd: {
+      task: {
+        options: {
+          all: true
+        }
+      }
+    },
+    gitcommit: {
+      task: {
+        options: {
+          message: 'patch'
+        }
+      }
+    },
   });
 
 };
