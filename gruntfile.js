@@ -4,7 +4,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('build', ['sass','cssmin','es6transpiler:dist','uglify','replace','clean']); //'header','clean'
   grunt.registerTask('serve', ['sass','cssmin','es6transpiler','copy','connect','open','watch']);
-  grunt.registerTask('publish', ['build','shell:git_add','shell:git_commit','shell:git_push','shell:npm_version','shell:npm_publish']);
+  grunt.registerTask('publish', ['build','shell:git_add','shell:git_commit','shell:git_push','shell:npm_version','shell:npm_publish','shell:surge']);
 
   grunt.initConfig ({
     sass: {
@@ -128,6 +128,9 @@ module.exports = function(grunt) {
   		},
       npm_publish: {
   			command: 'npm publish'
+  		},
+      surge: {
+  			command: 'surge'
   		}
   	}
   });
