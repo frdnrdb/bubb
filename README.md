@@ -1,3 +1,3 @@
-## bubb
+**bubb** *infotip*
 
-### infotip
+[→ Simple demo example](http://bubb.surge.sh)

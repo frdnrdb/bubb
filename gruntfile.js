@@ -4,7 +4,6 @@ module.exports = function(grunt) {
 
   grunt.registerTask('build', ['sass','cssmin','es6transpiler:dist','uglify','replace','clean']); //'header','clean'
   grunt.registerTask('serve', ['sass','cssmin','es6transpiler','copy','connect','open','watch']);
-  grunt.registerTask('deploy', ['build', 'run:deploy']);
 
   grunt.initConfig ({
     sass: {
@@ -89,11 +88,6 @@ module.exports = function(grunt) {
         }
     },
     clean: ['scss/style.css', 'scss/demo.css', 'scss/bubb.css', 'js/scrip_transpiled.js'],
-    run: {
-      deploy: {
-        args: ['./deploy.js', grunt.option('target')]
-      }
-    },
     watch: {
       source: {
         files: ['scss/*.scss','html/index.html','js/script.js'],

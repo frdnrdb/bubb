@@ -19,6 +19,17 @@ const bubb = (config, callback) => {
   bubb.config._ = bubb.config._ || config._ || {};
   bubb.callback = bubb.callback || (typeof callback === 'function' ? callback : false);
 
+  /*
+
+  const checkConfig = (self, input, validinput, fallback) =>
+  self && validinput ? Object.assign(self, input) : self || input || fallback;
+
+  bubb.config = checkConfig(bubb.config, config, typeof config === 'object', {});
+  bubb.config._ = checkConfig(bubb.config._, config && config._, config && config.hasOwnProperty('_'), {});
+  bubb.callback = checkConfig(bubb.callback, callback, typeof callback === 'function', false);
+
+  */
+
   let bubbs = Array.from( document.querySelectorAll('[data-bubb]:not(.bubb)') );
 
   if (!bubbs.length) return;

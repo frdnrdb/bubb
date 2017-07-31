@@ -222,6 +222,16 @@ body > span {
 /*
 --- bubb modifier
 */
+button {
+  font-size: .75em;
+  border: none;
+  outline: none;
+  background: #fad;
+  color: #444;
+  padding: .5em 1em;
+  border-radius: 4px;
+  margin-bottom: 1em;
+}
 .bubb {
   p {
     padding: 0;

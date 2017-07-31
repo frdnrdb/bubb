@@ -128,16 +128,16 @@
     // --> update DOM then add new bubbs post initialization
 
     var addElements = ''+
-          '<div data-bubb="addedOne">JS added after bubb init - method one</div><i></i><br>'+
-          '<div data-bubb="addedTwo">JS added after bubb init - method two</div><i></i>';
+          '<button data-bubb="addedOne">JS added after bubb init - method one</button><i></i><br>'+
+          '<button data-bubb="addedTwo">JS added after bubb init - method two</button><i></i>';
 
     document.querySelector('section:first-of-type').insertAdjacentHTML('beforeend', addElements);
 
-    config.addedOne = 'Content updated before adding new elements';
+    config.addedOne = 'Content updated before adding element';
 
     bubb.refresh(); // finds and adds new bubbs (here: addedOne + addedTwo)
 
-    bubb.update('addedTwo', 'Content updated after adding new elements');
+    bubb.update('addedTwo', 'Content updated after adding element');
     bubb.update('addedTwo', {
       background: 'gold',
       color: '#444',
@@ -172,6 +172,20 @@
 
       document.querySelector('section:first-of-type').insertBefore(pre, document.querySelector('[data-bubb="addedOne"]'));
       hljs.initHighlightingOnLoad();
+
+  </script>
+  <script>
+
+      function getFileSize(string) {
+        var bytes = encodeURI(string).split(/%..|./).length - 1;
+        return (bytes / 1024).toFixed(1) + 'kb';
+      }
+
+      var url = 'https://raw.githubusercontent.com/frdnrdb/bubb/master/dist/bubb.min.js';
+      fetch(url).then(function(res){ return res.text(); }).then(function(file){
+        console.log('***', getFileSize(file));
+      });
+
 
   </script>
 </body>

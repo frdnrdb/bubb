@@ -1,15 +1,15 @@
 {
-  "name": "drfront-chrome-helper-mobile-preview",
-  "version": "1.0.0",
-  "description": "fvn",
+  "name": "bubb",
+  "version": "1.0.1",
+  "description": "infotip",
   "main": "app.js",
   "scripts": {
     "start": "grunt serve",
-    "deploy": "grunt deploy"
+    "publish": "grunt build && npm version patch && npm publish"
   },
   "author": "frd",
   "license": "MIT",
-  "private": true,
+  "private": false,
   "dependencies": {},
   "devDependencies": {
     "grunt": "^1.0.1",
@@ -24,7 +24,6 @@
     "grunt-header": "^1.1.0",
     "grunt-open": "^0.2.3",
     "grunt-replace": "^1.0.1",
-    "grunt-run": "^0.7.0",
     "grunt-sass": "^1.2.0",
     "load-grunt-tasks": "^3.5.2"
   }

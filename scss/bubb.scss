@@ -7,11 +7,12 @@ $bubb-transition-delay-option: .5s; // enabled by bubb-delay class
 $bubb-background: #444;
 $bubb-color: #fff;
 $bubb-border-radius: 4px;
+$bubb-font-size: 17px;
 
 @mixin bubbStyle() {
   padding: .75em 1em .85em;
   line-height: 1.1;
-  font-size: 75%;
+  font-size: $bubb-font-size;
   text-align: center;
   border-radius: $bubb-border-radius;
   background-color: $bubb-background;
@@ -136,8 +137,10 @@ $bubb-border-radius: 4px;
       position: absolute;
       display: block;
       width: 100%;
-      height: $bubb-tip-size;
-      bottom: -$bubb-tip-size;
+      min-width: 150px;
+      height: calc( #{$bubb-tip-size} + #{$bubb-offset} );
+      bottom: calc( -#{$bubb-tip-size} - #{$bubb-offset} );
+      left: 0;
     }
     aside {
       &:hover {
