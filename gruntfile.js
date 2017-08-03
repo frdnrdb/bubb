@@ -3,7 +3,7 @@ module.exports = function(grunt) {
   require('dotenv').config();
   require('load-grunt-tasks')(grunt);
 
-  grunt.registerTask('build', ['sass','cssmin','es6transpiler:dist','uglify','compress','replace','clean']); //'header','clean'
+  grunt.registerTask('build', ['sass','cssmin','es6transpiler:demo','uglify','header','compress','replace','clean']);
   grunt.registerTask('serve:build', ['build','connect','open','watch']);
   grunt.registerTask('serve', ['sass','cssmin','es6transpiler','copy','connect','open','watch']);
   grunt.registerTask('publish', ['build','shell:git_add','shell:git_commit','shell:git_push','shell:npm_version','shell:npm_publish','shell:surge']);
@@ -12,7 +12,7 @@ module.exports = function(grunt) {
 
   grunt.initConfig ({
     sass: {
-      dist: {
+      demo: {
         files: {
           //'scss/style.css' : 'scss/style.scss',
           'scss/demo.css' : 'scss/demo.scss',
@@ -26,13 +26,13 @@ module.exports = function(grunt) {
           expand: true,
           cwd: 'scss/',
           src: ['*.css'],
-          dest: 'dist',
+          dest: 'demo',
           ext: '.min.css'
         }]
       }
     },
     es6transpiler: {
-      dist: {
+      demo: {
           files: {
               'js/script_transpiled.js': 'js/script.js',
               'js/demo_transpiled.js': 'js/demo.js'
@@ -42,8 +42,8 @@ module.exports = function(grunt) {
     uglify: {
       js: {
         files: {
-          'dist/bubb.min.js': ['js/script_transpiled.js'],
-          'dist/demo.min.js': ['js/demo_transpiled.js']
+          'demo/bubb.min.js': ['js/script_transpiled.js'],
+          'demo/demo.min.js': ['js/demo_transpiled.js']
         }
       }
     },
@@ -51,23 +51,23 @@ module.exports = function(grunt) {
       main: {
         files: [{
           src: 'js/script_transpiled.js',
-          dest: 'dist/bubb.min.js'
+          dest: 'demo/bubb.min.js'
         },
         {
           src: 'js/demo_transpiled.js',
-          dest: 'dist/demo.min.js'
+          dest: 'demo/demo.min.js'
         },
         {
           src: 'scss/demo.css',
-          dest: 'dist/demo.min.css'
+          dest: 'demo/demo.min.css'
         },
         {
           src: 'scss/bubb.css',
-          dest: 'dist/bubb.min.css'
+          dest: 'demo/bubb.min.css'
         },
         {
           src: 'html/index.html',
-          dest: 'dist/index.html'
+          dest: 'demo/index.html'
         }]
       }
     },
@@ -94,19 +94,18 @@ module.exports = function(grunt) {
           ]
         },
         files: [
-          {expand: true, flatten: true, src: ['html/index.html'], dest: 'dist'}
+          {expand: true, flatten: true, src: ['html/index.html'], dest: 'demo/'}
         ]
       }
     },
     header: {
-        dist: {
+        demo: {
             options: {
-                text: '/* by frdnrdb '+new Date().toISOString()+' */'
+                text: '/* github.com/frdnrdb/bubb '+new Date().getYear()+' */'
             },
             files: {
-                'dist/demo.min.css': 'dist/demo.min.css',
-                'dist/bubb.min.css': 'dist/bubb.min.css',
-                'dist/bubb.min.js': 'dist/bubb.min.js'
+                'dist/bubb.min.css': 'demo/bubb.min.css',
+                'dist/bubb.min.js': 'demo/bubb.min.js'
             }
         }
     },
@@ -125,7 +124,7 @@ module.exports = function(grunt) {
         options: {
           port: 5000,
           hostname: 'localhost',
-          base: 'dist'
+          base: 'demo'
         }
       }
     },
@@ -177,26 +176,7 @@ module.exports = function(grunt) {
           ext: '.gzip.js'
         }]
       }
-    },
-    test: {
-      build: {
-        src: './dist/bubb.min.js',
-        dest: './dist/test.min.js'
-      }
     }
-  });
-
-  grunt.registerMultiTask('test', 'test task', function() {
-
-    //make grunt know this task is async.
-    var done = this.async();
-
-    // https://stackoverflow.com/questions/18824071/create-a-custom-grunt-task-for-processing-files
-    grunt.log.writeln('test...', this);
-
-    done(true);
-
-
   });
 
 };
