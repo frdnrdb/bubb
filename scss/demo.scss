@@ -62,6 +62,13 @@ header {
         overflow: hidden;
         display: block;
       }
+      &.inline:before {
+        content: none;
+      }
+      &.first {
+        display: block;
+        padding-top: 1em;
+      }
     }
   }
   i {
@@ -119,7 +126,7 @@ pre {
 }
 section {
   position: relative;
-  padding: 3em 0 2em;
+  padding: 3em 0 4em;
   max-width: $max-width;
   margin: 0 auto;
   box-sizing: border-box;
@@ -198,7 +205,7 @@ body > span {
       display: inline-block;
       font-weight: normal;
       margin-right: 6px;
-      color: $col2;
+      color: #fff;
       content: 'Share Bubb on';
     }
     &:last-of-type {
@@ -244,16 +251,6 @@ body > span {
 /*
 --- bubb modifier
 */
-button {
-  font-size: .75em;
-  border: none;
-  outline: none;
-  background: #ddd;
-  color: #444;
-  padding: .5em 1em;
-  border-radius: 4px;
-  margin-bottom: 1em;
-}
 .bubb {
   p {
     padding: 0;

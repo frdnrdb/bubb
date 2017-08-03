@@ -24,9 +24,11 @@
   <header>
     <b>Bubb</b> Infotip<span>CSS <i>and</i><i>or</i> JS</span>
     <aside>
-      <a id="dist-js" href="https://unpkg.com/bubb/dist/bubb.min.js"></a>
-      <a id="dist-css" href="https://unpkg.com/bubb/dist/bubb.min.css"></a>
-      <a id="npm-js" href="https://www.npmjs.com/package/bubb"></a>
+      <a href="https://unpkg.com/bubb/dist/bubb.min.js">↓ bubb.min.js <b>{{filesize-js}}</b></a>
+      <a class="inline" href="https://unpkg.com/bubb/dist/bubb.min.gz.js">↓ bubb.min.gzip.js <b>{{filesize-gzip.js}}</b></a>
+      <a href="https://unpkg.com/bubb/dist/bubb.min.css">↓ bubb.min.css <b>{{filesize-css}}</b></a>
+      <a class="inline" href="https://unpkg.com/bubb/dist/bubb.min.gz.css">↓ bubb.min.gzip.css <b>{{filesize-gzip.css}}</b></a>
+      <a class="first" href="https://www.npmjs.com/package/bubb">yarn add bubb <b>or</b> npm i --save bubb</a>
     </aside>
   </header>
 
@@ -38,178 +40,15 @@
   </section>
 
   <section>
-    <p>Pure, minimal CSS infotip. Add class "bubb-delay" (or modify global bubb.scss variables) to add a reveal delay. A bubb with HTML content may want to be class(ified) as "bubb-interactive". If you really don't care for transitions add "bubb-still".</p>
+    <p>Pure, minimal CSS infotip. Add class "bubb-delay" (or modify global bubb.scss variables) to add a reveal delay. A bubb with HTML content may want to be class(ified) as "bubb-interactive". If you really don't care for transitions add "bubb-still". Alternate anchors with bubb-left or bubb-right.</p>
     <div bubb="Attribute only with pure text content">Attribute</div><i></i>
-    <div class="bubb bubb-delayed bubb-interactive">Element<aside>Child element with <b>HTML</b> content</aside></div><i></i>
+    <div class="bubb bubb-delayed bubb-interactive bubb-left">Element<aside>Child element with <b>HTML</b> content</aside></div><i></i>
   </section>
 
   <i id="eventsDisplay"></i>
 
   <script src="bubb.min.js"></script>
-  <script>
+  <script src="demo.min.js"></script>
 
-      // render <xmp> code blocks
-
-      [].slice.call( document.getElementsByTagName('div') ).forEach( function(div) {
-
-        var temp = document.createElement('temp');
-            temp.appendChild(div.cloneNode(true));
-        var pre = document.createElement('pre'),
-            code = document.createElement('code');
-            pre.appendChild(code);
-            code.innerHTML = temp.innerHTML.replace(/</g,"&lt;").replace(/>/g,"&gt;");
-
-            div.parentNode.insertBefore(pre, div.nextSibling.nextSibling);
-
-      });
-
-      // timeout then hide menu event info
-
-      var eventsDisplay = document.getElementById('eventsDisplay');
-
-      document.addEventListener('click', function() {
-        clearTimeout(eventsDisplay.hideTimeout);
-        eventsDisplay.hideTimeout = setTimeout(function() {
-          eventsDisplay.innerHTML = '';
-        }, 1500);
-      });
-
-  </script>
-  <script id="demo">
-    // --> configuration object. options are optional.
-
-    var config = {
-
-          // standard
-          reference: 'Referenced content maintained in a <b>separate configuration object</b>',
-
-          // menu with callback
-          pj: {
-            vedder: 'vocals',
-            mccready: 'guitar',
-            gossard: 'guitar',
-            ament: 'bass'
-          },
-
-          // standard with options
-          abbruzzese: {
-            text: '',
-            _: {
-              callback: function(key, item) {
-                item.innerHTML = 'Loading...';
-                var url = 'https://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1';
-                fetch(url).then(function(res){ return res.json(); }).then(function(quotes){
-                  item.innerHTML = quotes[0].content;
-                });
-              },
-              hoverCallback: true,
-              interactive: false, // true by default if a callback is registered
-              transitionOff: true
-            }
-          }
-
-        };
-
-    // --> initialize with bubb(config) or bubb(config, callback)
-
-    bubb(config, function(key, item) {
-      /**/
-
-      var eventsDisplay = document.getElementById('eventsDisplay');
-      eventsDisplay.innerHTML = 'clicked ' + key;
-      bubb.switch = !bubb.switch;
-      eventsDisplay.setAttribute('switch', bubb.switch);
-
-      /**/
-      console.log('clicked ' + key);
-
-    });
-
-    // --> update bubbs post initialization
-
-    bubb.update('pj.mccready', 'lead guitar');
-    bubb.add('pj.irons', 'drums');
-    // bubb.remove('pj.vedder');
-    bubb.update('abbruzzese', { background:'#fad', color:'#444', delay: true });
-
-    // --> update DOM then add new bubbs post initialization
-
-    var addElements = ''+
-          '<div data-bubb="addedOne">Dynamically added #1</div><i></i><br>'+
-          '<div data-bubb="addedTwo">Dynamically added #2</div><i></i>';
-
-    document.querySelector('section:first-of-type').insertAdjacentHTML('beforeend', addElements);
-
-    config.addedOne = 'config.element edited before adding bubb to DOM';
-
-    bubb.refresh(); // finds and adds new bubbs (here: addedOne + addedTwo)
-
-    bubb.update('addedTwo', 'bubb.update(element, content) called after adding bubb to DOM');
-    bubb.update('addedTwo', {
-      background: 'gold',
-      color: '#444',
-      callback: true // default callback on click
-    });
-
-    /*
-
-    --> optionally add globals to override initial (overall) behaviour
-
-    config._ = {
-      callback: function(), // overrides/ replaces main callback
-      transitionOff: false, // default
-      interactive: false, // default, true for bubb menus
-      hoverCallback: false, // default
-      delay: false, // default, true yields .5s reveal delay. configurable via bubb.scss
-      background: '#444', // default
-      color: '#fff', // default
-    };
-
-    */
-
-  </script>
-  <script>
-
-      // display bubb js demo code
-
-      var pre = document.createElement('pre'),
-          code = document.createElement('code');
-          pre.appendChild(code);
-          code.innerHTML = document.getElementById('demo').innerHTML.replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\/\*\*\/[\s\S]*\/\*\*\//igm,'');
-
-      document.querySelector('section:first-of-type').insertBefore(pre, document.querySelector('[data-bubb="addedOne"]'));
-      hljs.initHighlightingOnLoad();
-
-  </script>
-  <script>
-
-      /*
-      function getFileSize(string) {
-        var bytes = encodeURI(string).split(/%..|./).length - 1;
-        return (bytes / 1024).toFixed(1) + 'kb';
-      }
-
-      var urls = ['https://unpkg.com/bubb/dist/bubb.min.js','https://unpkg.com/bubb/dist/bubb.min.css'];
-      urls.forEach( function(url) {
-        fetch(url).then(function(res){ return res.text(); }).then(function(file){
-          console.log(url.split('/').pop(), getFileSize(file));
-        });
-      });
-      */
-
-      var urls = ['https://unpkg.com/bubb/dist'];
-      urls.forEach( function(url) {
-        fetch(url).then(function(res){ return res.text(); }).then(function(doc){
-          var js = doc.match(/(bubb.min.js).*?(\d+.?\d+\skB)/),
-              css = doc.match(/(bubb.min.css).*?(\d+.?\d+\skB)/);
-
-          document.querySelector('#dist-js').innerHTML = '↓ ' + js.slice(1,3).join(' <b>')+'</b>';
-          document.querySelector('#dist-css').innerHTML = '↓ ' + css.slice(1,3).join(' <b>')+'</b>';
-          document.querySelector('#npm-js').innerHTML = 'yarn add bubb <b>or</b> npm i --save bubb';
-
-        });
-      });
-
-  </script>
 </body>
 </html>

@@ -1,6 +1,9 @@
-## bubb
+# bubb
 
-non-dependent, non-fancy javascripted infotip.
+non-dependent, non-fancy javascripted _infotip_.
+
+[![dependencies Status](https://david-dm.org/frdnrdb/bubb/status.svg)](https://david-dm.org/frdnrdb/bubb)
+[![npm version](https://badge.fury.io/js/bubb.svg)](https://badge.fury.io/js/bubb)
 
 ---
 
@@ -8,8 +11,8 @@ non-dependent, non-fancy javascripted infotip.
 
 ```html
 
-<link rel='stylesheet' href='bubb.min.css'>
-<script src='bubb.min.js'></script>
+<link rel="stylesheet" href="bubb.min.css">
+<script src="bubb.min.js"></script>
 
 <this data-bubb="bubble">info</this>
 <that data-bubb="bobble">menu</that>
@@ -26,7 +29,7 @@ non-dependent, non-fancy javascripted infotip.
   }
 
   const callback = (key, el) => {
-    console.log(key); // menu click -> eg. 'bobble.mitchell'
+    console.log(key); // menu click -> eg. 'bobble.mitch'
   }
 
   bubb(config, callback)
@@ -35,12 +38,12 @@ non-dependent, non-fancy javascripted infotip.
 ```
 ```js
 
-// yarn add tablesort | npm i --save tablesort
+// yarn add bubb | npm i --save bubb
 let bubb = require('bubb');
 ```
 [→ See some examples](http://bubb.surge.sh)
 
-#### Optional options
+#### Options setup
 
 ```js
 
@@ -63,34 +66,61 @@ let bubb = require('bubb');
     }
   }
 
-  /*
+```
 
-    callback: function(){} || true
-    // overrides initial (or global) callback.
-    // boolean true adds click listener and reports to default callback
+#### options
 
-    transitionOff: false
-    // default
+```js
 
-    interactive: false
-    // default, true for menus and added callbacks
+callback: function(){} || true
+  // overrides initial (or global) callback.
+  // boolean true adds click listener and reports to default callback
 
-    hoverCallback: false
-    // default
+transitionOff: false
+  // default
 
-    delay: false
-    // default, true yields .5s reveal delay.
-    // configurable via bubb.scss
+interactive: false
+  // default true for menus and added callbacks
 
-    background: '#444'
-    // default
+hoverCallback: false
+  // default
 
-    color: '#fff'
-    // default  
+delay: false
+  // true yields .5s reveal delay
+  // configurable via bubb.scss
 
-  */
+background: '#444'
+  // default
+
+color: '#fff'
+  // default
+
+class: false
+  // add classname to .bubb
+
+maximize: false
+  // true calculates and applies maximal bubb width
 
 ```
+
+#### Methods
+
+```js
+
+    bubb.refresh();
+      // initialize new data-bubb elements added to DOM
+
+    bubb.update(reference, content | options);
+
+    bubb.update(menu_reference, options);
+    bubb.update(menu_reference.menu_item, content);
+
+    bubb.add(menu_reference.menu_item, content);
+    bubb.remove(menu_reference.menu_item);
+      // these methods adds and removes DOM elements
+
+```
+
 
 #### Style
 Override the initial element __.bubb__ _(.bubb-menu)_, the bubble __.bubb > aside__ or the content __.bubb > aside > div__. Or: Modify some global variables in the __SCSS__ file to change overall look/ behaviour.

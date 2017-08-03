@@ -3,9 +3,12 @@ module.exports = function(grunt) {
   require('dotenv').config();
   require('load-grunt-tasks')(grunt);
 
-  grunt.registerTask('build', ['sass','cssmin','es6transpiler:dist','uglify','replace','clean']); //'header','clean'
+  grunt.registerTask('build', ['sass','cssmin','es6transpiler:dist','uglify','compress','replace','clean']); //'header','clean'
+  grunt.registerTask('serve:build', ['build','connect','open','watch']);
   grunt.registerTask('serve', ['sass','cssmin','es6transpiler','copy','connect','open','watch']);
   grunt.registerTask('publish', ['build','shell:git_add','shell:git_commit','shell:git_push','shell:npm_version','shell:npm_publish','shell:surge']);
+
+  grunt.registerTask('dev', ['test']);
 
   grunt.initConfig ({
     sass: {
@@ -31,22 +34,28 @@ module.exports = function(grunt) {
     es6transpiler: {
       dist: {
           files: {
-              'js/scrip_transpiled.js': 'js/script.js'
+              'js/script_transpiled.js': 'js/script.js',
+              'js/demo_transpiled.js': 'js/demo.js'
           }
       }
     },
     uglify: {
       js: {
         files: {
-          'dist/bubb.min.js': ['js/scrip_transpiled.js']
+          'dist/bubb.min.js': ['js/script_transpiled.js'],
+          'dist/demo.min.js': ['js/demo_transpiled.js']
         }
       }
     },
     copy: {
       main: {
         files: [{
-          src: 'js/scrip_transpiled.js',
+          src: 'js/script_transpiled.js',
           dest: 'dist/bubb.min.js'
+        },
+        {
+          src: 'js/demo_transpiled.js',
+          dest: 'dist/demo.min.js'
         },
         {
           src: 'scss/demo.css',
@@ -69,7 +78,19 @@ module.exports = function(grunt) {
             {
               match: /<.+\sdelete\s.*\/.+>/g,
               replacement: ''
-            }
+            },
+            {
+              match: /{{filesize-(.+)}}/g,
+              replacement: function (match, key) {
+                var fs = require('fs');
+                function getFilesizeInBytes(filename) {
+                    const stats = fs.statSync(filename)
+                    const fileSizeInBytes = stats.size
+                    return (fileSizeInBytes/1024).toFixed(1)+' kB'
+                }
+                return getFilesizeInBytes('./dist/bubb.min.'+key);
+              }
+            },
           ]
         },
         files: [
@@ -89,10 +110,10 @@ module.exports = function(grunt) {
             }
         }
     },
-    clean: ['scss/style.css', 'scss/demo.css', 'scss/bubb.css', 'js/scrip_transpiled.js'],
+    clean: ['scss/style.css', 'scss/demo.css', 'scss/bubb.css', 'js/script_transpiled.js', 'js/demo_transpiled.js'],
     watch: {
       source: {
-        files: ['scss/*.scss','html/index.html','js/script.js'],
+        files: ['scss/*.scss','html/index.html','js/script.js','js/demo.js'],
         tasks: ['sass','es6transpiler','copy','clean'],
         options: {
           livereload: true
@@ -133,7 +154,49 @@ module.exports = function(grunt) {
       surge: {
   			command: 'surge'
   		}
-  	}
+  	},
+    compress: {
+      main: {
+        options: {
+          mode: 'gzip'
+        },
+        files: [{
+          expand: true,
+          cwd: 'dist/',
+          src: ['bubb.min.css'],
+          dest: 'dist/',
+          extDot: 'last',
+          ext: '.gzip.css'
+        },
+        {
+          expand: true,
+          cwd: 'dist/',
+          src: ['bubb.min.js'],
+          dest: 'dist/',
+          extDot: 'last',
+          ext: '.gzip.js'
+        }]
+      }
+    },
+    test: {
+      build: {
+        src: './dist/bubb.min.js',
+        dest: './dist/test.min.js'
+      }
+    }
+  });
+
+  grunt.registerMultiTask('test', 'test task', function() {
+
+    //make grunt know this task is async.
+    var done = this.async();
+
+    // https://stackoverflow.com/questions/18824071/create-a-custom-grunt-task-for-processing-files
+    grunt.log.writeln('test...', this);
+
+    done(true);
+
+
   });
 
 };

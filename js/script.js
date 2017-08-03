@@ -49,13 +49,12 @@ const buildElement = _bubbParent => {
 
       chck = typeof data === 'object',
       opts = chck && data._,
-      menu = chck && !data.hasOwnProperty('text'),
-
-      validOpts;
+      menu = chck && !data.hasOwnProperty('text');
 
       function setConfiguration() {
         return availableOptions.reduce( (config, option) => {
-          if (validOpts = (opts && opts[option]) || bubb.config._[option]) config[option] = validOpts;
+          let valid = opts && opts.hasOwnProperty(option) ? opts[option] : bubb.config.hasOwnProperty(option) ? bubb.config._[option] : false;
+          if (valid) config[option] = valid;
           return config;
         }, {});
       }
@@ -102,17 +101,22 @@ const configureElement = (_bubbParent, _bubbLe, html) => {
 
     _bubbParent.classList.add('bubb');
 
+    if (config.maximize) maximizeWidth(true, _bubbParent, _bubbLe);
+    else if (config.hasOwnProperty('maximize')) maximizeWidth(false, _bubbParent, _bubbLe);
+
     if (config.transitionOff) _bubbParent.classList.add('bubb-still');
-    else if (update) _bubbParent.classList.remove('bubb-still');
+    else if (config.hasOwnProperty('transitionOff')) _bubbParent.classList.remove('bubb-still');
 
     if (config.delay) _bubbParent.classList.add('bubb-delayed');
-    else if (update) _bubbParent.classList.remove('bubb-delayed');
+    else if (config.hasOwnProperty('delay')) _bubbParent.classList.remove('bubb-delayed');
 
     // make the bubb hoverable
-    (_bubbParent.bubb.type === 'menu' || config.callback) && _bubbParent.classList.add('bubb-interactive');
+    if (_bubbParent.bubb.type === 'menu' || config.callback) _bubbParent.classList.add('bubb-interactive');
 
     if (config.interactive) _bubbParent.classList.add('bubb-interactive');
-    else if (update && config.hasOwnProperty('interactive')) _bubbParent.classList.remove('bubb-interactive');
+    else if (config.hasOwnProperty('interactive')) _bubbParent.classList.remove('bubb-interactive');
+
+    if (config.class) _bubbParent.classList.add(config.class);
 
     // add convenience class for styling
     _bubbParent.bubb.type === 'menu' && _bubbParent.classList.add('bubb-menu');
@@ -240,6 +244,34 @@ const addOrRemove = () => {
 
 };
 
+const maximizeWidth = (check, _bubbParent, _bubbLe) => {
+
+  if (!check) {
+    _bubbLe.style.width = '100%';
+    _bubbParent.className = _bubbParent.className.replace(/bubb-(left|right)/,'').trim();
+    return;
+  }
+
+  let padding = 20,
+      bodyw = document.body.offsetWidth,
+      box = _bubbParent.getBoundingClientRect(),
+      boxm = box.width/2,
+      boxl = box.left,
+      boxr = box.right,
+      pos = (boxl + boxm) * 100 / bodyw,
+      lrm = pos < 33 ? 1 : pos > 66 ? 2 : 0,
+      cls = ['', 'left', 'right'];
+
+      let width = lrm === 1
+        ? bodyw - boxl - padding : lrm === 2
+        ? bodyw - ( bodyw - boxr ) - padding
+        : Math.min(boxl + boxm - padding, bodyw - ( boxr - boxm ) - padding) * 2;
+
+      _bubbLe.style.width = width + 'px';
+      if (lrm) _bubbParent.classList.add('bubb-' + cls[lrm]);
+
+};
+
 const updateMainConfig = (key, contentOrConfig, updateConfig, _bubbParent) => {
 
   let typeMenu = _bubbParent.bubb.type === 'menu',
@@ -285,7 +317,9 @@ const availableOptions = [
   'color',
   'transitionOff',
   'interactive',
-  'delay'
+  'delay',
+  'maximize',
+  'class'
 ];
 
 const isMobile = (typeof window.orientation !== "undefined") || ~navigator.userAgent.indexOf('IEMobile') ? true : false;

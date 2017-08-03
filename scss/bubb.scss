@@ -1,6 +1,6 @@
 $bubb-tip-size: .65em; // calc... -> must include units (em, px...)
 $bubb-offset: .15em; // calc...
-$bubb-transition-distance: .65em; // calc...
+$bubb-transition-distance: .85em; // calc...
 $bubb-transition-expression: cubic-bezier(0,0,.25,1); //cubic-bezier(.25,.8,.25,1);
 $bubb-transition-delay: 0s; // global
 $bubb-transition-delay-option: .5s; // enabled by bubb-delay class
@@ -10,7 +10,7 @@ $bubb-border-radius: 4px;
 $bubb-font-size: 17px;
 
 @mixin bubbStyle() {
-  padding: .75em 1em .85em;
+  padding: .75em .9em .85em;
   line-height: 1.1;
   font-size: $bubb-font-size;
   text-align: center;
@@ -26,6 +26,12 @@ $bubb-font-size: 17px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   @include boxShadow();
+
+  img {
+    max-width: 100%;
+    width: 100%;    
+    display: block;
+  }
 }
 @mixin bubbTip($width) {
   width: 0;
@@ -35,11 +41,9 @@ $bubb-font-size: 17px;
   border-bottom-width: $width;
   border-bottom-style: solid;
   border-bottom-color: inherit;
-  // border bottom properties are split to make tip-color changes through js possible by altering border-bottom-color on parent
 }
 @mixin boxShadow() {
-  box-shadow: rgba(#fad, .35) 6px 7px 0 0;
-  //box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+  //box-shadow: rgba(#fad, .35) 6px 7px 0 0;
 }
 @mixin bubbTipPseudo($width) {
   width: 0;
@@ -159,6 +163,36 @@ $bubb-font-size: 17px;
     &:hover {
       aside {
         transition-duration: 0s;
+      }
+    }
+  }
+
+  /*
+  --- Tip placement
+  */
+  &-left {
+    aside {
+      transform: translate(0, 100%);
+      left: 0;
+      border-radius: 0 $bubb-border-radius $bubb-border-radius $bubb-border-radius;
+      &:after {
+        transform: translate(0, 0);
+        left: 0;
+        border-left: none;
+      }
+    }
+  }
+  &-right {
+    aside {
+      transform: translate(0, 100%);
+      left: auto;
+      right: 0;
+      border-radius: $bubb-border-radius 0 $bubb-border-radius $bubb-border-radius;
+      &:after {
+        transform: translate(0, 0);
+        left: auto;
+        right: 0;
+        border-right: none;
       }
     }
   }
