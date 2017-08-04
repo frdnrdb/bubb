@@ -1,0 +1,66 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/Users/fred/.nvm/versions/node/v5.0.0/bin/node',
+1 verbose cli   '/Users/fred/.nvm/versions/node/v5.0.0/bin/npm',
+1 verbose cli   'version',
+1 verbose cli   'patch' ]
+2 info using npm@3.3.6
+3 info using node@v5.0.0
+4 info git [ 'status', '--porcelain' ]
+5 info lifecycle bubb@1.0.2~preversion: bubb@1.0.2
+6 silly lifecycle bubb@1.0.2~preversion: no script for preversion, continuing
+7 verbose version.write data { name: 'bubb',
+7 verbose version.write   description: 'infotip',
+7 verbose version.write   version: '1.0.2',
+7 verbose version.write   author: 'frdnrdb',
+7 verbose version.write   license: 'MIT',
+7 verbose version.write   main: './dist/bubb.min.js',
+7 verbose version.write   homepage: 'http://noink.no',
+7 verbose version.write   scripts: { start: 'grunt serve' },
+7 verbose version.write   repository: { type: 'git', url: 'git@github.com:frdnrdb/bubb.git' },
+7 verbose version.write   dependencies: {},
+7 verbose version.write   devDependencies:
+7 verbose version.write    { fs: '0.0.2',
+7 verbose version.write      grunt: '^1.0.1',
+7 verbose version.write      'grunt-contrib-clean': '^1.0.0',
+7 verbose version.write      'grunt-contrib-compress': '^1.4.3',
+7 verbose version.write      'grunt-contrib-connect': '^1.0.2',
+7 verbose version.write      'grunt-contrib-copy': '^1.0.0',
+7 verbose version.write      'grunt-contrib-cssmin': '^1.0.1',
+7 verbose version.write      'grunt-contrib-htmlmin': '^2.4.0',
+7 verbose version.write      'grunt-contrib-uglify': '^1.0.1',
+7 verbose version.write      'grunt-contrib-watch': '^1.0.0',
+7 verbose version.write      'grunt-es6-transpiler': '^1.0.2',
+7 verbose version.write      'grunt-header': '^1.1.0',
+7 verbose version.write      'grunt-open': '^0.2.3',
+7 verbose version.write      'grunt-replace': '^1.0.1',
+7 verbose version.write      'grunt-run': '^0.7.0',
+7 verbose version.write      'grunt-sass': '^1.2.0',
+7 verbose version.write      'grunt-shell': '^2.1.0',
+7 verbose version.write      'load-grunt-tasks': '^3.5.2' } } to package.json
+8 info lifecycle bubb@1.0.2~version: bubb@1.0.2
+9 silly lifecycle bubb@1.0.2~version: no script for version, continuing
+10 info git [ 'add', 'package.json' ]
+11 info git [ 'commit', '-m', '1.0.2' ]
+12 info git [ 'tag', 'v1.0.2', '-am', '1.0.2' ]
+13 verbose stack Error: Command failed: git tag v1.0.2 -am 1.0.2
+13 verbose stack fatal: tag 'v1.0.2' already exists
+13 verbose stack
+13 verbose stack     at ChildProcess.exithandler (child_process.js:203:12)
+13 verbose stack     at emitTwo (events.js:87:13)
+13 verbose stack     at ChildProcess.emit (events.js:172:7)
+13 verbose stack     at maybeClose (internal/child_process.js:818:16)
+13 verbose stack     at Socket.<anonymous> (internal/child_process.js:319:11)
+13 verbose stack     at emitOne (events.js:77:13)
+13 verbose stack     at Socket.emit (events.js:169:7)
+13 verbose stack     at Pipe._onclose (net.js:469:12)
+14 verbose cwd /Users/fred/Documents/–– Github/bubb
+15 error Darwin 16.0.0
+16 error argv "/Users/fred/.nvm/versions/node/v5.0.0/bin/node" "/Users/fred/.nvm/versions/node/v5.0.0/bin/npm" "version" "patch"
+17 error node v5.0.0
+18 error npm  v3.3.6
+19 error code 128
+20 error Command failed: git tag v1.0.2 -am 1.0.2
+20 error fatal: tag 'v1.0.2' already exists
+21 error If you need help, you may report this error at:
+21 error     <https://github.com/npm/npm/issues>
+22 verbose exit [ 1, true ]
