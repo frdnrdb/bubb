@@ -6,11 +6,11 @@ function render_code_blocks() {
 
   // render <xmp> code blocks
 
-  [].slice.call( document.getElementsByTagName('div') ).forEach( function(div) {
+  Array.from( document.getElementsByTagName('div') ).forEach( div => {
 
-    var temp = document.createElement('temp');
+    let temp = document.createElement('temp');
         temp.appendChild(div.cloneNode(true));
-    var pre = document.createElement('pre'),
+    let pre = document.createElement('pre'),
         code = document.createElement('code');
         pre.appendChild(code);
         code.innerHTML = temp.innerHTML.replace(/</g,"&lt;").replace(/>/g,"&gt;");
@@ -21,9 +21,9 @@ function render_code_blocks() {
 
   // timeout then hide menu event info
 
-  var eventsDisplay = document.getElementById('eventsDisplay');
+  let eventsDisplay = document.getElementById('eventsDisplay');
 
-  document.addEventListener('click', function() {
+  document.addEventListener('click', () => {
     clearTimeout(eventsDisplay.hideTimeout);
     eventsDisplay.hideTimeout = setTimeout(function() {
       eventsDisplay.innerHTML = '';
@@ -39,71 +39,46 @@ function addElementsToDOM() {
     });
 }
 
-function display_demo() {
+function demo() {
 
-
-  // --> configuration object
-
-  var config = {
-
-        // standard
+  let config = {
         reference: 'Referenced content maintained in a <b>separate configuration object</b>',
-
-        // menu with callback
         pj: {
           vedder: 'vocals',
           mccready: 'guitar',
           gossard: 'guitar',
           ament: 'bass'
         },
-
-        // standard with options
         abbruzzese: {
           text: '',
           _: {
-            callback: function(key, item) {
+            callback: (key, item) => {
               item.innerHTML = 'Loading...';
-              setTimeout(function(){ // simulate async ajax
+              setTimeout(function(){
                 item.innerHTML = designQuotes[Math.floor(Math.random() * designQuotes.length)];
               }, 1000);
             },
             hoverCallback: true,
-            interactive: false, // true by default if a callback is registered
+            interactive: false,
             transitionOff: true
           }
         }
-
       };
 
+  bubb(config, (key, item) => {
 
-
-  // --> initialize with bubb(config) or bubb(config, callback)
-
-  bubb(config, function(key, item) {
-    /**/
-
-    var eventsDisplay = document.getElementById('eventsDisplay');
+    let eventsDisplay = document.getElementById('eventsDisplay');
     eventsDisplay.innerHTML = 'clicked ' + key;
     bubb.switch = !bubb.switch;
     eventsDisplay.setAttribute('switch', bubb.switch);
 
-    /**/
     console.log('clicked ' + key);
 
   });
 
-
-
-  // --> update bubbs post initialization
-
   bubb.update('pj.mccready', 'lead guitar');
   bubb.add('pj.irons', 'drums');
-  // bubb.remove('pj.vedder');
   bubb.update('abbruzzese', { background:'#fad', color:'#444', delay: true });
-
-
-
-  // --> update DOM then refresh bubb
 
   addElementsToDOM(
     '<div data-bubb="added_one">Insert method 1</div>',
@@ -113,20 +88,12 @@ function display_demo() {
   config.added_one = 'config[reference] edited before adding bubb to DOM';
 
   bubb.refresh();
-    // finds and adds new bubbs
-    // right now added_two text content will be 'added_two'
 
   bubb.update('added_two', 'bubb.update(reference, content) called after adding bubb to DOM');
   bubb.update('added_two', {
     maximize: true,
-    callback: true // default callback on click
+    callback: true
   });
-
-
-
-  // --> optionally add globals to override initial (overall) behaviour
-
-  config._ = { /* ... options */ };
 
 }
 
@@ -323,7 +290,7 @@ function render_display_functions() {
 
   function buildCodeBlock(from) {
 
-    var pre = document.createElement('pre'),
+    let pre = document.createElement('pre'),
         code = document.createElement('code');
         pre.appendChild(code);
         code.innerHTML = from.toString().replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\/\*\*\/[\s\S]*\/\*\*\//igm,'');
@@ -344,8 +311,8 @@ function render_display_functions() {
 }
 
 render_code_blocks();
-display_demo();
 render_display_functions();
+demo();
 
 
 })(window.bubb, window.hljs);

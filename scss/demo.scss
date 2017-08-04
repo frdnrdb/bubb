@@ -198,7 +198,7 @@ section {
   }
   @include hovers();
 }
-body > footer {
+footer {
   background: $col;
   display: block;
   position: absolute;
@@ -258,6 +258,44 @@ body > footer {
 @media all and (max-width: 550px) {
   body {
     font-size: 5vw;
+    padding-bottom: 0;
+  }
+  section, header, footer {
+    padding: 2em;
+  }
+  section {
+    padding-top: 4em;
+    &:before {
+      height: 4em;
+      line-height: 4em;
+      padding: 0 3em;
+      content: 'JS version';
+    }
+    &:last-of-type:before {
+      content: 'CSS version';
+    }
+  }
+  footer {
+    position: static;
+    text-align: center;
+    padding: 2em 0 4em;
+    line-height: 1.2;
+    a {
+      position: static;
+    }
+  }
+  header {
+    aside {
+      a {
+        line-height: 1.5;
+        &.inline:before {
+          content: '';
+        }
+        &.first {
+          display: inline-block;
+        }
+      }
+    }
   }
 }
 
