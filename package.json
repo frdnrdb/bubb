@@ -1,7 +1,7 @@
 {
   "name": "bubb",
   "description": "infotip",
-  "version": "1.0.13",
+  "version": "1.0.1",
   "author": "frdnrdb",
   "license": "MIT",
   "main": "./dist/bubb.min.js",

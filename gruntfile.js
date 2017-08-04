@@ -34,15 +34,16 @@ module.exports = function(grunt) {
       demo: {
           files: {
               'js/script_transpiled.js': 'js/script.js',
-              'js/demo_transpiled.js': 'js/demo.js'
+              //'js/demo_transpiled.js': 'js/demo.js'
+              'demo/demo.min.js': 'js/demo.js'
           }
       }
     },
     uglify: {
       js: {
         files: {
-          'demo/bubb.min.js': ['js/script_transpiled.js'],
-          'demo/demo.min.js': ['js/demo_transpiled.js']
+          //'demo/demo.min.js': ['js/demo_transpiled.js'],
+          'demo/bubb.min.js': ['js/script_transpiled.js']
         }
       }
     },
