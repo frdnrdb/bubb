@@ -47,24 +47,24 @@ let bubb = require('bubb');
 
 ```js
 
-  let config = {
-    bubble: {
-      text: 'content',
+    let config = {
+      bubble: {
+        text: 'content',
+        _: {
+          // ... bubble options
+        }
+      },
+      bobble: {
+        menu_item_1: 'content',
+        menu_item_2: 'content',
+        _: {
+          // ... bobble options
+        }
+      },
       _: {
-        // ... bubble options
+        // ... global options
       }
-    },
-    bobble: {
-      menu_item_1: 'content',
-      menu_item_2: 'content',
-      _: {
-        // ... bobble options
-      }
-    },
-    _: {
-      // ... global options
     }
-  }
 
 ```
 
@@ -72,37 +72,37 @@ let bubb = require('bubb');
 
 ```js
 
-callback: function(){} || true
-  // overrides initial (or global) callback.
-  // boolean true adds click listener and reports to default callback
+    callback: function(){} || true
+      // overrides initial (or global) callback.
+      // boolean true adds click listener and reports to default callback
 
-transitionOff: false
-  // default
+    transitionOff: false
+      // default
 
-interactive: false
-  // default true for menus and added callbacks
+    interactive: false
+      // default true for menus and added callbacks
 
-hoverCallback: false
-  // default
+    hoverCallback: false
+      // default
 
-delay: false
-  // true yields .5s reveal delay
-  // configurable via bubb.scss
+    delay: false
+      // true yields .5s reveal delay
+      // configurable via bubb.scss
 
-background: '#444'
-  // default
+    background: '#444'
+      // default
 
-color: '#fff'
-  // default
+    color: '#fff'
+      // default
 
-class: false
-  // add classname to .bubb
+    class: false
+      // add classname to .bubb
 
-anchor: false
-  // 'left' or 'right' if centered tip is boring
+    anchor: false
+      // 'left' or 'right' if centered tip is boring
 
-maximize: false
-  // true calculates and applies maximal bubb width
+    maximize: false
+      // true calculates and applies maximal bubb width
 
 ```
 

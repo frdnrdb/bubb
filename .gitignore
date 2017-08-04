@@ -3,4 +3,4 @@ node_modules
 .DS_Store
 _dev_*.*
 fonts
-CNAME
+.log
