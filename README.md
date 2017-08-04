@@ -3,7 +3,8 @@
 non-dependent, non-fancy javascripted _infotip_.
 
 [![dependencies Status](https://david-dm.org/frdnrdb/bubb/status.svg)](https://david-dm.org/frdnrdb/bubb)
-[![npm version](https://badge.fury.io/js/bubb.svg)](https://badge.fury.io/js/bubb)
+[![dev dependencies](https://david-dm.org/frdnrdb/bubb/dev-status.svg)](https://badge.fury.io/js/bubb)
+[![npm version](https://img.shields.io/badge/stomach-empty-red.svg)](http://bubb.surge.sh)
 
 ---
 
