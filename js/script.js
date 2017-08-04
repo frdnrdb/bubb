@@ -19,17 +19,6 @@ const bubb = (config, callback) => {
   bubb.config._ = bubb.config._ || config._ || {};
   bubb.callback = bubb.callback || (typeof callback === 'function' ? callback : false);
 
-  /*
-
-  const checkConfig = (self, input, validinput, fallback) =>
-  self && validinput ? Object.assign(self, input) : self || input || fallback;
-
-  bubb.config = checkConfig(bubb.config, config, typeof config === 'object', {});
-  bubb.config._ = checkConfig(bubb.config._, config && config._, config && config.hasOwnProperty('_'), {});
-  bubb.callback = checkConfig(bubb.callback, callback, typeof callback === 'function', false);
-
-  */
-
   let bubbs = Array.from( document.querySelectorAll('[data-bubb]:not(.bubb)') );
 
   if (!bubbs.length) return;
@@ -110,7 +99,6 @@ const configureElement = (_bubbParent, _bubbLe, html) => {
     if (config.delay) _bubbParent.classList.add('bubb-delayed');
     else if (config.hasOwnProperty('delay')) _bubbParent.classList.remove('bubb-delayed');
 
-    // make the bubb hoverable
     if (_bubbParent.bubb.type === 'menu' || config.callback) _bubbParent.classList.add('bubb-interactive');
 
     if (config.interactive) _bubbParent.classList.add('bubb-interactive');
@@ -118,7 +106,6 @@ const configureElement = (_bubbParent, _bubbLe, html) => {
 
     if (config.class) _bubbParent.classList.add(config.class);
 
-    // add convenience class for styling
     _bubbParent.bubb.type === 'menu' && _bubbParent.classList.add('bubb-menu');
 
     if (!update) {
@@ -216,7 +203,7 @@ const addOrRemove = () => {
 
   if (!menu.val || !bubb.config[menu.key]) return;
 
-  // add new menu item
+  // add menu item
 
   if (value && typeof value === 'string' && !bubb.config[menu.key][menu.val]) {
 
@@ -260,9 +247,8 @@ const maximizeWidth = (check, _bubbParent, _bubbLe) => {
       boxr = box.right,
       pos = (boxl + boxm) * 100 / bodyw,
       lrm = pos < 33 ? 1 : pos > 66 ? 2 : 0,
-      cls = ['', 'left', 'right'];
-
-      let width = lrm === 1
+      cls = ['', 'left', 'right'],
+      width = lrm === 1
         ? bodyw - boxl - padding : lrm === 2
         ? bodyw - ( bodyw - boxr ) - padding
         : Math.min(boxl + boxm - padding, bodyw - ( boxr - boxm ) - padding) * 2;

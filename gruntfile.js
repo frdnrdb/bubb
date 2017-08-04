@@ -1,6 +1,5 @@
 module.exports = function(grunt) {
 
-  require('dotenv').config();
   require('load-grunt-tasks')(grunt);
 
   grunt.registerTask('build', ['sass','cssmin','es6transpiler:demo','uglify','header','compress','replace','clean']);
@@ -101,7 +100,7 @@ module.exports = function(grunt) {
     header: {
         demo: {
             options: {
-                text: '/* github.com/frdnrdb/bubb '+new Date().getYear()+' */'
+                text: '/* github.com/frdnrdb/bubb '+ new Date().toISOString() +' */'
             },
             files: {
                 'dist/bubb.min.css': 'demo/bubb.min.css',
