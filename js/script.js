@@ -5,7 +5,7 @@
     * TRY alternative tooltip layout (list-style) as option
     * TRY alternative theme (light, "material" box-shadow) as option
 
-    * MAYBE:
+    * MAYBE: JS Animations and events applied to ONE dynamic bubb element
     * MAYBE: Context awareness ((smart) width vs content, tip/ direction) as option
 
 */

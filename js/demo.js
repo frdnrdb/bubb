@@ -311,8 +311,8 @@ function render_display_functions() {
 }
 
 render_code_blocks();
-render_display_functions();
 demo();
+render_display_functions();
 
 
 })(window.bubb, window.hljs);
