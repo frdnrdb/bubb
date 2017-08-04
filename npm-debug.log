@@ -7,24 +7,8 @@
 3 info using node@v6.9.0
 4 info git [ 'status', '--porcelain' ]
 5 verbose stack Error: Git working directory not clean.
-5 verbose stack M README.md
-5 verbose stack M demo/bubb.min.css
-5 verbose stack M demo/bubb.min.js
-5 verbose stack M demo/demo.min.css
-5 verbose stack M demo/demo.min.js
-5 verbose stack M demo/index.html
-5 verbose stack M dist/bubb.min.css
-5 verbose stack M dist/bubb.min.gzip.css
-5 verbose stack M dist/bubb.min.gzip.js
-5 verbose stack M dist/bubb.min.js
 5 verbose stack M gruntfile.js
-5 verbose stack M html/index.html
-5 verbose stack M js/demo.js
-5 verbose stack M js/script.js
-5 verbose stack D npm-debug.log
-5 verbose stack M package.json
-5 verbose stack M scss/bubb.scss
-5 verbose stack M scss/demo.scss
+5 verbose stack M npm-debug.log
 5 verbose stack     at /Users/fronordb/.nvm/versions/node/v6.9.0/lib/node_modules/npm/lib/version.js:247:19
 5 verbose stack     at /Users/fronordb/.nvm/versions/node/v6.9.0/lib/node_modules/npm/lib/utils/no-progress-while-running.js:21:8
 5 verbose stack     at ChildProcess.exithandler (child_process.js:197:7)
@@ -41,24 +25,8 @@
 9 error node v6.9.0
 10 error npm  v3.10.8
 11 error Git working directory not clean.
-11 error M README.md
-11 error M demo/bubb.min.css
-11 error M demo/bubb.min.js
-11 error M demo/demo.min.css
-11 error M demo/demo.min.js
-11 error M demo/index.html
-11 error M dist/bubb.min.css
-11 error M dist/bubb.min.gzip.css
-11 error M dist/bubb.min.gzip.js
-11 error M dist/bubb.min.js
 11 error M gruntfile.js
-11 error M html/index.html
-11 error M js/demo.js
-11 error M js/script.js
-11 error D npm-debug.log
-11 error M package.json
-11 error M scss/bubb.scss
-11 error M scss/demo.scss
+11 error M npm-debug.log
 12 error If you need help, you may report this error at:
 12 error     <https://github.com/npm/npm/issues>
 13 verbose exit [ 1, true ]

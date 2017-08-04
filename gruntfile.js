@@ -5,7 +5,7 @@ module.exports = function(grunt) {
   grunt.registerTask('build', ['sass','cssmin','es6transpiler','uglify','copy:build','compress','replace','clean']);
   grunt.registerTask('serve:build', ['build','connect','open','watch']);
   grunt.registerTask('serve', ['sass','cssmin','es6transpiler','copy:dev','connect','open','watch']);
-  grunt.registerTask('publish', ['build','shell:git_add','shell:git_commit','shell:git_push','shell:npm_version','shell:npm_publish','shell:surge']);
+  grunt.registerTask('publish', ['build','shell:git_add','shell:git_commit','shell:npm_version','shell:git_push','shell:npm_publish','shell:surge']);
 
   grunt.initConfig ({
     pkg: grunt.file.readJSON('package.json'),
