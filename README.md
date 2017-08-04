@@ -98,6 +98,9 @@ color: '#fff'
 class: false
   // add classname to .bubb
 
+anchor: false
+  // 'left' or 'right' if centered tip is boring
+
 maximize: false
   // true calculates and applies maximal bubb width
 

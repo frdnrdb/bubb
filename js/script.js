@@ -2,10 +2,11 @@
 
   TODO!
 
-    * TRY alternative tooltip layout ('list', as option)
-    * TRY alternative theme (light, "material" box-shadow, as option)
+    * TRY alternative tooltip layout (list-style) as option
+    * TRY alternative theme (light, "material" box-shadow) as option
 
-    * MAYBE: Context awareness (width vs content, tip/ direction, as option)
+    * MAYBE:
+    * MAYBE: Context awareness ((smart) width vs content, tip/ direction) as option
 
 */
 
@@ -105,6 +106,8 @@ const configureElement = (_bubbParent, _bubbLe, html) => {
     else if (config.hasOwnProperty('interactive')) _bubbParent.classList.remove('bubb-interactive');
 
     if (config.class) _bubbParent.classList.add(config.class);
+
+    if (config.anchor) _bubbParent.classList.add('bubb-' + config.anchor);
 
     _bubbParent.bubb.type === 'menu' && _bubbParent.classList.add('bubb-menu');
 
@@ -305,7 +308,8 @@ const availableOptions = [
   'interactive',
   'delay',
   'maximize',
-  'class'
+  'class',
+  'anchor'
 ];
 
 const isMobile = (typeof window.orientation !== "undefined") || ~navigator.userAgent.indexOf('IEMobile') ? true : false;

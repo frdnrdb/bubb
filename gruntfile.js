@@ -2,18 +2,16 @@ module.exports = function(grunt) {
 
   require('load-grunt-tasks')(grunt);
 
-  grunt.registerTask('build', ['sass','cssmin','es6transpiler:demo','uglify','header','compress','replace','clean']);
+  grunt.registerTask('build', ['sass','cssmin','es6transpiler','uglify','copy:build','compress','replace','clean']);
   grunt.registerTask('serve:build', ['build','connect','open','watch']);
-  grunt.registerTask('serve', ['sass','cssmin','es6transpiler','copy','connect','open','watch']);
+  grunt.registerTask('serve', ['sass','cssmin','es6transpiler','copy:dev','connect','open','watch']);
   grunt.registerTask('publish', ['build','shell:git_add','shell:git_commit','shell:git_push','shell:npm_version','shell:npm_publish','shell:surge']);
 
-  grunt.registerTask('dev', ['test']);
-
   grunt.initConfig ({
+    pkg: grunt.file.readJSON('package.json'),
     sass: {
       demo: {
         files: {
-          //'scss/style.css' : 'scss/style.scss',
           'scss/demo.css' : 'scss/demo.scss',
           'scss/bubb.css' : 'scss/bubb.scss'
         }
@@ -31,24 +29,45 @@ module.exports = function(grunt) {
       }
     },
     es6transpiler: {
-      demo: {
+      main: {
           files: {
               'js/script_transpiled.js': 'js/script.js',
-              //'js/demo_transpiled.js': 'js/demo.js'
-              'demo/demo.min.js': 'js/demo.js'
+              'js/demo_transpiled.js': 'js/demo.js'
           }
       }
     },
     uglify: {
-      js: {
+      options: {
+        banner: '/* ' +
+          '<%= pkg.name %> v<%= pkg.version %> ' +
+          '(<%= grunt.template.today("yyyy-mm-dd") %>) | ' +
+          '<%= pkg.homepage %> | ' +
+          '(c) <%= grunt.template.today("yyyy") %> <%= pkg.author %> | ' +
+          'licensed <%= pkg.license %> ' +
+          '*/\n'
+      },
+      main: {
         files: {
-          //'demo/demo.min.js': ['js/demo_transpiled.js'],
           'demo/bubb.min.js': ['js/script_transpiled.js']
         }
       }
     },
     copy: {
-      main: {
+      build: {
+        files: [{
+          src: 'demo/bubb.min.js',
+          dest: 'dist/bubb.min.js'
+        },
+        {
+          src: 'demo/bubb.min.css',
+          dest: 'dist/bubb.min.css'
+        },
+        {
+          src: 'js/demo_transpiled.js',
+          dest: 'demo/demo.min.js'
+        }]
+      },
+      dev: {
         files: [{
           src: 'js/script_transpiled.js',
           dest: 'demo/bubb.min.js'
@@ -97,17 +116,6 @@ module.exports = function(grunt) {
           {expand: true, flatten: true, src: ['html/index.html'], dest: 'demo/'}
         ]
       }
-    },
-    header: {
-        demo: {
-            options: {
-                text: '/* github.com/frdnrdb/bubb '+ new Date().toISOString() +' */'
-            },
-            files: {
-                'dist/bubb.min.css': 'demo/bubb.min.css',
-                'dist/bubb.min.js': 'demo/bubb.min.js'
-            }
-        }
     },
     clean: ['scss/style.css', 'scss/demo.css', 'scss/bubb.css', 'js/script_transpiled.js', 'js/demo_transpiled.js'],
     watch: {

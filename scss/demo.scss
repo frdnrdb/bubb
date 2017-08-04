@@ -21,6 +21,32 @@ $max-width: 720px;
   -moz-osx-font-smoothing: grayscale;
 }
 
+@mixin hovers() {
+  > div {
+    display: inline-block;
+    font-size: 95%;
+    margin-top: 1em;
+    padding-bottom: 2px;
+    border-bottom: 2px dotted $col2;
+    cursor: help;
+    position: relative;
+    &:hover {
+      border-color: transparent;
+    }
+  }
+  > i {
+    &:after {
+      content: '⟵  :hover';
+      display: inline-block;
+      white-space: nowrap;
+      border-bottom: none;
+      margin-left: 12px;
+      font-size: 75%;
+      opacity: .35;
+    }
+  }
+}
+
 body {
   padding: 0 0 2em;
   margin: 0;
@@ -104,7 +130,7 @@ header {
 }
 code {
   font-size: 70%;
-  padding: 2em;
+  //padding: 2em;
   overflow-x: scroll;
   &::-webkit-scrollbar {
     width: 0px;
@@ -112,10 +138,11 @@ code {
   }
 }
 pre {
-  padding: 1em;
-  border: 1px solid #f0f0f0;
+  //padding: .5em;
+  font-size: 16px;
+  //border: 1px solid #f0f0f0;
   opacity: .35;
-  transition: opacity .5s linear;
+  transition: opacity .25s linear;
   position: relative;
   z-index: 0;
   filter: grayscale(100%);
@@ -123,6 +150,13 @@ pre {
     opacity: 1;
     filter: grayscale(0%);
   }
+}
+.opaque pre {
+  opacity: 1;
+  filter: grayscale(0%);
+  padding: 0;
+  border: none;
+  font-size: 18px;
 }
 section {
   position: relative;
@@ -159,31 +193,12 @@ section {
     line-height: 1.3;
     color: #888;
   }
-  > div {
-    display: inline-block;
-    font-size: 95%;
-    margin-top: 1em;
-    padding-bottom: 2px;
-    border-bottom: 2px dotted $col2;
-    cursor: help;
-    position: relative;
-    &:hover {
-      border-color: transparent;
-    }
+  > span {
+    @include hovers();
   }
-  > i {
-    &:after {
-      content: '⟵  :hover';
-      display: inline-block;
-      white-space: nowrap;
-      border-bottom: none;
-      margin-left: 12px;
-      font-size: 75%;
-      opacity: .35;
-    }
-  }
+  @include hovers();
 }
-body > span {
+body > footer {
   background: $col;
   display: block;
   position: absolute;

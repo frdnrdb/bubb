@@ -1,11 +1,11 @@
 {
   "name": "bubb",
   "description": "infotip",
-  "version": "1.0.2",
+  "version": "1.0.15",
   "author": "frdnrdb",
   "license": "MIT",
   "main": "./dist/bubb.min.js",
-  "homepage": "http://noink.no",
+  "homepage": "http://bubb.surge.sh",
   "scripts": {
     "start": "grunt serve"
   },
@@ -22,11 +22,9 @@
     "grunt-contrib-connect": "^1.0.2",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-cssmin": "^1.0.1",
-    "grunt-contrib-htmlmin": "^2.4.0",
     "grunt-contrib-uglify": "^1.0.1",
     "grunt-contrib-watch": "^1.0.0",
     "grunt-es6-transpiler": "^1.0.2",
-    "grunt-header": "^1.1.0",
     "grunt-open": "^0.2.3",
     "grunt-replace": "^1.0.1",
     "grunt-run": "^0.7.0",

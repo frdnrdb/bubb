@@ -25,11 +25,10 @@ $bubb-font-size: 17px;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  @include boxShadow();
 
   img {
     max-width: 100%;
-    width: 100%;    
+    width: 100%;
     display: block;
   }
 }
@@ -41,9 +40,6 @@ $bubb-font-size: 17px;
   border-bottom-width: $width;
   border-bottom-style: solid;
   border-bottom-color: inherit;
-}
-@mixin boxShadow() {
-  //box-shadow: rgba(#fad, .35) 6px 7px 0 0;
 }
 @mixin bubbTipPseudo($width) {
   width: 0;
@@ -63,7 +59,7 @@ $bubb-font-size: 17px;
       padding: .75em 0;
       text-transform: uppercase;
       letter-spacing: 2px;
-      font-size: 72.5%;
+      font-size: 12px;
       font-weight: bold;
       color: #ddd;
       border-bottom: 1px solid rgba(#fff, .15);

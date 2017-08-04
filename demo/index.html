@@ -16,37 +16,58 @@
 
 <body>
 
-  <span>
-    <a href="https://twitter.com/intent/tweet?url=bubb.surge.sh&text=bubb%20infotip&hashtags=css,js,lightweight,simple">Twitter</a>
-    <a href="https://github.com/frdnrdb/bubb">GitHub</a>
-  </span>
-
   <header>
     <b>Bubb</b> Infotip<span>CSS <i>and</i><i>or</i> JS</span>
     <aside>
       <a href="https://unpkg.com/bubb/dist/bubb.min.js">↓ bubb.min.js <b>4.6 kB</b></a>
       <a class="inline" href="https://unpkg.com/bubb/dist/bubb.min.gzip.js">↓ bubb.min.gzip.js <b>2.0 kB</b></a>
       <a href="https://unpkg.com/bubb/dist/bubb.min.css">↓ bubb.min.css <b>3.1 kB</b></a>
-      <a class="inline" href="https://unpkg.com/bubb/dist/bubb.min.gzip.css">↓ bubb.min.gzip.css <b>1.1 kB</b></a>
+      <a class="inline" href="https://unpkg.com/bubb/dist/bubb.min.gzip.css">↓ bubb.min.gzip.css <b>1.0 kB</b></a>
       <a class="first" href="https://www.npmjs.com/package/bubb">yarn add bubb <b>or</b> npm i --save bubb</a>
       <a class="first" href="https://github.com/frdnrdb/bubb"><b>git</b> clone https://github.com/frdnrdb/bubb.git</a>
     </aside>
   </header>
 
   <section>
-    <p>Minimal non-dependent JS script that simplifies utilization of bubbs as UI menus with callbacks and, most importantly, uses simple element attribute keyword references for lucid maintenance of content within a configuration object. All available bubb options are listed in the code blocks below. Menu bubbs get a "bubb-menu" class for targeted styling. Mouseover-events are primarily handled by CSS:hover.</p>
-    <div data-bubb="reference">Basic</div><i></i>
-    <div data-bubb="pj">Menu</div><i></i>
-    <div data-bubb="abbruzzese">Callback on hover</div><i></i>
+    <p>Minimal non-dependent, non-fancy JS scripted infotip.</p>
+    <p>Why? Lucidity and maintenance: Each instance's content is referenced from a single configuration object. Context menus: Bubb can act as a lazy man's UI</p>
+    <span id="basic">
+      <div data-bubb="reference">Basic</div><i></i>
+    </span>
+    <span id="menu">
+      <div data-bubb="pj">Menu</div><i></i>
+    </span>
+    <span id="opts">
+      <div data-bubb="abbruzzese">Callback on hover</div><i></i>
+    </span>
+    <span id="added"></span>
+
+    <div data-bubb="Interstellar hootchie kootchie">API and options</div>
+    <span id="methods" class="opaque"></span>
+    <span id="options" class="opaque"></span>
+    <span id="options_setup" class="opaque"></span>
+
+    <div data-bubb="Alternatively edit bubb.scss">Override styling</div>
+    <p>Initial element <b>.bubb</b> <i>or (.bubb-menu)</i>
+    <br>the bubble <b>.bubb > aside</b>
+    <br>or the content <b>.bubb > aside > div</b>.</p>
+
   </section>
 
   <section>
-    <p>Pure, minimal CSS infotip. Add class "bubb-delay" (or modify global bubb.scss variables) to add a reveal delay. A bubb with HTML content may want to be class(ified) as "bubb-interactive". If you really don't care for transitions add "bubb-still". Alternate anchors with bubb-left or bubb-right.</p>
+    <p>Pure CSS infotip.</p>
+    <p>Add class "bubb-delay" (or modify global bubb.scss variables) to add a reveal delay. A bubb with HTML content may want to be class(ified) as "bubb-interactive". If you really don't care for transitions add "bubb-still". Alternate anchors with bubb-left or bubb-right.</p>
+    <p>Attribute-only is in-your-face without animations due to the fact that identical CSS transitions on multiple elements are slightly out of sync.</p>
     <div bubb="Attribute only with pure text content">Attribute</div><i></i>
     <div class="bubb bubb-delayed bubb-interactive bubb-left">Element<aside>Child element with <b>HTML</b> content</aside></div><i></i>
   </section>
 
   <i id="eventsDisplay"></i>
+
+  <footer>
+    <a href="https://twitter.com/intent/tweet?url=bubb.surge.sh&text=bubb%20infotip&hashtags=css,js,lightweight,simple">Twitter</a>
+    <a href="https://github.com/frdnrdb/bubb">GitHub</a>
+  </footer>
 
   <script src="bubb.min.js"></script>
   <script src="demo.min.js"></script>
