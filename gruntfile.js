@@ -20,8 +20,8 @@ module.exports = function(grunt) {
     cssnano: {
       dist: {
         files: {
-          'demo/demo.min.css': 'scss/demo.css',
-          'demo/bubb.min.css': 'scss/bubb.css'
+          'demo/assets/demo.min.css': 'scss/demo.css',
+          'demo/assets/bubb.min.css': 'scss/bubb.css'
         }
       }
     },
@@ -31,7 +31,7 @@ module.exports = function(grunt) {
           expand: true,
           cwd: 'scss/',
           src: ['*.css'],
-          dest: 'demo',
+          dest: 'demo/assets',
           ext: '.min.css'
         }]
       }
@@ -56,8 +56,8 @@ module.exports = function(grunt) {
       },
       main: {
         files: {
-          'demo/demo.min.js': ['js/demo_transpiled.js'],
-          'demo/bubb.min.js': ['js/script_transpiled.js']
+          'demo/assets/demo.min.js': ['js/demo_transpiled.js'],
+          'demo/assets/bubb.min.js': ['js/script_transpiled.js']
         }
       }
     },
@@ -65,11 +65,11 @@ module.exports = function(grunt) {
       build: {
         files: [
           {
-            src: 'demo/bubb.min.js',
+            src: 'demo/assets/bubb.min.js',
             dest: 'dist/bubb.min.js'
           },
           {
-            src: 'demo/bubb.min.css',
+            src: 'demo/assets/bubb.min.css',
             dest: 'dist/bubb.min.css'
           }
         ]
@@ -77,19 +77,19 @@ module.exports = function(grunt) {
       dev: {
         files: [{
           src: 'js/script_transpiled.js',
-          dest: 'demo/bubb.min.js'
+          dest: 'demo/assets/bubb.min.js'
         },
         {
           src: 'js/demo_transpiled.js',
-          dest: 'demo/demo.min.js'
+          dest: 'demo/assets/demo.min.js'
         },
         {
           src: 'scss/demo.css',
-          dest: 'demo/demo.min.css'
+          dest: 'demo/assets/demo.min.css'
         },
         {
           src: 'scss/bubb.css',
-          dest: 'demo/bubb.min.css'
+          dest: 'demo/assets/bubb.min.css'
         },
         {
           src: 'html/index.html',

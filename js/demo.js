@@ -34,8 +34,11 @@ function render_code_blocks() {
 
 function addElementsToDOM() {
 
-    Array.from(arguments).forEach( markup => {
-      document.querySelector('#added').insertAdjacentHTML('beforeend', markup + '<i></i><br>');
+    let query = arguments[0],
+        pos = arguments[1];
+
+    Array.from(arguments).slice(2).forEach( markup => {
+      document.querySelector(query).insertAdjacentHTML(pos, markup + '<i></i><br>');
     });
 }
 
@@ -80,6 +83,8 @@ function demo() {
   bubb.update('abbruzzese', { background: '#FFDEDE', color: '#444' });
 
   addElementsToDOM(
+    '#added',
+    'beforeend',
     '<div data-bubb="added_one">Insert method 1</div>',
     '<div data-bubb="added_two">Insert method 2</div>'
   );
@@ -106,6 +111,19 @@ function demo() {
     callback: true,
     class: 'tipcolor',
     background: 'repeating-linear-gradient(45deg, #FFDEDE, #FFDEDE 25%, #F7F3CE 25%, #F7F3CE 50%, #C5ECBE 50%, #C5ECBE 75%, #4797B1 75%, #4797B1 100%)'
+  });
+
+  document.body.insertAdjacentHTML('beforeend', '<span data-bubb="bubble_bobble" class="bubble-bobble wait"></span>');
+  bubb.refresh();
+
+  bubb.update('bubble_bobble', 'Share?');
+  bubb.update('bubble_bobble', {
+    direction: 'west',
+    anchor: 'right',
+    fontSize: '23px',
+    callback: function(){
+      console.log('----');
+    }
   });
 
 }

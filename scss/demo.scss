@@ -52,7 +52,7 @@ html {
 }
 
 body {
-  padding: 0 0 2em;
+  padding: 0;
   margin: 0;
   background: #fff;
   color: $col;
@@ -223,10 +223,9 @@ footer {
   background: #444;
   color: #F7F3CE;
   display: block;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
+  position: relative;
   height: 2em;
+  width: 100%;
   line-height: 2em;
   a {
     position: absolute;
@@ -427,6 +426,18 @@ hr {
   }
 }
 
+.bubble-bobble {
+  width: 64px;
+  height: 64px;
+  background: url(/assets/bubble_bobble.png);
+  background-repeat: no-repeat;
+  position: fixed;
+  bottom: 1em;
+  right: 1em;
+  &:hover {
+    background-position: 0 100%;
+  }
+}
 
 .bubb-menu {
   bubb-bobb {

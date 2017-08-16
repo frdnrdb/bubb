@@ -5,6 +5,7 @@
     * west-anchored css
     * added_one transition bug?
 
+    * update on non-added dom elements!!!
 
     * Alternative html elements (instead of sub, sup, etc) + update readme on styling;
     * Include bubb-menu-style?
@@ -146,8 +147,6 @@ const eventHandler = function(e) {
     let hover = this._bubb.config.hoverCallback,
         bubbvalue = hover ? this.dataset.bubb : e.target.dataset.bubbValue || e.target.parentNode.dataset.bubbValue;
 
-    console.log('--->', bubbvalue, e.target);
-
     if (!bubbvalue) return;
 
     let thiscallback = (typeof this._bubb.config.callback === 'function' && this._bubb.config.callback) || bubb.callback,
@@ -174,10 +173,6 @@ const update = () => {
 
       bubb.previousKey = false;
 
-      // update main config
-
-      updateMainConfig(key, contentOrConfig, updateOptions, _trigger);
-
       // update element
 
       if (!updateOptions) {
@@ -187,12 +182,6 @@ const update = () => {
 
       // update element config
 
-      Object.keys(contentOrConfig).forEach( updatedKey => {
-        if (!~availableOptions.indexOf(updatedKey)) return;
-        if (_trigger) _trigger._bubb.config[updatedKey] = contentOrConfig[updatedKey];
-        else bubb.config['_'][updatedKey] = contentOrConfig[updatedKey];
-      });
-
       if (!_trigger) {
         Array.from( document.querySelectorAll('.bubb') ).forEach( instance => instance.classList.remove('bubb') );
         bubb();
@@ -200,12 +189,22 @@ const update = () => {
       }
 
       let bindDefault = typeof contentOrConfig.callback === 'boolean' && !_trigger._bubb.bind,
-          bindSelf = contentOrConfig.callback && !_trigger._bubb.config.hasOwnProperty('callback'),
+          bindSelf = typeof contentOrConfig.callback === 'function' && !_trigger._bubb.config.hasOwnProperty('callback'),
           bindHover = contentOrConfig.hoverCallback && !_trigger._bubb.config.hoverCallback;
 
       if (bindDefault || bindSelf || bindHover) _trigger._bubb.bind = true;
 
-      if (bindDefault) _trigger.addEventListener( 'mousedown', eventHandler, false);
+      if (bindDefault || bindSelf) _trigger.addEventListener( 'mousedown', eventHandler, false);
+
+      Object.keys(contentOrConfig).forEach( updatedKey => {
+        if (!~availableOptions.indexOf(updatedKey)) return;
+        if (_trigger) _trigger._bubb.config[updatedKey] = contentOrConfig[updatedKey];
+        else bubb.config['_'][updatedKey] = contentOrConfig[updatedKey];
+      });
+
+      // update main config
+
+      updateMainConfig(key, contentOrConfig, updateOptions, _trigger);
 
 };
 
