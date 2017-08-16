@@ -20,8 +20,8 @@ module.exports = function(grunt) {
     cssnano: {
       dist: {
         files: {
-          'demo/assets/demo.min.css': 'scss/demo.css',
-          'demo/assets/bubb.min.css': 'scss/bubb.css'
+          'docs/assets/demo.min.css': 'scss/demo.css',
+          'docs/assets/bubb.min.css': 'scss/bubb.css'
         }
       }
     },
@@ -31,7 +31,7 @@ module.exports = function(grunt) {
           expand: true,
           cwd: 'scss/',
           src: ['*.css'],
-          dest: 'demo/assets',
+          dest: 'docs/assets',
           ext: '.min.css'
         }]
       }
@@ -56,8 +56,8 @@ module.exports = function(grunt) {
       },
       main: {
         files: {
-          'demo/assets/demo.min.js': ['js/demo_transpiled.js'],
-          'demo/assets/bubb.min.js': ['js/script_transpiled.js']
+          'docs/assets/demo.min.js': ['js/demo_transpiled.js'],
+          'docs/assets/bubb.min.js': ['js/script_transpiled.js']
         }
       }
     },
@@ -65,11 +65,11 @@ module.exports = function(grunt) {
       build: {
         files: [
           {
-            src: 'demo/assets/bubb.min.js',
+            src: 'docs/assets/bubb.min.js',
             dest: 'dist/bubb.min.js'
           },
           {
-            src: 'demo/assets/bubb.min.css',
+            src: 'docs/assets/bubb.min.css',
             dest: 'dist/bubb.min.css'
           }
         ]
@@ -77,23 +77,23 @@ module.exports = function(grunt) {
       dev: {
         files: [{
           src: 'js/script_transpiled.js',
-          dest: 'demo/assets/bubb.min.js'
+          dest: 'docs/assets/bubb.min.js'
         },
         {
           src: 'js/demo_transpiled.js',
-          dest: 'demo/assets/demo.min.js'
+          dest: 'docs/assets/demo.min.js'
         },
         {
           src: 'scss/demo.css',
-          dest: 'demo/assets/demo.min.css'
+          dest: 'docs/assets/demo.min.css'
         },
         {
           src: 'scss/bubb.css',
-          dest: 'demo/assets/bubb.min.css'
+          dest: 'docs/assets/bubb.min.css'
         },
         {
           src: 'html/index.html',
-          dest: 'demo/index.html'
+          dest: 'docs/index.html'
         }]
       }
     },
@@ -120,7 +120,7 @@ module.exports = function(grunt) {
           ]
         },
         files: [
-          {expand: true, flatten: true, src: ['html/index.html'], dest: 'demo/'}
+          {expand: true, flatten: true, src: ['html/index.html'], dest: 'docs/'}
         ]
       }
     },
@@ -139,7 +139,7 @@ module.exports = function(grunt) {
         options: {
           port: 5000,
           hostname: 'localhost',
-          base: 'demo'
+          base: 'docs'
         }
       }
     },
