@@ -4,7 +4,7 @@
 
 [![dependencies Status](https://david-dm.org/frdnrdb/bubb/status.svg)](https://david-dm.org/frdnrdb/bubb)
 [![dev dependencies](https://david-dm.org/frdnrdb/bubb/dev-status.svg)](https://badge.fury.io/js/bubb)
-[![npm version](https://img.shields.io/badge/stomach-empty-red.svg)](http://bubb.surge.sh)
+[![npm version](https://img.shields.io/badge/trump-sad-red.svg)](http://bubb.surge.sh)
 
 ---
 
@@ -135,12 +135,10 @@ bubb.remove(menu_reference.menu_item);
 ```
 
 
-#### Style
+#### Style overrides
 The content is targeted through **bubb-content** > **div**.
-
-The trigger element gets className **.bubb** *(and .bubb-menu)*
-
-the bubble tagname is **bubb-bobb**
+The trigger element gets className **.bubb** *(and .bubb-menu)*.
+The bubb(le) tagname is **bubb-bobb**.
 
 ---
 
