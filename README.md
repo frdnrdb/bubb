@@ -1,6 +1,6 @@
 # bubb
 
-non-dependent, non-fancy javascripted _infotip_.
+**non-dependent**, non-fancy javascript _infotip_. **no css needed**.
 
 [![dependencies Status](https://david-dm.org/frdnrdb/bubb/status.svg)](https://david-dm.org/frdnrdb/bubb)
 [![dev dependencies](https://david-dm.org/frdnrdb/bubb/dev-status.svg)](https://badge.fury.io/js/bubb)
@@ -9,10 +9,10 @@ non-dependent, non-fancy javascripted _infotip_.
 ---
 
 #### Usage
+[→ See some examples](http://bubb.surge.sh)
 
 ```html
 
-<link rel="stylesheet" href="bubb.min.css">
 <script src="bubb.min.js"></script>
 
 <this data-bubb="bubble">info</this>
@@ -42,7 +42,6 @@ non-dependent, non-fancy javascripted _infotip_.
 // yarn add bubb | npm i --save bubb
 let bubb = require('bubb');
 ```
-[→ See some examples](http://bubb.surge.sh)
 
 #### Options setup
 
@@ -84,16 +83,23 @@ interactive: false
   // boolean, default true for menus and option callback
 
 hoverCallback: false
-  // boolean
+  // boolean, trigger callback on element:hover
 
 delay: false
   // int value, microseconds reveal delay
 
+direction: false
+  // string 'north', 'west' or 'east' (default false = 'south')
+
 anchor: false
-  // string 'left' or 'right' if centered tip is boring
+  // string 'left' or 'right' (default false = 'centered')
 
 width: false
   // int value <= 100 (document width percentage)
+  // or a querySelector string (eg. 'section:first-of-type')
+
+borderRadius: '4px'
+  // css string with units
 
 fontSize: '17px'
   // css string with units
@@ -105,7 +111,8 @@ color: '#fff'
   // css color string
 
 class: false
-  // string, add classname to bubb
+  // string, className to target current bubb specifically
+
 
 ```
 
@@ -129,7 +136,11 @@ bubb.remove(menu_reference.menu_item);
 
 
 #### Style
-Override the initial element __.bubb__ _(.bubb-menu)_, the bubble __.bubb > aside__ or the content __.bubb > aside > div__. Or: Modify some global variables in the __SCSS__ file to change overall look/ behaviour.
+The content is targeted through **bubb-content** > **div**.
+
+The trigger element gets className **.bubb** *(and .bubb-menu)*
+
+the bubble tagname is **bubb-bobb**
 
 ---
 
