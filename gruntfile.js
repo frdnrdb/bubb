@@ -17,6 +17,14 @@ module.exports = function(grunt) {
         }
       }
     },
+    cssnano: {
+      dist: {
+        files: {
+          'demo/demo.min.css': 'scss/demo.css',
+          'demo/bubb.min.css': 'scss/bubb.css'
+        }
+      }
+    },
     cssmin: {
       css: {
         files: [{
@@ -48,24 +56,23 @@ module.exports = function(grunt) {
       },
       main: {
         files: {
+          'demo/demo.min.js': ['js/demo_transpiled.js'],
           'demo/bubb.min.js': ['js/script_transpiled.js']
         }
       }
     },
     copy: {
       build: {
-        files: [{
-          src: 'demo/bubb.min.js',
-          dest: 'dist/bubb.min.js'
-        },
-        {
-          src: 'demo/bubb.min.css',
-          dest: 'dist/bubb.min.css'
-        },
-        {
-          src: 'js/demo_transpiled.js',
-          dest: 'demo/demo.min.js'
-        }]
+        files: [
+          {
+            src: 'demo/bubb.min.js',
+            dest: 'dist/bubb.min.js'
+          },
+          {
+            src: 'demo/bubb.min.css',
+            dest: 'dist/bubb.min.css'
+          }
+        ]
       },
       dev: {
         files: [{
@@ -91,7 +98,7 @@ module.exports = function(grunt) {
       }
     },
     replace: {
-      default: {
+      html: {
         options: {
           patterns: [
             {
@@ -143,25 +150,25 @@ module.exports = function(grunt) {
       }
     },
     shell: {
-  		git_add: {
-  			command: 'git add .'
-  		},
+      git_add: {
+        command: 'git add .'
+      },
       git_commit: {
-  			command: 'git commit -m \'patch\''
-  		},
+        command: 'git commit -m \'patch\''
+      },
       git_push: {
-  			command: 'git push origin master'
-  		},
+        command: 'git push origin master'
+      },
       npm_version: {
-  			command: 'npm version patch'
-  		},
+        command: 'npm version patch'
+      },
       npm_publish: {
-  			command: 'npm publish'
-  		},
+        command: 'npm publish'
+      },
       surge: {
-  			command: 'surge'
-  		}
-  	},
+        command: 'surge'
+      }
+    },
     compress: {
       main: {
         options: {
@@ -173,7 +180,7 @@ module.exports = function(grunt) {
           src: ['bubb.min.css'],
           dest: 'dist/',
           extDot: 'last',
-          ext: '.gzip.css'
+          ext: '.css.gz'
         },
         {
           expand: true,
@@ -181,7 +188,7 @@ module.exports = function(grunt) {
           src: ['bubb.min.js'],
           dest: 'dist/',
           extDot: 'last',
-          ext: '.gzip.js'
+          ext: '.js.gz'
         }]
       }
     }

@@ -1,13 +1,15 @@
-$bubb-tip-size: .65em; // calc... -> must include units (em, px...)
-$bubb-offset: .15em; // calc...
-$bubb-transition-distance: .85em; // calc...
-$bubb-transition-expression: cubic-bezier(0,0,.25,1); //cubic-bezier(.25,.8,.25,1);
-$bubb-transition-delay: 0s; // global
-$bubb-transition-delay-option: .5s; // enabled by bubb-delay class
+$bubb-tip-size: 10px;
+$bubb-offset: 4px;
+$bubb-transition-distance: 20px;
+$bubb-transition-expression: cubic-bezier(0,0,0,1);
+$bubb-transition-delay: .75s;
+$bubb-border-radius: 5px;
+$bubb-border-radius-round: 30px;
+$bubb-min-width: 9em;
+$bubb-font-size-large: 20px;
+$bubb-font-size: 17px;
 $bubb-background: #444;
 $bubb-color: #fff;
-$bubb-border-radius: 4px;
-$bubb-font-size: 17px;
 
 @mixin bubbStyle() {
   padding: .75em .9em .85em;
@@ -16,32 +18,12 @@ $bubb-font-size: 17px;
   text-align: center;
   border-radius: $bubb-border-radius;
   background-color: $bubb-background;
-  border-bottom-color: $bubb-background;
   color: $bubb-color;
-  cursor: default;
-  min-width: 150px;
-  width: 100%;
-  box-sizing: border-box;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  img {
-    max-width: 100%;
-    width: 100%;
-    display: block;
-  }
+  min-width: $bubb-min-width;
+  @include textRendering();
+  @include userSelectNone();
 }
 @mixin bubbTip($width) {
-  width: 0;
-  height: 0;
-  border-right: $width solid transparent;
-  border-left: $width solid transparent;
-  border-bottom-width: $width;
-  border-bottom-style: solid;
-  border-bottom-color: inherit;
-}
-@mixin bubbTipPseudo($width) {
   width: 0;
   height: 0;
   border-bottom: $width solid $bubb-background;
@@ -49,206 +31,422 @@ $bubb-font-size: 17px;
   border-left: $width solid transparent;
 }
 @mixin bubbTransition() {
-  transition: opacity .3s $bubb-transition-expression, bottom .3s $bubb-transition-expression;
-  transition-delay: $bubb-transition-delay;
+  transition: transform .35s $bubb-transition-expression, opacity .35s $bubb-transition-expression;
 }
-@mixin bubbMenuStyle() {
-  aside {
-    padding: 0!important;
-    div {
-      padding: .75em 0;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      font-size: 12px;
-      font-weight: bold;
-      color: #ddd;
-      border-bottom: 1px solid rgba(#fff, .15);
-      transition: background .3s cubic-bezier(0,0,0,.75);
-      &:first-child {
-        padding-top: 1em;
-      }
-      &:hover {
-        background: rgba(#fff, .1);
-        color: #fff;
-        border-color: transparent;
-      }
-    }
-  }
+@mixin textRendering() {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 @mixin userSelectNone() {
-  -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-     -khtml-user-select: none; /* Konqueror HTML */
-       -moz-user-select: none; /* Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
-}
-
-/*
---- Bubb as html element
-*/
-.bubb {
-  position: relative;
-  word-wrap: break-word;
-  hyphens: auto;
-  @include userSelectNone();
-  aside {
-    position: absolute;
-    z-index: 1;
-    display: block;
-    visibility: hidden;
-    transform: translate(-50%, 100%);
-    bottom: calc( -#{$bubb-tip-size} - ( #{$bubb-transition-distance} + #{$bubb-offset} ) );
-    left: 50%;
-    pointer-events: none;
-    opacity: 0;
-    @include bubbStyle();
-    &:after {
-      content: '';
-      position: absolute;
-      transform: translate(-50%, 0);
-      top: calc( 1px - #{$bubb-tip-size} );
-      left: 50%;
-      @include bubbTip($bubb-tip-size);
-    }
-    &:hover {
-      display: none;
-    }
-    &:empty {
-      display: none;
-    }
-  }
-  &:hover {
-    aside {
-      @include bubbTransition();
-      visibility: visible;
-      bottom: calc( -#{$bubb-tip-size} - #{$bubb-offset} );
-      pointer-events: all;
-      opacity: 1;
-    }
-  }
-
-  /*
-  --- Make bubb hoverable
-  */
-  &-interactive {
-    &:before {
-      content: '';
-      position: absolute;
-      display: block;
-      width: 100%;
-      min-width: 150px;
-      height: calc( #{$bubb-tip-size} + #{$bubb-offset} );
-      bottom: calc( -#{$bubb-tip-size} - #{$bubb-offset} );
-      left: 0;
-    }
-    aside {
-      &:hover {
-        display: block;
-      }
-      > div {
-        cursor: pointer;
-      }
-    }
-  }
-
-  /*
-  --- Remove transition
-  */
-  &-still {
-    &:hover {
-      aside {
-        transition-duration: 0s;
-      }
-    }
-  }
-
-  /*
-  --- Tip placement
-  */
-  &-left {
-    aside {
-      transform: translate(0, 100%);
-      left: 0;
-      border-radius: 0 $bubb-border-radius $bubb-border-radius $bubb-border-radius;
-      &:after {
-        transform: translate(0, 0);
-        left: 0;
-        border-left: none;
-      }
-    }
-  }
-  &-right {
-    aside {
-      transform: translate(0, 100%);
-      left: auto;
-      right: 0;
-      border-radius: $bubb-border-radius 0 $bubb-border-radius $bubb-border-radius;
-      &:after {
-        transform: translate(0, 0);
-        left: auto;
-        right: 0;
-        border-right: none;
-      }
-    }
-  }
-
-  /*
-  --- Delayed reveal
-  */
-  &-delayed {
-    &:hover {
-      aside {
-        transition-delay: $bubb-transition-delay-option;
-      }
-    }
-  }
-
-  /*
-  --- Default menu style
-  */
-  &-menu {
-    @include bubbMenuStyle();
-  }
-
+  -webkit-touch-callout: none;
+    -webkit-user-select: none;
+     -khtml-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
 }
 
 
+// bubb bottom, bubb east
+$y-transform-tip: calc( #{$bubb-tip-size} + .065rem + #{$bubb-offset} + #{$bubb-transition-distance} );
+$y-transform-hover-tip: calc( #{$bubb-tip-size} + .065rem + #{$bubb-offset} );
+$y-transform: calc( 100% + #{$bubb-tip-size} + #{$bubb-offset} + #{$bubb-transition-distance} );
+$y-transform-hover: calc( 100% + #{$bubb-tip-size} + #{$bubb-offset} );
 
-/*
---- Bubb as pseudo element, attribute only
-*/
-[bubb] {
+// bubb top, bubb west
+$y-transform-tip-top: calc( -#{$bubb-tip-size} - .065rem - #{$bubb-offset} - #{$bubb-transition-distance} );
+$y-transform-hover-tip-top: calc( -#{$bubb-tip-size} - .065rem - #{$bubb-offset} );
+$y-transform-top: calc( -100% - #{$bubb-tip-size} - #{$bubb-offset} - #{$bubb-transition-distance} );
+$y-transform-hover-top: calc( -100% - #{$bubb-tip-size} - #{$bubb-offset} );
+
+@mixin bubb-base() {
   position: relative;
   &:before, &:after {
     position: absolute;
     pointer-events: none;
     visibility: hidden;
     z-index: 1;
-  }
-  &:after {
-    content: attr(bubb);
-    transform: translate(-50%, 100%);
-    left: 50%;
-    bottom: calc( 0px - ( #{$bubb-tip-size} + #{$bubb-offset} ) );
-    @include bubbStyle();
+    bottom: 0;
+    opacity: 0;
   }
   &:before {
     content: '';
-    transform: translate(-50%, 100%);
-    left: 50%;
-    bottom: -$bubb-offset;
-    @include bubbTipPseudo($bubb-tip-size);
+    @include bubbTip($bubb-tip-size);
+  }
+  &:after {
+    content: attr(bubb);
+    @include bubbStyle();
   }
   &:hover {
     &:before, &:after {
-      transition-delay: $bubb-transition-delay;
+      @include bubbTransition();
       visibility: visible;
+      opacity: 1;
     }
   }
-  &.bubb-delayed:hover {
+}
+@mixin bubb-center() {
+  &:before, &:after {
+    left: 50%;
+  }
+  &:before {
+    transform: translate(-50%, $y-transform-tip);
+  }
+  &:after {
+    transform: translate(-50%, $y-transform);
+  }
+  &:hover {
+    &:before {
+      transform: translate(-50%, $y-transform-hover-tip);
+    }
+    &:after {
+      transform: translate(-50%, $y-transform-hover);
+    }
+  }
+}
+@mixin bubb-left-and-right() {
+    &:before {
+      transform: translate(0, $y-transform-tip);
+    }
+    &:after {
+      transform: translate(0, $y-transform);
+    }
+    &:hover {
+      &:before {
+        transform: translate(0, $y-transform-hover-tip);
+      }
+      &:after {
+        transform: translate(0, $y-transform-hover);
+      }
+    }
+}
+@mixin bubb-left() {
     &:before, &:after {
-      transition-delay: $bubb-transition-delay-option;
+      left: 0;
+    }
+    &:before {
+      border-left: none;
+    }
+    &:after {
+      border-radius: 0 $bubb-border-radius $bubb-border-radius $bubb-border-radius;
+    }
+}
+@mixin bubb-right() {
+    &:before, &:after {
+      left: auto;
+      right: 0;
+    }
+    &:before {
+      border-right: none;
+    }
+    &:after {
+      border-radius: $bubb-border-radius 0 $bubb-border-radius $bubb-border-radius;
+    }
+}
+@mixin bubb-east-all() {
+  &:before, &:after {
+    left: auto;
+    right: 0;
+    top: 50%;
+    bottom: auto;
+  }
+  &:before {
+    border-left: none;
+    border-right-color: $bubb-background;
+  }
+}
+@mixin bubb-east() {
+  &:before {
+    border-top: $bubb-tip-size solid transparent;
+    border-bottom-color: transparent;
+    transform: translate($y-transform-tip, -50%);
+  }
+  &:after {
+    transform: translate($y-transform, -50%);
+  }
+  &:hover {
+    &:before {
+      transform: translate($y-transform-hover-tip, -50%);
+    }
+    &:after {
+      transform: translate($y-transform-hover, -50%);
+    }
+  }
+}
+@mixin bubb-east-top() {
+  &:before {
+    border-top: none;
+    border-bottom-color: transparent;
+    transform: translate($y-transform-tip, 0);
+  }
+  &:after {
+    border-radius: 0 $bubb-border-radius $bubb-border-radius $bubb-border-radius;
+    transform: translate($y-transform, 0);
+  }
+  &:hover {
+    &:before {
+      transform: translate($y-transform-hover-tip, 0);
+    }
+    &:after {
+      transform: translate($y-transform-hover, 0);
+    }
+  }
+}
+@mixin bubb-east-bottom() {
+  &:before {
+    border-top: $bubb-tip-size solid transparent;
+    border-bottom: none;
+    transform: translate($y-transform-tip, -100%);
+  }
+  &:after {
+    border-radius: $bubb-border-radius $bubb-border-radius $bubb-border-radius 0;
+    transform: translate($y-transform, -100%);
+  }
+  &:hover {
+    &:before {
+      transform: translate($y-transform-hover-tip, -100%);
+    }
+    &:after {
+      transform: translate($y-transform-hover, -100%);
+    }
+  }
+}
+@mixin bubb-west-all() {
+  &:before, &:after {
+    left: 0;
+    right: auto;
+    top: 50%;
+    bottom: auto;
+  }
+  &:before {
+    border-right: none;
+    border-top: $bubb-tip-size solid transparent;
+    border-bottom-color: transparent;
+    border-left-color: $bubb-background;
+  }
+}
+@mixin bubb-west() {
+  &:before {
+    transform: translate($y-transform-tip-top, -50%);
+  }
+  &:after {
+    transform: translate($y-transform-top, -50%);
+  }
+  &:hover {
+    &:before {
+      transform: translate($y-transform-hover-tip-top, -50%);
+    }
+    &:after {
+      transform: translate($y-transform-hover-top, -50%);
+    }
+  }
+}
+@mixin bubb-west-top() {
+  &:before {
+    border-top: none;
+    transform: translate($y-transform-tip-top, 0);
+  }
+  &:after {
+    border-radius: $bubb-border-radius 0 $bubb-border-radius $bubb-border-radius;
+    transform: translate($y-transform-top, 0);
+  }
+  &:hover {
+    &:before {
+      transform: translate($y-transform-hover-tip-top, 0);
+    }
+    &:after {
+      transform: translate($y-transform-hover-top, 0);
+    }
+  }
+}
+@mixin bubb-west-bottom() {
+  &:before {
+    border-bottom: none;
+    transform: translate($y-transform-tip-top, -100%);
+  }
+  &:after {
+    border-radius: $bubb-border-radius $bubb-border-radius 0 $bubb-border-radius;
+    transform: translate($y-transform-top, -100%);
+  }
+  &:hover {
+    &:before {
+      transform: translate($y-transform-hover-tip-top, -100%);
+    }
+    &:after {
+      transform: translate($y-transform-hover-top, -100%);
+    }
+  }
+}
+@mixin bubb-north() {
+  &:before, &:after {
+    left: 50%;
+    top: 0;
+    bottom: auto;
+  }
+  &:before {
+    border-bottom: none;
+    border-top: $bubb-tip-size solid $bubb-background;
+    border-left-color: transparent;
+    border-right-color: transparent;
+    transform: translate(-50%, $y-transform-tip-top);
+  }
+  &:after {
+    transform: translate(-50%, $y-transform-top);
+  }
+  &:hover {
+    &:before {
+      transform: translate(-50%, $y-transform-hover-tip-top);
+    }
+    &:after {
+      transform: translate(-50%, $y-transform-hover-top);
+    }
+  }
+}
+@mixin bubb-north-left-and-right() {
+  &:before {
+    transform: translate(0, $y-transform-tip-top);
+  }
+  &:after {
+    transform: translate(0, $y-transform-top);
+  }
+  &:hover {
+    &:before {
+      transform: translate(0, $y-transform-hover-tip-top);
+    }
+    &:after {
+      transform: translate(0, $y-transform-hover-top);
+    }
+  }
+}
+@mixin bubb-north-left() {
+  &:before, &:after {
+    left: 0;
+    top: 0;
+    bottom: auto;
+  }
+  &:before {
+    border-left: none;
+  }
+  &:after {
+    border-radius: $bubb-border-radius $bubb-border-radius $bubb-border-radius 0;
+  }
+}
+@mixin bubb-north-right() {
+  &:before, &:after {
+    left: auto;
+    right: 0;
+    top: 0;
+    bottom: auto;
+  }
+  &:before {
+    border-right: none;
+  }
+  &:after {
+    border-radius: $bubb-border-radius $bubb-border-radius 0 $bubb-border-radius;
+  }
+}
+@mixin bubb-still() {
+  &:hover {
+    &:before, &:after {
+      transition-duration: 0s;
+    }
+  }
+}
+@mixin bubb-delay() {
+  &:hover {
+    &:before, &:after {
+      transition-delay: $bubb-transition-delay;
+    }
+  }
+}
+@mixin bubb-round() {
+  &:after {
+    border-radius: $bubb-border-radius-round !important;
+  }
+  &[north][left], &[east][right] {
+    &:after {
+      border-radius: $bubb-border-radius-round $bubb-border-radius-round $bubb-border-radius-round 0 !important;
+    }
+  }
+  &[north][right], &[west][right] {
+    &:after {
+      border-radius: $bubb-border-radius-round $bubb-border-radius-round 0 $bubb-border-radius-round !important;
+    }
+  }
+  &[left]:not([east]):not([west]):not([north]), &[east][left] {
+    &:after {
+      border-radius: 0 $bubb-border-radius-round $bubb-border-radius-round $bubb-border-radius-round !important;
+    }
+  }
+  &[right]:not([east]):not([west]):not([north]), &[west][left] {
+    &:after {
+      border-radius: $bubb-border-radius-round 0 $bubb-border-radius-round $bubb-border-radius-round !important;
+    }
+  }
+}
+@mixin bubb-large() {
+  &:after {
+    font-size: $bubb-font-size-large !important;
+  }
+}
+
+[bubb] {
+  @include bubb-base();
+  &[still] {
+    @include bubb-still();
+  }
+  &[delay] {
+    @include bubb-delay();
+  }
+  &[round] {
+    @include bubb-round();
+  }
+  &[large] {
+    @include bubb-large();
+  }
+  &:not([east]):not([west]):not([north]) {
+    @include bubb-center();
+    &[left], &[right] {
+      @include bubb-left-and-right();
+    }
+    &[left] {
+      @include bubb-left();
+    }
+    &[right] {
+      @include bubb-right();
+    }
+  }
+  &[north] {
+    @include bubb-north();
+    &[left], &[right] {
+      @include bubb-north-left-and-right();
+    }
+    &[left] {
+      @include bubb-north-left();
+    }
+    &[right] {
+      @include bubb-north-right();
+    }
+  }
+  &[east] {
+    @include bubb-east-all();
+    @include bubb-east();
+    &[left] {
+      @include bubb-east-top();
+    }
+    &[right] {
+      @include bubb-east-bottom();
+    }
+  }
+  &[west] {
+    @include bubb-west-all();
+    @include bubb-west();
+    &[left] {
+      @include bubb-west-top();
+    }
+    &[right] {
+      @include bubb-west-bottom();
     }
   }
 }

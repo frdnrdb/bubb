@@ -13,7 +13,7 @@ function render_code_blocks() {
     let pre = document.createElement('pre'),
         code = document.createElement('code');
         pre.appendChild(code);
-        code.innerHTML = temp.innerHTML.replace(/</g,"&lt;").replace(/>/g,"&gt;");
+        code.innerHTML = temp.innerHTML.replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\=""/g,'');
 
         div.parentNode.insertBefore(pre, div.nextSibling.nextSibling);
 
@@ -56,7 +56,7 @@ function demo() {
               item.innerHTML = 'Loading...';
               setTimeout(function(){
                 item.innerHTML = designQuotes[Math.floor(Math.random() * designQuotes.length)];
-              }, 1000);
+              }, 750);
             },
             hoverCallback: true,
             interactive: false,
@@ -69,8 +69,7 @@ function demo() {
 
     let eventsDisplay = document.getElementById('eventsDisplay');
     eventsDisplay.innerHTML = 'clicked ' + key;
-    bubb.switch = !bubb.switch;
-    eventsDisplay.setAttribute('switch', bubb.switch);
+    eventsDisplay.setAttribute('color', Array.from(item.parentNode.children).indexOf(item));
 
     console.log('clicked ' + key);
 
@@ -78,21 +77,35 @@ function demo() {
 
   bubb.update('pj.mccready', 'lead guitar');
   bubb.add('pj.irons', 'drums');
-  bubb.update('abbruzzese', { background:'#fad', color:'#444', delay: true });
+  bubb.update('abbruzzese', { background: '#FFDEDE', color: '#444' });
 
   addElementsToDOM(
     '<div data-bubb="added_one">Insert method 1</div>',
     '<div data-bubb="added_two">Insert method 2</div>'
   );
 
-  config.added_one = 'config[reference] edited before adding bubb to DOM';
+  config.added_one = {
+    text: 'config[reference] edited before adding bubb to DOM',
+    _: {
+      background: '#4797B1',
+      color: '#fff',
+      borderRadius: '14px',
+      direction: 'north',
+      anchor: 'left'
+    }
+  };
 
   bubb.refresh();
 
   bubb.update('added_two', 'bubb.update(reference, content) called after adding bubb to DOM');
   bubb.update('added_two', {
-    maximize: true,
-    callback: true
+    width: '40',
+    anchor: 'left',
+    fontSize: '23px',
+    color: '#444',
+    callback: true,
+    class: 'tipcolor',
+    background: 'repeating-linear-gradient(45deg, #FFDEDE, #FFDEDE 25%, #F7F3CE 25%, #F7F3CE 50%, #C5ECBE 50%, #C5ECBE 75%, #4797B1 75%, #4797B1 100%)'
   });
 
 }
@@ -145,37 +158,46 @@ const display_options = {
 target: '#options',
 code:`// --> available options
 
-callback: function(){} || true
-  // overrides initial (or global) callback.
+callback: false
+  // function(){} overrides initial (or global) callback
   // boolean true adds click listener and reports to default callback
 
 transitionOff: false
-  // default
+  // boolean
 
 interactive: false
-  // default true for menus and added callbacks
+  // boolean, default true for menus and option callback
 
 hoverCallback: false
-  // default
+  // boolean, trigger callback on element:hover
 
 delay: false
-  // true yields .5s reveal delay
-  // configurable via bubb.scss
+  // int value, microseconds reveal delay
 
-background: '#444'
-  // default
-
-color: '#fff'
-  // default
+direction: false
+  // string 'north', 'west' or 'east' (default false = 'south')
 
 anchor: false
-  // 'left' or 'right' if centered tip is boring
+  // string 'left' or 'right' (default false = 'centered')
 
-maximize: false
-  // true calculates and applies maximal bubb width
+width: false
+  // int value <= 100 (document width percentage)
+  // or a querySelector string (eg. 'section:first-of-type')
+
+borderRadius: '4px'
+  // css string with units
+
+fontSize: '17px'
+  // css string with units
+
+background: '#444'
+  // css color string
+
+color: '#fff'
+  // css color string
 
 class: false
-  // add classname to .bubb
+  // string, className to target current bubb specifically
 
 `};
 
@@ -201,7 +223,7 @@ code: `let config = {
     ament: 'bass'
 };
 
-bubb(config, function(key, item){
+bubb(config, (key, item) => {
   console.log('clicked ' + key);
 });
 
@@ -225,7 +247,7 @@ code: `let config = {
         }, 1000);
       },
       hoverCallback: true,
-      interactive: false, // true by default if a callback is registered
+      interactive: false,
       transitionOff: true
     }
   }
@@ -233,7 +255,7 @@ code: `let config = {
 
 bubb(config);
 
-bubb.update('abbruzzese', { background:'#fad', color:'#444', delay: true });`
+bubb.update('abbruzzese', { background: '#fad', color: '#444', delay: true });`
 
 }
 
@@ -245,19 +267,33 @@ code: `// --> refresh bubb post DOM update
 addElementsToDOM(
   '<div data-bubb="added_one">Insert method 1</div>',
   '<div data-bubb="added_two">Insert method 2</div>'
-);
+); // bubb-independent demo function
 
-config.added_one = 'config[reference] edited before adding bubb to DOM';
+config.added_one = {
+  text: 'config[reference] edited before adding bubb to DOM',
+  _: {
+    background: '#4797B1',
+    color: '#fff',
+    borderRadius: '14px',
+    direction: 'north',
+    anchor: 'left'
+  }
+};
 
 bubb.refresh();
   // finds and adds new bubbs
-  // right now added_two text content will be 'added_two'
+  // right now added_two text content will just be 'added_two'
 
-bubb.update('added_two', 'bubb.update(reference, content) called after adding bubb to DOM');
-bubb.update('added_two', {
-  maximize: true,
-  callback: true // default callback on click
-});`
+  bubb.update('added_two', 'bubb.update(reference, content) called after adding bubb to DOM');
+  bubb.update('added_two', {
+    width: '40',
+    anchor: 'left',
+    fontSize: '23px',
+    color: '#444',
+    callback: true,
+    class: 'tipcolor',
+    background: 'repeating-linear-gradient(45deg, #FFDEDE, #FFDEDE 25%, #F7F3CE 25%, #F7F3CE 50%, #C5ECBE 50%, #C5ECBE 75%, #4797B1 75%, #4797B1 100%)'
+  });`
 
 }
 
@@ -307,12 +343,12 @@ function render_display_functions() {
   // colorful code
 
   hljs.initHighlightingOnLoad();
+  document.body.classList.add('done');
 
 }
 
 render_code_blocks();
 demo();
 render_display_functions();
-
 
 })(window.bubb, window.hljs);

@@ -73,37 +73,39 @@ let config = {
 
 ```js
 
-callback: function(){} || true
-  // overrides initial (or global) callback.
+callback: false
+  // function(){} overrides initial (or global) callback
   // boolean true adds click listener and reports to default callback
 
 transitionOff: false
-  // default
+  // boolean
 
 interactive: false
-  // default true for menus and added callbacks
+  // boolean, default true for menus and option callback
 
 hoverCallback: false
-  // default
+  // boolean
 
 delay: false
-  // true yields .5s reveal delay
-  // configurable via bubb.scss
-
-background: '#444'
-  // default
-
-color: '#fff'
-  // default
-
-class: false
-  // add classname to .bubb
+  // int value, microseconds reveal delay
 
 anchor: false
-  // 'left' or 'right' if centered tip is boring
+  // string 'left' or 'right' if centered tip is boring
 
-maximize: false
-  // true calculates and applies maximal bubb width
+width: false
+  // int value <= 100 (document width percentage)
+
+fontSize: '17px'
+  // css string with units
+
+background: '#444'
+  // css color string
+
+color: '#fff'
+  // css color string
+
+class: false
+  // string, add classname to bubb
 
 ```
 
