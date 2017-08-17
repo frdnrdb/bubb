@@ -361,6 +361,11 @@ ul.share-buttons {
   list-style: none;
   padding: 0;
   margin: .75em 0 0;
+  &.device {
+    background: #444;
+    padding: 2em 0;
+    text-align: center;
+  }
 }
 
 ul.share-buttons li {
@@ -372,7 +377,9 @@ ul.share-buttons li {
     opacity: .75;
   }
   img {
-    max-width: 36px;
+    min-width: 32px;
+    min-height: 32px;
+    max-width: 32px;
     margin: 0 4px;
     display: inline-block;
   }
@@ -551,7 +558,7 @@ device {
     height: 32px;
     background-size: 32px;
     &:hover {
-      background-position: 0 32px;
+      background-position: 0 -32px;
     }
   }
 }
