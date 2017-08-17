@@ -2,17 +2,11 @@
 
   TODO!
 
-    * west-anchored css
-    * added_one transition bug?
+    * Implement some try/catch error handling and/or input type checks to prevent user input errors
+    * Implement dim-rest-of-page-option
 
-    * update on non-added dom elements!!!
-
-    * Alternative html elements (instead of sub, sup, etc) + update readme on styling;
-    * Include bubb-menu-style?
-
-    * border (including tip)?
     * TRY alternative tooltip layout (list-style) as option
-    * TRY alternative theme (light, "material" box-shadow) as option
+    * TRY alternative theme (light, "material" box-shadow, outline) as option
 
 */
 
@@ -26,7 +20,7 @@ const bubb = (config, callback) => {
   bubb.config._ = bubb.config._ || config._ || {};
   bubb.callback = bubb.callback || (typeof bubb.config._.callback === 'function' && bubb.config._.callback) || (typeof callback === 'function' && callback);
 
-  let bubbs = Array.from( document.querySelectorAll('[data-bubb]:not(.bubb)') );
+  let bubbs = arguments[0] === 'update' ? [arguments[1]] : Array.from( document.querySelectorAll('[data-bubb]:not(.bubb)') );
 
   if (!bubbs.length) return;
 
@@ -110,7 +104,7 @@ const configureElement = (_trigger) => {
 
     bubble.className = config.class || '';
 
-    setWidth(config.width, config.anchor, _trigger, bubble);
+    setWidth(config, _trigger, bubble);
 
     trigger.type === 'menu' && _trigger.classList.add('bubb-menu');
 
@@ -171,6 +165,15 @@ const update = () => {
 
       if (!_trigger && !updateOptions) return;
 
+      if (!_trigger) {
+        console.error('bubb: trying to update a non-existing element');
+        return;
+      }
+
+      // update added DOM element - when bubb.refresh() has not been used
+
+      if (!_trigger._bubb) bubb('update', _trigger);
+
       bubb.previousKey = false;
 
       // update element
@@ -181,12 +184,6 @@ const update = () => {
       }
 
       // update element config
-
-      if (!_trigger) {
-        Array.from( document.querySelectorAll('.bubb') ).forEach( instance => instance.classList.remove('bubb') );
-        bubb();
-        return;
-      }
 
       let bindDefault = typeof contentOrConfig.callback === 'boolean' && !_trigger._bubb.bind,
           bindSelf = typeof contentOrConfig.callback === 'function' && !_trigger._bubb.config.hasOwnProperty('callback'),
@@ -249,9 +246,20 @@ const addOrRemove = () => {
 
 };
 
-const setWidth = (input, anchor, _trigger, _bubble) => {
+const setWidth = (config, _trigger, _bubble) => {
 
-  // positive number or numberstring || query
+  let input = config.width,
+      anchor = config.anchor,
+      direction = config.direction,
+      sideways = direction === 'east' || direction === 'west';
+
+  // '300px', '3em'
+  if (typeof input === 'string' && parseInt(input)) {
+    _bubble.style.width = input;
+    return;
+  }
+
+  // 33, '33' || 'section > div'
   let width = (input | 0) || document.querySelector(input);
 
   if (!width) {
@@ -259,7 +267,7 @@ const setWidth = (input, anchor, _trigger, _bubble) => {
     return;
   }
 
-  let padding = 20,
+  let padding = 30,
       fill = typeof width === 'object',
       bodyw = document.body.offsetWidth,
       box = _trigger.getBoundingClientRect(),
@@ -268,12 +276,17 @@ const setWidth = (input, anchor, _trigger, _bubble) => {
       boxr = box.right,
       inputWidth = fill ? width.offsetWidth : (width === 100 ? bodyw - padding*2 : (width * bodyw) / 100);
 
-  if (anchor) {
+  if (anchor || sideways) {
 
-    let newWidth = anchor === 'left'
-          ? bodyw - boxl - padding : anchor === 'right'
-          ? bodyw - ( bodyw - boxr ) - padding
-          : false;
+    let newWidth = !sideways && anchor
+                      ? anchor === 'left'
+                      ? bodyw - boxl - padding : anchor === 'right'
+                      ? bodyw - ( bodyw - boxr ) - padding
+                      : false
+                   : direction === 'east'
+                      ? bodyw - boxr - padding : direction === 'west'
+                      ? boxl - padding
+                      : false;
 
     if (newWidth) {
       _bubble.style.width = Math.min(inputWidth, newWidth) + 'px';
@@ -327,15 +340,15 @@ const updateMainConfig = (key, contentOrConfig, updateOptions, _trigger) => {
 };
 
 const styleVariables = {
-  'tip-size': '12px',
-  'offset': '.15em',
-  'distance': '20px',
-  'easing': 'cubic-bezier(0,0,0,1)',
-  'duration': '.3s',
-  'background': '#444',
-  'color': '#fff',
-  'rounding': '4px',
-  'font-size': '17px'
+  tipsize: '12px',
+  offset: '.15em',
+  distance: '20px',
+  easing: 'cubic-bezier(0,0,0,1)',
+  duration: '.3s',
+  background: '#444',
+  color: '#fff',
+  rounding: '4px',
+  fontsize: '17px'
 };
 
 const styles = {
@@ -371,7 +384,7 @@ const styles = {
     background: styleVariables['background'],
     borderBottomColor: styleVariables['background'],
     color: styleVariables['color'],
-    fontSize: styleVariables['font-size'],
+    fontSize: styleVariables['fontsize'],
   },
   _bubbleActive: {
     transitionProperty: 'opacity, transform',
@@ -385,10 +398,10 @@ const styles = {
     position: 'absolute',
     zIndex: '-1',
     display: 'none',
-    width: `calc( 100% + ( ${styleVariables['tip-size']} + ${styleVariables['offset']} ) * 2 )`,
-    height: `calc( 100% + ( ${styleVariables['tip-size']} + ${styleVariables['offset']} ) * 2 )`,
-    top: `calc( -1 * ( ${styleVariables['tip-size']} + ${styleVariables['offset']} ) )`,
-    left: `calc( -1 * ( ${styleVariables['tip-size']} + ${styleVariables['offset']} ) )`,
+    width: `calc( 100% + ( ${styleVariables['tipsize']} + ${styleVariables['offset']} ) * 2 )`,
+    height: `calc( 100% + ( ${styleVariables['tipsize']} + ${styleVariables['offset']} ) * 2 )`,
+    top: `calc( -1 * ( ${styleVariables['tipsize']} + ${styleVariables['offset']} ) )`,
+    left: `calc( -1 * ( ${styleVariables['tipsize']} + ${styleVariables['offset']} ) )`,
     pointerEvents: 'all',
     background: 'transparent'
   },
@@ -396,9 +409,9 @@ const styles = {
     position: 'absolute',
     width: '0',
     height: '0',
-    borderLeft: `${styleVariables['tip-size']} solid transparent`,
-    borderRight: `${styleVariables['tip-size']} solid transparent`,
-    borderBottomWidth: styleVariables['tip-size'],
+    borderLeft: `${styleVariables['tipsize']} solid transparent`,
+    borderRight: `${styleVariables['tipsize']} solid transparent`,
+    borderBottomWidth: styleVariables['tipsize'],
     borderBottomStyle: 'solid',
     borderBottomColor: 'inherit'
   }
@@ -406,12 +419,12 @@ const styles = {
 
 const styleTransforms = {
   positive: {
-    active: `calc( 100% + ${styleVariables['tip-size']} + ${styleVariables['offset']} )`,
-    inactive: `calc( 100% + ${styleVariables['tip-size']} + ${styleVariables['offset']} + ${styleVariables['distance']} )`
+    active: `calc( 100% + ${styleVariables['tipsize']} + ${styleVariables['offset']} )`,
+    inactive: `calc( 100% + ${styleVariables['tipsize']} + ${styleVariables['offset']} + ${styleVariables['distance']} )`
   },
   negative: {
-    active: `calc( -100% - ${styleVariables['tip-size']} - ${styleVariables['offset']} )`,
-    inactive: `calc( -100% - ${styleVariables['tip-size']} - ${styleVariables['offset']} - ${styleVariables['distance']} )`
+    active: `calc( -100% - ${styleVariables['tipsize']} - ${styleVariables['offset']} )`,
+    inactive: `calc( -100% - ${styleVariables['tipsize']} - ${styleVariables['offset']} - ${styleVariables['distance']} )`
   }
 };
 
@@ -451,24 +464,24 @@ const stylePositions = {
   south: {
     left: evalAnchor.bind(this, true),
     right: evalAnchor.bind(this, false),
-    top: (anchor, tip) => tip ? `calc( 2px - ${styleVariables['tip-size']} )` : 'auto',
+    top: (anchor, tip) => tip ? `calc( 2px - ${styleVariables['tipsize']} )` : 'auto',
     bottom: (anchor, tip) => tip ? 'auto' : 0
   },
   north: {
     left: (anchor, tip) => evalAnchor(true, tip && anchor ? anchor === 'left' ? 'right' : 'left' : anchor),
     right: (anchor, tip) => evalAnchor(false, tip && anchor ? anchor === 'left' ? 'right' : 'left' : anchor),
     top: (anchor, tip) => tip ? 'auto' : 0,
-    bottom: (anchor, tip) => tip ? `calc( 2px - ${styleVariables['tip-size']} )` : 'auto'
+    bottom: (anchor, tip) => tip ? `calc( 2px - ${styleVariables['tipsize']} )` : 'auto'
   },
   east: {
-    left: (anchor, tip) => tip ? `calc( 2px - ${styleVariables['tip-size']} )` : 'auto',
+    left: (anchor, tip) => tip ? `calc( 2px - ${styleVariables['tipsize']} )` : 'auto',
     right: (anchor, tip) => tip ? 'auto' : 0,
     top: (anchor, tip) => tip ? evalAnchor(true, anchor) : !anchor || (anchor === 'left') ? '50%' : 'auto',
     bottom: (anchor, tip) => tip ? evalAnchor(false, anchor) : anchor === 'right' ? '50%' : 'auto'
   },
   west: {
     left: (anchor, tip) => tip ? 'auto' : 0,
-    right: (anchor, tip) => tip ? `calc( 2px - ${styleVariables['tip-size']} )` : 'auto',
+    right: (anchor, tip) => tip ? `calc( 2px - ${styleVariables['tipsize']} )` : 'auto',
     top: (anchor, tip) => tip ? evalAnchor(true, anchor) : !anchor || (anchor === 'left') ? '50%' : 'auto',
     bottom: (anchor, tip) => tip ? evalAnchor(false, anchor) : anchor === 'right' ? '50%' : 'auto'
   }
@@ -567,7 +580,7 @@ const createBubbElements = () => {
 
   let element = bubb._element,
       tagMap = {
-        _elementInteractive: 'bubb-bridge',
+        _elementInteractive: 'bubb-interactive',
         _elementTip: 'bubb-tip',
         _elementContent: 'bubb-content'
       };
@@ -581,13 +594,11 @@ const createBubbElements = () => {
   appendStyles(element._elementTip, '_bubbleTip', true);
   appendStyles(element._elementInteractive, '_bubbleInteractive', true);
 
-  // BAD method to NOT show the initially unassigned bubble.
-  // visibility:hidden (display:none breaks transitions) renders white-space at end of document.body
+  bubb._dimmer = document.createElement('bubb-dimmer');
+  bubb._dimmer.style.display = 'none';
+  bubb._dimmer.appendChild(element);
 
-  let hidden = document.createElement('bubb-crib');
-      hidden.style.display = 'none';
-      hidden.appendChild(element);
-      document.body.appendChild(hidden);
+  document.body.appendChild(bubb._dimmer);
 
 };
 

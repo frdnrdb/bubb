@@ -50,7 +50,6 @@ $max-width: 720px;
 html {
   overflow-y: scroll;
 }
-
 body {
   padding: 0;
   margin: 0;
@@ -75,7 +74,7 @@ header {
   background: $col;
   color: #fff;
   &:last-of-type {
-    background: #F7F3CE;
+    background: #FFDEDE;
     color: #444;
     a {
       color: #444;
@@ -87,14 +86,14 @@ header {
   aside {
     margin-top: .75em;
     a {
-      color: #fff;
+      color: #F7F3CE;
       text-decoration: none;
       font-size: 50%;
       text-transform: uppercase;
       letter-spacing: 2px;
-      margin: 1em .5em 0 0;
+      margin: .5em .5em 0 0;
       &:hover {
-        color: #F7F3CE;
+        opacity: .75;
       }
       &:before {
         content:'';
@@ -187,26 +186,25 @@ section {
   padding: .5em 0 4em;
   box-sizing: border-box;
   display: block;
-  width: 100%;
+  width: 90%;
   &:first-of-type {
-    padding: 3em 0 4em;
-    &:before {
+    padding: 0 0 4em;
+    .header {
       font-weight: bold;
       width: 100%;
-      position: absolute;
-      left: 0;
-      top: 0;
       height: 6em;
       line-height: 6em;
+      text-decoration: none;
       background: #F7F3CE;
       display: block;
-      padding-left: 7.5%;
+      padding: 0 5%;
       box-sizing: border-box;
       text-transform: uppercase;
       letter-spacing: 2px;
       font-size: 11px;
       color: #444;
-      content: '↓ Pure CSS version available further down the line';
+      margin-bottom: 4em;
+      white-space: nowrap;
     }
   }
   > p {
@@ -220,13 +218,12 @@ section {
   @include hovers();
 }
 footer {
-  background: #444;
-  color: #F7F3CE;
+  background: #F7F3CE;
   display: block;
   position: relative;
-  height: 2em;
+  height: 4.5em;
   width: 100%;
-  line-height: 2em;
+  line-height: 4.5em;
   a {
     position: absolute;
     top: 0;
@@ -236,15 +233,15 @@ footer {
     font-size: 11px;
     text-decoration: none;
     font-weight: bold;
-    color: #4797B1;
+    color: #444;
 
     &:before {
       display: inline-block;
       font-weight: normal;
       margin-right: 6px;
-      color: #4797B1;
-      content: 'Share Bubb on';
+      content: 'By';
     }
+    /*
     &:last-of-type {
       left: auto;
       right: calc( (100vw - #{$max-width}) / 2 );
@@ -252,6 +249,7 @@ footer {
         content: 'Download Bubb on';
       }
     }
+    */
   }
 }
 #eventsDisplay {
@@ -289,49 +287,6 @@ footer {
     visibility: hidden;
   }
 }
-@media all and (max-width: 550px) {
-  body {
-    font-size: 5vw;
-    padding-bottom: 0;
-  }
-  section, header, footer {
-    padding: 2em;
-  }
-  section {
-    padding-top: 4em;
-    &:before {
-      height: 4em;
-      line-height: 4em;
-      padding: 0 3em;
-      content: 'JS version';
-    }
-    &:last-of-type:before {
-      content: 'CSS version';
-    }
-  }
-  footer {
-    position: static;
-    text-align: center;
-    padding: 2em 0 4em;
-    line-height: 1.2;
-    a {
-      position: static;
-    }
-  }
-  header {
-    aside {
-      a {
-        line-height: 1.5;
-        &.inline:before {
-          content: '';
-        }
-        &.first {
-          display: inline-block;
-        }
-      }
-    }
-  }
-}
 
 .wait {
   opacity: 0;
@@ -344,44 +299,7 @@ footer {
 }
 
 
-
-
-
-
-/*
---- bubb modifier
-*/
-@mixin bubbMenuStyle() {
-    padding: 0!important;
-    div {
-      padding: .75em 0;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      font-size: 12px;
-      font-weight: bold;
-      transition: background .3s cubic-bezier(0,0,0,.75);
-      cursor: pointer;
-      &:first-child {
-        padding-top: 1em;
-      }
-      &:hover {
-        text-decoration: line-through;
-      }
-    }
-}
-
-.bubb {
-  p {
-    padding: 0;
-    margin: 0;
-  }
-  b {
-    font-weight: bold;
-    letter-spacing: 1px;
-    font-size: 90%;
-  }
-}
-ul {
+section ul {
   font-size: 70%;
   list-style: none;
   color: #888;
@@ -393,7 +311,7 @@ ul {
     position: relative;
     &:before {
       position: absolute;
-      top: 50%;
+      top: .6em;
       height: 1px;
       width: 35px;
       left: -50px;
@@ -429,7 +347,7 @@ hr {
 .bubble-bobble {
   width: 64px;
   height: 64px;
-  background: url(/assets/bubble_bobble.png);
+  background: url(/assets/images/bubble_bobble.png);
   background-repeat: no-repeat;
   position: fixed;
   bottom: 1em;
@@ -439,6 +357,87 @@ hr {
   }
 }
 
+ul.share-buttons {
+  list-style: none;
+  padding: 0;
+  margin: .75em 0 0;
+}
+
+ul.share-buttons li {
+  display: inline;
+  &:before {
+    content: none;
+  }
+  &:hover img {
+    opacity: .75;
+  }
+  img {
+    max-width: 36px;
+    margin: 0 4px;
+    display: inline-block;
+  }
+}
+
+ul.share-buttons .sr-only {
+  position: absolute;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 0;
+  border: 0;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+}
+
+
+
+device {
+  display: none;
+}
+
+
+
+/*
+--- bubb modifiers
+*/
+@mixin bubbMenuStyle() {
+    padding: 0!important;
+    div {
+      padding: .75em 0;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 12px;
+      font-weight: bold;
+      transition: background .3s cubic-bezier(0,0,0,.75);
+      cursor: pointer;
+      &:first-child {
+        padding-top: 1em;
+      }
+      &:hover {
+        text-decoration: line-through;
+      }
+    }
+}
+
+.bubb {
+  p {
+    padding: 0;
+    margin: 0;
+  }
+  b {
+    font-weight: bold;
+    letter-spacing: 1px;
+    font-size: 90%;
+  }
+}
+
+.bubb {
+  img {
+    max-width: 100%;
+    display: block;
+    margin: 0 auto .5em;
+  }
+}
 .bubb-menu {
   bubb-bobb {
     @include bubbMenuStyle();
@@ -464,6 +463,95 @@ hr {
     }
   }
 }
+
 .tipcolor {
   border-bottom-color: #FFDEDE!important;
+}
+.share-bubb {
+
+}
+
+
+
+
+
+@media all and (max-width: 550px) {
+  hide {
+    display: none;
+  }
+  device {
+    display: block;
+  }
+  body {
+    font-size: 5vw;
+    padding-bottom: 0;
+  }
+  header, footer {
+    padding: 1.5em;
+  }
+  section {
+    padding: 4em 1.5em;
+  }
+  section:first-of-type .header {
+    margin-bottom: 3em;
+    position: relative;
+    left: -5vw;
+    width: 100vw;
+    text-align: center;
+    font-size: 50%;
+    &.info {
+      background: #FFDEDE;
+      margin-bottom: 0;
+    }
+  }
+  section:last-of-type {
+    padding: 1.35em 0;
+  }
+  section > p, section ul {
+    font-size: 86%;
+  }
+  section ul {
+    padding-left: 0;
+    li:before {
+      content: none;
+    }
+  }
+  footer {
+    position: static;
+    text-align: center;
+    padding: 2em 0 4em;
+    line-height: 1.2;
+    a {
+      position: static;
+    }
+  }
+  header {
+    font-size: 1.25em;
+
+    aside {
+      a {
+        line-height: 1.5;
+        font-size: 35%;
+        &.inline:before {
+          content: '';
+        }
+        &.first {
+          display: inline-block;
+        }
+      }
+    }
+  }
+  pre, .opaque pre {
+    opacity: 1;
+    filter: none;
+    font-size: 80%;
+  }
+  .bubble-bobble {
+    width: 32px;
+    height: 32px;
+    background-size: 32px;
+    &:hover {
+      background-position: 0 32px;
+    }
+  }
 }

@@ -2,14 +2,23 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Bubb</title>
+<title>Bubb - Euphemism for a JS tooltip</title>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <link rel="shortcut icon"type="image/x-icon" href="data:image/x-icon;,">
-<link rel="stylesheet" href="/libs/css/tomorrow.min.css">
-<script src="/libs/js/highlight.min.js"></script>
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@frdnrdb" />
+<meta name="twitter:title" content="Bubb" />
+<meta name="twitter:description" content="Euphemism for a JS tooltip" />
+<meta name="twitter:image" content="/assets/images/bubb.png" />
+<meta name="twitter:url" content="http://bubb.surge.sh" />
+<meta property="og:title" content="Bubb" />
+<meta property="og:description" content="Euphemism for a JS tooltip" />
+<meta property="og:image" content="/assets/images/bubb.png" />
+<meta property="og:url" content="http://bubb.surge.sh" />
 <link rel="preload" href="/assets/fonts/gt-walsheim-light-web.ttf" as="font" type="font/ttf" crossorigin>
 <link rel="preload" href="/assets/fonts/gt-walsheim-bold-web.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="stylesheet" href="/libs/css/tomorrow.min.css">
 <link rel="stylesheet" href="/assets/demo.min.css">
 <link rel="stylesheet" href="/assets/bubb.min.css">
 <script delete src="//localhost:35729/livereload.js"></script>
@@ -19,15 +28,17 @@
 
   <header>
     <b>Bubb</b> Infotip<span>JS</span>
-    <aside>
+    <hide><aside>
       <a href="https://unpkg.com/bubb/dist/bubb.min.js">bubb.min.js <b>{{filesize-js}}</b></a>
       <a class="inline" href="https://unpkg.com/bubb/dist/bubb.min.gzip.js">bubb.min.js.gz <b>{{filesize-js.gz}}</b></a>
       <a class="first" href="https://www.npmjs.com/package/bubb">yarn add bubb <b>or</b> npm i --save bubb</a>
-      <a class="first" href="https://github.com/frdnrdb/bubb"><b>git</b> clone https://github.com/frdnrdb/bubb.git</a>
-    </aside>
+      <a class="first" href="https://github.com/frdnrdb/bubb"><b>github</b> git clone https://github.com/frdnrdb/bubb.git</a>
+    </aside></hide>
   </header>
 
   <section class="wait">
+    <device><span class="header info">This product targets desktop</span></device>
+    <a class="header" href="#css">↓ Pure CSS version available<hide> further down</hide></a>
     <p>Minimal, <b>non-dependent</b>, non-fancy JS infotip. <b>No CSS needed.</b></p>
     <p><i>Infotip? Seriously? Isn't that just a euphemism for tooltip?</i> It sure is.</p>
     <p>Still, Bubb has a couple of pros to consider.
@@ -62,26 +73,26 @@
 
   <i id="eventsDisplay"></i>
 
-  <header class="wait">
+  <header id="css" class="wait">
     <b>Bubb</b> Infotip<span>CSS</span>
-    <aside>
+    <hide><aside>
       <a href="https://unpkg.com/bubb/dist/bubb.min.css">bubb.min.css <b>{{filesize-css}}</b></a>
       <a class="inline" href="https://unpkg.com/bubb/dist/bubb.min.gzip.css">bubb.min.css.gz <b>{{filesize-css.gz}}</b></a>
-    </aside>
+    </aside></hide>
   </header>
 
   <section class="wait">
-    <p>Pure CSS infotip, &lt;div bubb="<b>Attribute only</b>" /&gt;.</p>
+    <p>Pure CSS infotip, &lt;div bubb="<b>attribute only</b>" /&gt;.</p>
     <hr>
-    <div bubb="Change bubb color by applying 'border-bottom-color' :before and 'background-color' :after">Default</div><i></i>
-    <div east left bubb="north, east or west changes direction. other options are left (south) or right (south), north-left, north-right, east-top, east-bottom, west-top or west-bottom">Direction</div><i></i>
-    <div delay left bubb="Default 0.75 seconds reveal delay">Delay</div><i></i>
+    <div bubb="Target 'border-bottom-color' on [bubb]:before and 'background-color' on [bubb]:after to change fill color">Default</div><i></i>
+    <div east left bubb="North, east or west changes direction. Left or right anchors the tip.">Direction</div><i></i>
+    <div delay left bubb="0.75 seconds reveal delay. Edit bubb.scss to change defaults.">Delay</div><i></i>
     <div still north bubb="♥ No fuzz">No transitions</div><i></i>
     <div round large delay north right bubb="Keep adding option-attributes until you're pleased">Delayed, rounded...</div><i></i>
     <hr>
     <p>
       <ul>
-        <li><u>bubb</u>initiate with content south</li>
+        <li><u>bubb</u>Initiate with attribute content. Default direction south</li>
         <li><u>nort, east, west</u>Change direction</li>
         <li><u>left, right</u>Move the tip</li>
         <li><u>still</u>Remove the transition</li>
@@ -94,12 +105,21 @@
 
 
   <footer class="wait">
-    <a href="https://twitter.com/intent/tweet?url=bubb.surge.sh&text=bubb%20infotip&hashtags=css,js,lightweight,simple">Twitter</a>
-    <a href="https://github.com/frdnrdb/bubb">GitHub</a>
+    <a href="mailto:froden@gmail.com">frd</a>
   </footer>
 
+  <script src="/libs/js/highlight.min.js"></script>
   <script src="/assets/bubb.min.js"></script>
   <script src="/assets/demo.min.js"></script>
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-104759095-1', 'auto');
+    ga('send', 'pageview');
+  </script>
 
 </body>
 </html>

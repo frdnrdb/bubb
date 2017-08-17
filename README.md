@@ -96,7 +96,8 @@ anchor: false
 
 width: false
   // int value <= 100 (document width percentage)
-  // or a querySelector string (eg. 'section:first-of-type')
+  // css string with units (eg. '300px')
+  // querySelector string (eg. 'section:first-of-type')
 
 borderRadius: '4px'
   // css string with units
