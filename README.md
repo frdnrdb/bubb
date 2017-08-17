@@ -1,6 +1,6 @@
-# bubb
+![Alt text](/docs/assets/images/bubb.gif?raw=true "Bubb")
 
-**non-dependent**, non-fancy javascript _infotip_. **no css needed**.
+**Non-dependent**, non-fancy javascript _infotip_. **No CSS needed**.
 
 [![dependencies Status](https://david-dm.org/frdnrdb/bubb/status.svg)](https://david-dm.org/frdnrdb/bubb)
 [![dev dependencies](https://david-dm.org/frdnrdb/bubb/dev-status.svg)](https://badge.fury.io/js/bubb)
