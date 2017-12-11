@@ -29,45 +29,60 @@
   <header>
     <b>Bubb</b> Infotip<span>JS</span>
     <hide><aside>
-      <a href="https://unpkg.com/bubb/dist/bubb.min.js">bubb.min.js <b>10.8 kB</b></a>
-      <a class="inline" href="https://unpkg.com/bubb/dist/bubb.min.gzip.js">bubb.min.js.gz <b>4.2 kB</b></a>
+      <a href="https://unpkg.com/bubb/dist/bubb.min.js">bubb.min.js <b>11.9 kB</b></a>
+      <a class="inline" href="https://unpkg.com/bubb/dist/bubb.min.gzip.js">bubb.min.js.gz <b>4.5 kB</b></a>
       <a class="first" href="https://www.npmjs.com/package/bubb">yarn add bubb <b>or</b> npm i --save bubb</a>
       <a class="first" href="https://github.com/frdnrdb/bubb"><b>github</b> git clone https://github.com/frdnrdb/bubb.git</a>
     </aside></hide>
   </header>
 
   <section class="wait">
-    <device><span class="header info">This product targets desktop</span></device>
-    <a class="header" href="#css">↓ Pure CSS version available<hide> further down</hide></a>
-    <p>Minimal, <b>non-dependent</b>, non-fancy JS infotip. <b>No CSS needed.</b></p>
-    <p><i>Infotip? Seriously? Isn't that just a euphemism for tooltip?</i> It sure is.</p>
-    <p>Still, Bubb has a couple of pros to consider.
-      <ul>
-          <li><u>Lucidity and maintenance</u>Each instance's content is referenced from a single configuration object. If you need some amount of pop-ups in your application this is plain convenience.</li>
-          <li><u>Context menus</u>Bubb can act as a lazy man's UI</li>
-      </ul>
-    </p>
-    <hr>
-    <span id="basic">
-      <div data-bubb="reference">Basic</div><i></i>
-    </span>
-    <span id="menu">
-      <div data-bubb="pj">Menu</div><i></i>
-    </span>
-    <span id="opts">
-      <div data-bubb="abbruzzese">Callback on hover</div><i></i>
-    </span>
-    <span id="added"></span>
+      <device>
+        <span class="header info">Bubb was built for desktop</span>
+        <img class="header image" src="/assets/images/bubb_720.gif">
+        <a class="header download" href="https://github.com/frdnrdb/bubb">See project on Github</a>
+      </device>
+      <a class="header" href="#css">↓ Pure CSS version available<hide> further down</hide></a>
+      <p>Minimal, <b>non-dependent</b>, non-fancy JS infotip. <b>No CSS needed.</b></p>
+      <p><em>Infotip? Seriously? Isn't that just a euphemism for tooltip?</em> It sure is.</p>
+      <p>Still, Bubb has a couple of pros to consider.
+        <ul>
+            <li><u>Content by config</u>Each instance's content is referenced from a single configuration object. Plain convenience, lucid maintenance.</li>
+            <li><u>Context menus</u>Bubb can act as a lazy man's UI</li>
+        </ul>
+      </p>
+      <hr>
+      
+    <article>
 
-    <div data-bubb="Interstellar hootchie kootchie">API and options</div>
-    <span id="methods" class="opaque"></span>
-    <span id="options" class="opaque"></span>
-    <span id="options_setup" class="opaque"></span>
+      <span id="basic">
+        <div data-bubb="reference">Basic</div><i></i>
+      </span>
+      <span id="menu">
+        <div data-bubb="pj">Menu</div><i></i>
+      </span>
+      <span id="opts">
+        <div data-bubb="abbruzzese">Callback on hover</div><i></i>
+      </span>
+      <span id="toggle">
+        <div data-bubb="toggle">Toggle</div><i class="click"></i>
+      </span>
+      <span id="toggler">
+        <div>Toggle remote</div><i class="click"></i>
+      </span>
+      <span id="added"></span>
 
-    <div data-bubb="You may need to exclaim !important to override root bubb properties">Override styling</div>
-    <p>The content is targeted through <b>bubb-content </b>><b> div</b>.
-    <br>The trigger element gets className <b>.bubb</b> <i>(and .bubb-menu)</i>
-    <br>the bubble tagname is <b>bubb-bobb</b></p>
+      <div data-bubb="Interstellar hootchie kootchie">API and options</div>
+      <span id="methods" class="opaque"></span>
+      <span id="options" class="opaque"></span>
+      <span id="options_setup" class="opaque"></span>
+
+      <div data-bubb="You may need to exclaim !important to override root bubb properties">Override styling</div>
+      <p>The content is targeted through <b>bubb-content </b>><b> div</b>.
+      <br>The trigger element gets className <b>.bubb</b> <i>(and .bubb-menu)</i>
+      <br>the bubble tagname is <b>bubb-bobb</b></p>
+
+    </article>
 
   </section>
 
@@ -82,32 +97,34 @@
   </header>
 
   <section class="wait">
-    <p>Pure CSS infotip, &lt;div bubb="<b>attribute only</b>" /&gt;.</p>
-    <hr>
-    <div bubb="Target 'border-bottom-color' on [bubb]:before and 'background-color' on [bubb]:after to change fill color">Default</div><i></i>
-    <div east left bubb="North, east or west changes direction. Left or right anchors the tip.">Direction</div><i></i>
-    <div delay left bubb="0.75 seconds reveal delay. Edit bubb.scss to change defaults.">Delay</div><i></i>
-    <div still north bubb="♥ No fuzz">No transitions</div><i></i>
-    <div round large delay north right bubb="Keep adding option-attributes until you're pleased">Delayed, rounded...</div><i></i>
-    <hr>
-    <p>
-      <ul>
-        <li><u>bubb</u>Initiate with attribute content. Default direction south</li>
-        <li><u>nort, east, west</u>Change direction</li>
-        <li><u>left, right</u>Move the tip</li>
-        <li><u>still</u>Remove the transition</li>
-        <li><u>delay</u>Delay the reveal</li>
-        <li><u>round</u>Add some border radius</li>
-        <li><u>large</u>Subtly enlarge</li>
-      </ul>
-    </p>
+    <article>
+      <p>Pure CSS infotip, &lt;div bubb="<b>attribute only</b>" /&gt;.</p>
+      <hr>
+      <div bubb="Target 'border-bottom-color' on [bubb]:before and 'background-color' on [bubb]:after to change fill color">Default</div><i></i>
+      <div east left bubb="North, east or west changes direction. Left or right anchors the tip.">Direction</div><i></i>
+      <div delay left bubb="0.75 seconds reveal delay. Edit bubb.scss to change defaults.">Delay</div><i></i>
+      <div still north bubb="♥ No fuzz">No transitions</div><i></i>
+      <div round large delay north right bubb="Keep adding option-attributes until you're pleased">Delayed, rounded...</div><i></i>
+      <hr>
+      <p>
+        <ul>
+          <li><u>bubb</u>Initiate with attribute content. Default direction south</li>
+          <li><u>nort, east, west</u>Change direction</li>
+          <li><u>left, right</u>Anchor the tip</li>
+          <li><u>still</u>Remove the transition</li>
+          <li><u>delay</u>Delay the reveal</li>
+          <li><u>round</u>Add some border radius</li>
+          <li><u>large</u>Subtly enlarge</li>
+        </ul>
+      </p>
+    </article>
   </section>
 
 
   <device>
     <ul class="share-buttons device">
-      <li><a href="https://twitter.com/intent/tweet?source=http%3A%2F%2Fbubb.surge.sh&text=bubb:%20http%3A%2F%2Fbubb.surge.sh&via=frdnrdb" target="_blank" title="Tweet"><img alt="Tweet" src="/assets/images/icons/twitter.svg" /></a></li>
-      <li><a href="http://www.reddit.com/submit?url=http%3A%2F%2Fbubb.surge.sh&title=bubb" target="_blank" title="Submit to Reddit"><img alt="Submit to Reddit" src="/assets/images/icons/reddit.svg" /></a></li>
+      <li><a href="https://twitter.com/intent/tweet?source=http%3A%2F%2Fbubb.surge.sh&text=Bubb%20-%20Euphemism%20for%20a%20JS%20tooltip:%20http%3A%2F%2Fbubb.surge.sh&via=frdnrdb" target="_blank" title="Tweet"><img alt="Tweet" src="/assets/images/icons/twitter.svg" /></a></li>
+      <li><a href="http://www.reddit.com/submit?url=http%3A%2F%2Fbubb.surge.sh&title=Bubb%20-%20Euphemism%20for%20a%20JS%20tooltip" target="_blank" title="Submit to Reddit"><img alt="Submit to Reddit" src="/assets/images/icons/reddit.svg" /></a></li>
       <li><a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fbubb.surge.sh&t=bubb" title="Share on Facebook" target="_blank"><img alt="Share on Facebook" src="/assets/images/icons/facebook.svg" /></a></li>
     </ul>
   </device>

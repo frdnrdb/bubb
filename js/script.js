@@ -2,17 +2,22 @@
 
   TODO!
 
-    * Implement some try/catch error handling and/or input type checks to prevent user input errors
-    * Implement dim-rest-of-page-option
+  * IMPROVE add eventEmitter
+      - https://www.sitepoint.com/nodejs-events-and-eventemitter/
+      - https://github.com/chrisdavies/eev
 
-    * TRY alternative tooltip layout (list-style) as option
-    * TRY alternative theme (light, "material" box-shadow, outline) as option
+  * IMPROVE Implement some try/catch error handling and/or input type checks to prevent user input errors
+
+  * ADD Implement dim-rest-of-page-option
+
+  * TRY alternative tooltip layout (material-ui-dropdown-menu-ish) as option
+  * TRY alternative theme (light (box-shadowed) or thin border) as option
+
+  * CONSIDER Menu-style as part of package
 
 */
 
 (function(window, document) {
-
-"use strict;"
 
 const bubb = (config, callback) => {
 
@@ -20,11 +25,12 @@ const bubb = (config, callback) => {
   bubb.config._ = bubb.config._ || config._ || {};
   bubb.callback = bubb.callback || (typeof bubb.config._.callback === 'function' && bubb.config._.callback) || (typeof callback === 'function' && callback);
 
+  // class bubb indicates the element has already been initiated/ configured
   let bubbs = arguments[0] === 'update' ? [arguments[1]] : Array.from( document.querySelectorAll('[data-bubb]:not(.bubb)') );
 
   if (!bubbs.length) return;
 
-  !bubb.initialized && initBubb();
+  !bubb._initialized && initBubb();
 
   bubbs.forEach(buildElement);
 
@@ -33,13 +39,16 @@ const bubb = (config, callback) => {
 const buildElement = _trigger => {
 
   let key = _trigger.dataset.bubb.trim(),
-      data = bubb.config[key],
+      data = bubb.config[key] || key,
 
       chck = typeof data === 'object',
-      opts = chck && data._,
-      menu = chck && !data.hasOwnProperty('text'),
+      opts = chck && data._, // config contains options _
+      only = opts && Object.keys(data).length === 1, // options only, use key as content
+      menu = chck && !data.hasOwnProperty('text'); // config indicates a menu
 
-      props = !menu ? opts ? ['text'] : [false] : Object.keys(data),
+      only && (data.text = key);
+
+      let props = !menu ? opts ? ['text'] : [false] : Object.keys(data),
       bindMenu = typeof bubb.callback === 'function' || typeof bubb.config._.callback === 'function',
       triggerPosition = window.getComputedStyle(_trigger).position;
 
@@ -54,6 +63,8 @@ const buildElement = _trigger => {
       triggerPosition && !triggerPosition.match(/absolute|fixed|relative/) && (_trigger.style.position = 'relative');
 
       _trigger.classList.add('bubb');
+
+      bubb.triggers[key] = _trigger;
 
       bindElement(_trigger);
 
@@ -72,19 +83,19 @@ const setElementConfiguration = opts => {
 
 const buildElementMarkup = (key, markup, prop) => {
 
-    if (prop === '_') return '';
+    if (prop === '_') return markup;
 
     let content = prop ? bubb.config[key][prop] : bubb.config[key] || key,
         selector = key + (prop && prop !== 'text' ? '.' + prop : ''),
         attribute = ` data-bubb-value="${selector}"`;
 
-    return markup += `<div ${attribute}>${content}</div>`;
+    return markup += `<div ${attribute}><span>${content}</span></div>`;
 
 };
 
 const bindElement = (_trigger) => {
 
-  let bubbEvents = isMobile ? ['touchstart', 'touchend'] : ['mouseenter', 'mouseleave'];
+  let bubbEvents = isMobile ? ['touchstart', 'touchend'] : _trigger._bubb.config.toggle ? [] : ['mouseenter', 'mouseleave'];
 
   if (!isMobile && _trigger._bubb.bind) bubbEvents.push('mousedown');
 
@@ -92,15 +103,17 @@ const bindElement = (_trigger) => {
 
 };
 
-const configureElement = (_trigger) => {
+const configureElement = _trigger => {
 
     let trigger = _trigger._bubb,
         bubble = bubb._element,
         config = bubble._config = trigger.config;
 
+    bubble.style.visibility = 'hidden';
+
     bubble._elementContent.innerHTML = trigger.markup;
 
-    bubble._bind = trigger.bind && (config.interactive !== false);
+    bubble._bind = (trigger.bind && (config.interactive !== false)) || config.toggle;
 
     bubble.className = config.class || '';
 
@@ -108,11 +121,55 @@ const configureElement = (_trigger) => {
 
     trigger.type === 'menu' && _trigger.classList.add('bubb-menu');
 
-    bubb.previousKey = trigger.key;
+    _trigger.appendChild(bubble);
+    bubb._trigger = _trigger;
+    bubb._visible = false;
 
     appendStyles(bubb._element, '_bubblePreactive');
 
-    _trigger.appendChild(bubble);
+};
+
+const bubbShow = () => {
+
+  appendStyles(bubb._element, '_bubbleActive');
+  bubb._visible = true;
+
+};
+
+const bubbHide = (e) => {
+
+  appendStyles(bubb._element, ['_bubbleInactive', '_bubblePreactive']);
+  bubb._visible = false;
+
+};
+
+const autoDirection = (e, target) => {
+
+  if (!e) return;
+
+  const h = bubb._element.offsetHeight || 150;
+  const w = bubb._element.offsetWidth || 150;
+  const d = target._bubb.config.direction;
+
+  const rect = target.getBoundingClientRect();
+
+  const limits = {
+    w: rect.left < w,
+    e: rect.right > (window.innerWidth - w),
+    n: rect.top < h,
+    s: rect.bottom > (window.innerHeight - h)
+  }
+
+  if (d && (d === 'east' || d === 'west')) {
+    bubb._autoDirection = limits.w ? 'east' : limits.e ? 'west' : false;
+    bubb._autoAnchor = limits.n ? 'left' : limits.s ? 'right' : false;
+  }
+  else {
+    bubb._autoDirection = limits.s ? 'north' : limits.n ? 'south' : false;
+    bubb._autoAnchor = false;
+  }
+
+  return bubb._autoDirection;
 
 };
 
@@ -120,17 +177,28 @@ const eventHandler = function(e) {
 
     if (!this._bubb) return;
 
-    window.clearTimeout(bubb._timeout);
+    // ---> configure (if autoDirection in config OR trigger new element)
 
-    // ---> configure
-
-    (bubb.previousKey !== this._bubb.key) && configureElement(this);
+    (
+      ((bubb.config._.autoDirection || this._bubb.config.autoDirection)
+          && autoDirection(e, this)
+      )
+      || (bubb._trigger !== this)
+    )
+    && configureElement(this);
 
     // ---> reveal or hide
 
-    e.type === 'mouseenter' || e.type === 'touchstart'
-      ? bubb._timeout = window.setTimeout( () => appendStyles(bubb._element, '_bubbleActive'), (this._bubb.config.delay | 0) || 0)
-      : e.type !== 'mousedown' && appendStyles(bubb._element, ['_bubbleInactive', '_bubblePreactive']);
+    window.clearTimeout(bubb._timerOn);
+    window.clearTimeout(bubb._timerOff);
+
+    e.type === 'mouseenter'
+      ? bubb._timerOn = window.setTimeout( bubbShow, (this._bubb.config.delay | 0) || 0)
+      : e.type !== 'mousedown' && bubbHide(e);
+
+    if (this._bubb.config.autoHide) {
+      bubb._timerOff = window.setTimeout( bubbHide, this._bubb.config.autoHide + (this._bubb.config.delay | 0) );
+    }
 
     // ---> leave
 
@@ -139,16 +207,63 @@ const eventHandler = function(e) {
     // ---> callback
 
     let hover = this._bubb.config.hoverCallback,
-        bubbvalue = hover ? this.dataset.bubb : e.target.dataset.bubbValue || e.target.parentNode.dataset.bubbValue;
+        bubbvalue = hover ? this.dataset.bubb : e.target.dataset.bubbValue || e.target.parentNode.dataset.bubbValue || e.target.parentNode.parentNode.dataset.bubbValue;
 
     if (!bubbvalue) return;
 
     let thiscallback = (typeof this._bubb.config.callback === 'function' && this._bubb.config.callback) || bubb.callback,
         item = this.querySelector(`[data-bubb-value="${this.dataset.bubb}"]`) || e.target;
 
-    thiscallback(bubbvalue, item);
+    thiscallback(bubbvalue, item, this, e.type);
 
 }
+
+const isTrigger = (node, check) => {
+
+  if (!node) return;
+  if (node._bubb && (check ? node === bubb._trigger : true)) return node;
+  return isTrigger(node.parentNode);
+
+};
+
+const clickOutside = function(e) {
+
+  // _toggler initiated the toggle
+
+  !bubb._toggler && (bubb._toggler = e.target);
+
+  // avoid toggle initiator to negate the toggle
+
+  if (bubb._toggler === e.target) return;
+
+  // click inside; the caller is the toggled element
+
+  if (isTrigger(e.target, bubb._trigger)) return;
+
+  // release _toggler, remove event listener and hide bubb
+
+  bubb._toggler = false;
+  window.removeEventListener('click', clickOutside, false);
+  eventHandler.call(bubb._trigger, {target: bubb._trigger, type: 'mouseleave'});
+
+}
+
+const toggle = () => {
+
+    let element = arguments[0],
+        _trigger = (typeof element === 'object' && element) || bubb.triggers[element];
+
+    if (!_trigger || !_trigger._bubb.config.toggle) {
+      console.error('bubb: trying to toggle a non-existing or non-toggled element');
+      return;
+    }
+
+    //_trigger !== bubb._trigger && configureElement(_trigger);
+
+    window[ (bubb._visible ? 'remove' : 'add') + 'EventListener']('click', clickOutside, false);
+    eventHandler.call(_trigger, {target: _trigger, type: bubb._visible ? 'mouseleave' : 'mouseenter'});
+
+};
 
 const update = () => {
 
@@ -174,12 +289,12 @@ const update = () => {
 
       if (!_trigger._bubb) bubb('update', _trigger);
 
-      bubb.previousKey = false;
+      bubb._trigger = false;
 
       // update element
 
       if (!updateOptions) {
-        _trigger._bubb.markup = _trigger._bubb.markup.replace(new RegExp(`<div\\s+data-bubb-value="${key}">.*?</div>`), `<div data-bubb-value="${key}">${contentOrConfig}</div>`);
+        _trigger._bubb.markup = _trigger._bubb.markup.replace(new RegExp(`<div\\s+data-bubb-value="${key}">.*?</div>`), `<div data-bubb-value="${key}"><span>${contentOrConfig}</span></div>`);
         return;
       }
 
@@ -222,13 +337,13 @@ const addOrRemove = () => {
 
   // add menu item
 
-  bubb.previousKey = false;
+  bubb._trigger = false;
 
   if (value && typeof value === 'string' && !bubb.config[menu.key][menu.val]) {
 
     bubb.config[menu.key][menu.val] = value;
 
-    document.querySelector(`[data-bubb="${menu.key}"]`)._bubb.markup += `<div data-bubb-value="${key}">${value}</div>`;
+    document.querySelector(`[data-bubb="${menu.key}"]`)._bubb.markup += `<div data-bubb-value="${key}"><span>${value}</span></div>`;
     return;
 
   }
@@ -445,8 +560,8 @@ const styleRoundings = {
     right: [1,0,1,1]
   },
   north: {
-    left: [1,1,0,1],
-    right: [1,1,1,0]
+    left: [1,1,1,0],
+    right: [1,1,0,1]
   },
   east: {
     left: [0,1,1,1],
@@ -468,8 +583,8 @@ const stylePositions = {
     bottom: (anchor, tip) => tip ? 'auto' : 0
   },
   north: {
-    left: (anchor, tip) => evalAnchor(true, tip && anchor ? anchor === 'left' ? 'right' : 'left' : anchor),
-    right: (anchor, tip) => evalAnchor(false, tip && anchor ? anchor === 'left' ? 'right' : 'left' : anchor),
+    left: (anchor, tip) => evalAnchor(true, tip && anchor ? anchor === 'left' ? 'left' : 'right' : anchor),
+    right: (anchor, tip) => evalAnchor(false, tip && anchor ? anchor === 'left' ? 'left' : 'right' : anchor),
     top: (anchor, tip) => tip ? 'auto' : 0,
     bottom: (anchor, tip) => tip ? `calc( 2px - ${styleVariables['tipsize']} )` : 'auto'
   },
@@ -495,8 +610,8 @@ const tipTransforms = {
   },
   north: {
     center: 'translate(-50%, 0) rotate(180deg)',
-    left: 'translate(25%, -50%) rotate(-90deg)',
-    right: 'translate(-25%, -50%) rotate(90deg)'
+    left: 'translate(-25%, -50%) rotate(90deg)',
+    right: 'translate(25%, -50%) rotate(-90deg)'
   },
   east: {
     center: 'translate(-25%, -50%) rotate(-90deg)',
@@ -508,14 +623,12 @@ const tipTransforms = {
     left: 'translate(0, 0) rotate(180deg)',
     right: 'translate(0, 0)'
   }
-
-
 };
 
 const setDirectionSpecificStyles = (element, config, activeOrInactive) => {
 
-  let direction = config.direction || 'south',
-      anchor = config.anchor;
+  let direction = bubb._autoDirection || config.direction || 'south',
+      anchor = bubb._autoAnchor || config.anchor;
 
   const setBubbleTransform = xy => ( typeof styleDirections[xy][direction] === 'object' && styleDirections[xy][direction][activeOrInactive] ) || ( anchor ? '0' : '-50%' );
 
@@ -542,7 +655,7 @@ const appendStyles = (element, keys, init) => {
 
   keys = typeof keys === 'string' ? [keys] : keys;
 
-  for (let key of keys) {
+  keys.forEach( key => {
 
       let active = key === '_bubbleActive',
           preactive = key === '_bubblePreactive',
@@ -552,18 +665,18 @@ const appendStyles = (element, keys, init) => {
           color = preactive && config.color,
           fontsize = preactive && config.fontSize;
 
-      for (let style in styles[key]) {
+      Object.keys(styles[key]).forEach( style => {
         element.style[style] = init ? styles[key][style]
           : style === 'transitionDuration' && still ? '0s'
           : (style === 'background' || style === 'borderBottomColor') && background ? background
           : style === 'color' && color ? color
           : style === 'fontSize' && fontsize ? fontsize
           : styles[key][style];
-      }
+      });
 
       if (!init && (active || preactive)) setDirectionSpecificStyles(element, config, active ? 'active' : 'inactive');
 
-  }
+  });
 
 };
 
@@ -571,6 +684,7 @@ const setMethodProxies = () => {
 
   bubb.update = () => update.apply(this, arguments);
   bubb.add = bubb.refresh = bubb.remove = () => addOrRemove.apply(this, arguments);
+  bubb.toggle = () => toggle.apply(this, arguments);
 
 };
 
@@ -594,11 +708,11 @@ const createBubbElements = () => {
   appendStyles(element._elementTip, '_bubbleTip', true);
   appendStyles(element._elementInteractive, '_bubbleInteractive', true);
 
-  bubb._dimmer = document.createElement('bubb-dimmer');
-  bubb._dimmer.style.display = 'none';
-  bubb._dimmer.appendChild(element);
+  bubb._den = document.createElement('bubb-den');
+  bubb._den.style.display = 'none';
+  bubb._den.appendChild(element);
 
-  document.body.appendChild(bubb._dimmer);
+  document.body.appendChild(bubb._den);
 
 };
 
@@ -611,7 +725,8 @@ const listenToBubbEvents = () => {
 
 const initBubb = () => {
 
-  bubb.initialized = true;
+  bubb._initialized = true;
+  bubb.triggers = {};
 
   setMethodProxies();
   createBubbElements();
@@ -632,7 +747,10 @@ const availableOptions = [
   'class',
   'anchor',
   'direction',
-  'borderRadius'
+  'borderRadius',
+  'autoHide',
+  'toggle',
+  'autoDirection'
 ];
 
 const isMobile = (typeof window.orientation !== "undefined") || ~window.navigator.userAgent.indexOf('IEMobile') ? true : false;

@@ -44,6 +44,9 @@ $max-width: 720px;
       font-size: 75%;
       opacity: .35;
     }
+    &.click:after {
+      content: '⟵  :click';
+    }
   }
 }
 
@@ -63,6 +66,8 @@ body {
   position: relative;
   min-height: 100vh;
   box-sizing: border-box;
+  max-width: 100vw;
+  overflow: hidden;
 }
 header {
   font-size: 1em;
@@ -179,6 +184,7 @@ pre {
   border: none;
   font-size: 18px;
 }
+
 section {
   position: relative;
   max-width: $max-width;
@@ -212,10 +218,18 @@ section {
     line-height: 1.3;
     color: #888;
   }
-  > span {
-    @include hovers();
-  }
+  article {
+    position: relative;
+    > p {
+      font-size: 70%;
+      line-height: 1.3;
+      color: #888;
+    }
+    > span {
+      @include hovers();
+    }
   @include hovers();
+  }
 }
 footer {
   background: #F7F3CE;
@@ -267,7 +281,8 @@ footer {
   position: fixed;
   top: 0;
   right: 0;
-  z-index: 0;
+  pointer-events: none;
+  z-index: 9999999;
   &[color="0"] {
     background: rgba(#ffdede, 0.6);
   }
@@ -345,10 +360,11 @@ hr {
 }
 
 .bubble-bobble {
-  width: 64px;
-  height: 64px;
+  width: 44px;
+  height: 44px;
   background: url(/assets/images/bubble_bobble.png);
   background-repeat: no-repeat;
+  background-size: 100%;
   position: fixed;
   bottom: 1em;
   right: 1em;
@@ -404,6 +420,201 @@ device {
 
 
 
+@mixin noSelect() {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+#toggle {
+  float: left;
+  width: 50%;
+}
+#toggler {
+  float: right;
+  width: 50%;
+  text-align: right;
+  pre {
+    visibility: hidden;
+  }
+  @include noSelect();
+}
+#added {
+  display: block;
+  width: 100%;
+  clear: both;
+}
+#all-directions {
+  position: absolute;
+  top: 100px;
+  right: 0;
+  width: 80px;
+  height: 78px;
+  border: none;
+  background: transparent;
+  border-radius: 50%;
+  background-image: url(images/cirque.svg);
+  background-repeat: no-repeat;
+  > div {
+    display: inline-block;
+    z-index: 1;
+    position: absolute;
+    width: auto;
+    height: auto;
+    cursor: crosshair;
+    &:after {
+      content: '';
+      background: rgba(255, 255, 255, 0.8);
+      min-width: 24px;
+      min-height: 30px;
+      position: absolute;
+      transition: background .25s ease;
+    }
+    &:hover:after {
+      background: rgba(255, 255, 255, 0);
+    }
+    &.n {
+      &:nth-child(1) {
+        top: 7.5%;
+        left: 25%;
+        &:after {
+          transform: translate(-50%, -50%) rotate(-30deg);
+        }
+      }
+      &:nth-child(2) {
+        z-index: 9;
+        top: 0;
+        left: 50%;
+        &:after {
+          transform: translate(-50%, -50%);
+        }
+      }
+      &:nth-child(3) {
+        top: 7.5%;
+        left: 75%;
+        &:after {
+          transform: translate(-50%, -50%) rotate(30deg);
+        }
+      }
+    }
+    &.e {
+      &:nth-child(4) {
+        right: 7.5%;
+        top: 25%;
+        &:after {
+          transform: translate(-50%, -50%) rotate(60deg);
+        }
+      }
+      &:nth-child(5) {
+        right: 0;
+        top: 50%;
+        &:after {
+          transform: translate(-50%, -50%) rotate(90deg);
+        }
+      }
+      &:nth-child(6) {
+        right: 7.5%;
+        top: 75%;
+        &:after {
+          transform: translate(-50%, -50%) rotate(120deg);
+        }
+      }
+    }
+    &.s {
+      &:nth-child(7) {
+        bottom: 7.5%;
+        left: 25%;
+        &:after {
+          transform: translate(-50%, -50%) rotate(30deg);
+        }
+      }
+      &:nth-child(8) {
+        z-index: 9;
+        bottom: 0;
+        left: 50%;
+        &:after {
+          transform: translate(-50%, -50%);
+        }
+      }
+      &:nth-child(9) {
+        bottom: 7.5%;
+        left: 75%;
+        &:after {
+          transform: translate(-50%, -50%) rotate(-30deg);
+        }
+      }
+    }
+    &.w {
+      &:nth-child(10) {
+        left: 7.5%;
+        top: 25%;
+        &:after {
+          transform: translate(-50%, -50%) rotate(120deg);
+        }
+      }
+      &:nth-child(11) {
+        left: 0;
+        top: 50%;
+        &:after {
+          transform: translate(-50%, -50%) rotate(90deg);
+        }
+      }
+      &:nth-child(12) {
+        left: 7.5%;
+        top: 75%;
+        &:after {
+          transform: translate(-50%, -50%) rotate(60deg);
+        }
+      }
+    }
+  }
+
+  > span {
+      position: absolute;
+      width: 0;
+      height: 0;
+      background: pink;
+      left: 50%;
+      top: 50%;
+      transform: rotate(0deg);
+      transition: all .25s ease;
+      opacity: 1;
+      > i img {
+        position: absolute;
+        width: 35px;
+        height: 35px;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+      /*
+      > i {
+          position: absolute;
+          width:0;
+          height: 0;
+          border-left: 8px solid transparent;
+          border-right: 8px solid transparent;
+          border-bottom: 20px solid #444;
+          border-top: none;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -60%);
+      }
+      */
+  }
+  &:hover > span {
+    opacity: 1;
+  }
+
+
+}
+
+
+
+
 /*
 --- bubb modifiers
 */
@@ -436,6 +647,7 @@ device {
     letter-spacing: 1px;
     font-size: 90%;
   }
+  @include noSelect();
 }
 
 .bubb {
@@ -474,9 +686,7 @@ device {
 .tipcolor {
   border-bottom-color: #FFDEDE!important;
 }
-.share-bubb {
 
-}
 
 
 
@@ -497,7 +707,15 @@ device {
     padding: 1.5em;
   }
   section {
+    text-align: center;
     padding: 4em 1.5em;
+
+  }
+  section > span {
+      display: block;
+  }
+  section i {
+      display: none;
   }
   section:first-of-type .header {
     margin-bottom: 3em;
@@ -506,16 +724,26 @@ device {
     width: 100vw;
     text-align: center;
     font-size: 50%;
+    &.download {
+      background: #C5ECBE;
+      margin-bottom: 0;
+    }
     &.info {
       background: #FFDEDE;
       margin-bottom: 0;
+    }
+    &.image {
+      height: auto;
+      padding: 0;
+      margin: 0;
+      display: block;
     }
   }
   section:last-of-type {
     padding: 1.35em 0;
   }
   section > p, section ul {
-    font-size: 86%;
+    font-size: 70%;
   }
   section ul {
     padding-left: 0;
@@ -548,10 +776,16 @@ device {
       }
     }
   }
-  pre, .opaque pre {
+  pre {
+    display: none;
+  }
+  .opaque pre {
+    display: block;
+    text-align: left;
     opacity: 1;
     filter: none;
     font-size: 80%;
+    padding: 1em 10% 0;
   }
   .bubble-bobble {
     width: 32px;
@@ -560,5 +794,8 @@ device {
     &:hover {
       background-position: 0 -32px;
     }
+  }
+  #all-directions {
+    display: none;
   }
 }

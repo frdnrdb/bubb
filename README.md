@@ -20,7 +20,7 @@
 
 <script>
 
-  let config = {
+  const config = {
     bubble: 'simple bubb with <i>html</i> or text content',
     bobble: {
       jimi: 'hendrix',
@@ -30,7 +30,7 @@
   }
 
   const callback = (key, el) => {
-    console.log(key); // menu click -> eg. 'bobble.mitch'
+    console.log(key); // eg. 'bubble' or 'bobble.mitch'
   }
 
   bubb(config, callback)
@@ -40,14 +40,14 @@
 ```js
 
 // yarn add bubb | npm i --save bubb
-let bubb = require('bubb');
+const bubb = require('bubb');
 ```
 
 #### Options setup
 
 ```js
 
-let config = {
+const config = {
   bubble: {
     text: 'content',
     _: {
@@ -88,8 +88,17 @@ hoverCallback: false
 delay: false
   // int value, microseconds reveal delay
 
+autoHide: false
+  // false or milliseconds
+
+toggle: false
+  // boolean, activate tooltip with function call bubb.toggle(key)
+
 direction: false
   // string 'north', 'west' or 'east' (default false = 'south')
+
+autoDirection: false
+  // boolean, screen edge proximity aware direction change
 
 anchor: false
   // string 'left' or 'right' (default false = 'centered')
@@ -131,7 +140,7 @@ bubb.update(menu_reference.menu_item, content);
 
 bubb.add(menu_reference.menu_item, content);
 bubb.remove(menu_reference.menu_item);
-  // these methods adds and removes DOM elements
+  // these methods adds or removes DOM elements
 
 ```
 
