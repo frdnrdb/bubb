@@ -8,6 +8,7 @@
 
   * IMPROVE Implement some try/catch error handling and/or input type checks to prevent user input errors
 
+  * ADD mobile version
   * ADD Implement dim-rest-of-page-option
 
   * TRY alternative tooltip layout (material-ui-dropdown-menu-ish) as option
@@ -95,9 +96,9 @@ const buildElementMarkup = (key, markup, prop) => {
 
 const bindElement = (_trigger) => {
 
-  let bubbEvents = isMobile ? ['touchstart', 'touchend'] : _trigger._bubb.config.toggle ? [] : ['mouseenter', 'mouseleave'];
+  let bubbEvents = _trigger._bubb.config.toggle ? [] : ['mouseenter', 'mouseleave'];
 
-  if (!isMobile && _trigger._bubb.bind) bubbEvents.push('mousedown');
+  if (_trigger._bubb.bind) bubbEvents.push('mousedown');
 
   bubbEvents.forEach( event => _trigger.addEventListener(event, eventHandler, false) );
 
@@ -719,7 +720,7 @@ const createBubbElements = () => {
 const listenToBubbEvents = () => {
 
   const hideOrKeep = () => bubb._element._bind || appendStyles(bubb._element, '_bubbleInactive', true);
-  bubb._element.addEventListener(isMobile ? 'touchstart' : 'mouseenter', hideOrKeep, false);
+  bubb._element.addEventListener('mouseenter', hideOrKeep, false);
 
 };
 
@@ -753,7 +754,7 @@ const availableOptions = [
   'autoDirection'
 ];
 
-const isMobile = (typeof window.orientation !== "undefined") || ~window.navigator.userAgent.indexOf('IEMobile') ? true : false;
+// const isMobile = (typeof window.orientation !== "undefined") || ~window.navigator.userAgent.indexOf('IEMobile') ? true : false;
 
 typeof module !== 'undefined' && module.exports ? module.exports = bubb : window.bubb = bubb;
 

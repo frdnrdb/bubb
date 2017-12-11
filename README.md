@@ -8,6 +8,11 @@
 
 ---
 
+* **2.0.1** Options: toggle, autoDirection, autoHide
+* **next** Mobile solution
+
+---
+
 #### Usage
 [→ See some examples](http://bubb.surge.sh)
 
