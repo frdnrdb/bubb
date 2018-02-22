@@ -69,7 +69,7 @@ function demo() {
           text: '',
           _: {
             callback: (key, item) => {
-              item.innerHTML = 'Loading...';
+              //item.innerHTML = 'Loading...';
               setTimeout(function(){
                 item.innerHTML = designQuotes[Math.floor(Math.random() * designQuotes.length)];
               }, 750);
